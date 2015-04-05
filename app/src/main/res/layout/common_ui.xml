@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <com.nitro888.www.nitroaction360.NAPCardboardView
+    <com.nitro888.nitroaction360.cardboard.NACardboardView
         android:id="@+id/cardboard_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

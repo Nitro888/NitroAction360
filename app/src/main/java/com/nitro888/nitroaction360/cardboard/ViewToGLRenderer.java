@@ -1,4 +1,4 @@
-package com.nitro888.nitroaction360.utils;
+package com.nitro888.nitroaction360.cardboard;
 
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
@@ -16,17 +16,19 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * Created by nitro888 on 15. 4. 5..
  */
-public class ViewToGLRenderer  implements GLSurfaceView.Renderer {
+public class ViewToGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = ViewToGLRenderer.class.getSimpleName();
 
     private static final int    DEFAULT_TEXTURE_WIDTH   = 2048;
     private static final int    DEFAULT_TEXTURE_HEIGHT  = 2048;
 
-    private SurfaceTexture mSurfaceTexture;
-    private Surface mSurface;
+    private SurfaceTexture      mSurfaceTexture;
+    private Surface             mSurface;
 
     private int                 mGlSurfaceTexture;
+    private int                 mTextureBlenderTarget   = GLES20.GL_TEXTURE_2D;
+
     private int                 mTextureWidth           = DEFAULT_TEXTURE_WIDTH;
     private int                 mTextureHeight          = DEFAULT_TEXTURE_HEIGHT;
 
@@ -36,7 +38,8 @@ public class ViewToGLRenderer  implements GLSurfaceView.Renderer {
     private MediaPlayer mMediaPlayer;
 
     public void setMediPlayer(MediaPlayer mp){
-        mMediaPlayer = mp;
+        mTextureBlenderTarget   = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+        mMediaPlayer            = mp;
     }
     private void setMediPlayerToSurface() {
         if(mSurface==null) return;
@@ -93,7 +96,6 @@ public class ViewToGLRenderer  implements GLSurfaceView.Renderer {
         }
     }
 
-
     public void releaseSurface(){
         if(mSurface != null){
             mSurface.release();
@@ -133,6 +135,9 @@ public class ViewToGLRenderer  implements GLSurfaceView.Renderer {
 
     public int getGLSurfaceTexture(){
         return mGlSurfaceTexture;
+    }
+    public int getGLSurfaceTextureBlenderTarget(){
+        return mTextureBlenderTarget;
     }
 
     public static void checkGLError(String label) {
