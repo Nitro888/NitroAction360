@@ -1,7 +1,6 @@
 package com.nitro888.nitroaction360;
 
 import android.os.Bundle;
-
 import com.nitro888.nitroaction360.cardboard.CardboardOverlayView;
 import com.nitro888.nitroaction360.cardboard.NACardboardView;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -19,11 +18,13 @@ public class MainActivity extends CardboardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_ui);
 
+        mNACardboardView = (NACardboardView) findViewById(R.id.cardboard_view);
+        setCardboardView(mNACardboardView);
+
         mOverlayView    = (CardboardOverlayView) findViewById(R.id.overlay);
         mOverlayView.show3DToast("NitroAction 360 Start");
 
-        mNACardboardView = (NACardboardView) findViewById(R.id.cardboard_view);
         mNACardboardView.initRenderer(this, R.raw.plane, R.mipmap.test, R.raw.big_buck_bunny);
-        setCardboardView(mNACardboardView);
+
     }
 }
