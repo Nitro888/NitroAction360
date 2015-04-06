@@ -17,11 +17,15 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
     private Context mContext;
     private static final String TAG                     = ScreenMeshGLRenderer.class.getSimpleName();
 
-    private float[]                 mModelMatrix            = new float[16];
-    private float[]                 mMVPMatrix              = new float[16];
-    private float[]                 mMVMatrix               = new float[16];
+    protected static final float    Z_NEAR              = 1.0f;
+    protected static final float    Z_FAR               = 500.0f;
+    protected static final float    CAMERA_Z            = 0.01f;
 
-    private float[]                 mProjectionMatrix       = new float[16];
+    private float[]                 mModelMatrix        = new float[16];
+    private float[]                 mMVPMatrix          = new float[16];
+    private float[]                 mMVMatrix           = new float[16];
+
+    private float[]                 mProjectionMatrix   = new float[16];
 
     private int                     mMVPMatrixHandle;
     private int                     mMVMatrixHandle;
@@ -31,7 +35,7 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
     private int                     mTextureCoordinateHandle;
     private int                     mProgramHandle;
 
-    private final MeshBufferHelper  mModelBuffer;         // vertex, texture, normal
+    private final MeshBufferHelper  mModelBuffer;       // vertex, texture, normal
 
     public ScreenMeshGLRenderer(Context context,int meshId) {
         mContext                = context;
@@ -61,8 +65,8 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
         final float right   = ratio;
         final float bottom  = -1.0f;
         final float top     = 1.0f;
-        final float near    = 1.0f;
-        final float far     = 10.0f;
+        final float near    = Z_NEAR;
+        final float far     = Z_FAR;
 
         Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far);
         super.onSurfaceChanged(width, height);
@@ -99,16 +103,10 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
         GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, false, 0, mModelBuffer.getBuffer()[2]);
         GLES20.glEnableVertexAttribArray(mNormalHandle);
 
-        /*
         Matrix.multiplyMM(mMVMatrix, 0, view, 0, mModelMatrix, 0);
         GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mMVPMatrix, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVMatrix, 0);
-        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        */
-
-        Matrix.multiplyMM(mMVMatrix, 0, view, 0, mModelMatrix, 0);
-        GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mMVPMatrix, 0);
-        Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, mMVMatrix, 0);
+        //Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, mMVMatrix, 0);
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mModelBuffer.getCount());

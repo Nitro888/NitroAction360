@@ -62,11 +62,6 @@ public class NACardboardView extends CardboardView {
     }
 
     private class ScreenRenderer extends ScreenMeshGLRenderer implements NACardboardView.StereoRenderer {
-
-        private static final float          Z_NEAR      = 5.0f;
-        private static final float          Z_FAR       = 500.0f;
-        private static final float          CAMERA_Z    = 0.01f;
-
         private float[]                     mCamera     = new float[16];
         private float[]                     mView       = new float[16];
         private float[]                     mHeadView   = new float[16];
@@ -80,7 +75,6 @@ public class NACardboardView extends CardboardView {
             GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
             GLES20.glEnable(GLES20.GL_CULL_FACE);
             GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-
             super.onSurfaceCreated();
             checkGLError("onSurfaceCreated");
         }
