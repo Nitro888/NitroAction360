@@ -15,7 +15,9 @@ import java.util.ArrayList;
  * Created by nitro888 on 15. 4. 5..
  */
 public class WaveFrontObjHelper {
-    public static FloatBuffer[] loadObj(final Context context, final int resourceId) {
+    private static final String TAG                     = WaveFrontObjHelper.class.getSimpleName();
+
+    public static MeshBufferHelper loadObj(final Context context, final int resourceId) {
         ArrayList<String> vertexes  = new ArrayList<String>();
         ArrayList<String> textures  = new ArrayList<String>();
         ArrayList<String> normals   = new ArrayList<String>();
@@ -75,6 +77,6 @@ public class WaveFrontObjHelper {
         mesh[2] = ByteBuffer.allocateDirect(normalBuffer.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mesh[2].put(normalBuffer).position(0);
 
-        return mesh;
+        return new MeshBufferHelper(indexBuffer.length,mesh);
     }
 }

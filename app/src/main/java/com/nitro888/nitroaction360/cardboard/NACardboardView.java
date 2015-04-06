@@ -49,19 +49,19 @@ public class NACardboardView extends CardboardView {
         mMediaPlayer    = new MediaPlayer();
 
         try {
-            mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-/*
+            //mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+
             AssetFileDescriptor afd = getResources().openRawResourceFd(ResourceID);
             mMediaPlayer.setDataSource(
                     afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
-*/
+
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
     }
 
-    private class ScreenRenderer extends CubeMeshGLRenderer implements NACardboardView.StereoRenderer {
+    private class ScreenRenderer extends ScreenMeshGLRenderer implements NACardboardView.StereoRenderer {
 
         private static final float          Z_NEAR      = 5.0f;
         private static final float          Z_FAR       = 500.0f;
@@ -77,7 +77,7 @@ public class NACardboardView extends CardboardView {
 
         @Override
         public void onSurfaceCreated(EGLConfig config) {
-            GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
             GLES20.glEnable(GLES20.GL_CULL_FACE);
             GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
