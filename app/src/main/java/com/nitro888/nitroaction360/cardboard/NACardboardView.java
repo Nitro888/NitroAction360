@@ -49,10 +49,13 @@ public class NACardboardView extends CardboardView {
         mMediaPlayer    = new MediaPlayer();
 
         try {
+            mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+/*
             AssetFileDescriptor afd = getResources().openRawResourceFd(ResourceID);
             mMediaPlayer.setDataSource(
                     afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
+*/
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
