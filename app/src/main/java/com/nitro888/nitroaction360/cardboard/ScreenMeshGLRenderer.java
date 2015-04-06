@@ -1,8 +1,6 @@
 package com.nitro888.nitroaction360.cardboard;
 
 import android.content.Context;
-import android.opengl.GLES10;
-import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
@@ -14,11 +12,11 @@ import com.nitro888.nitroaction360.utils.WaveFrontObjHelper;
 import java.nio.FloatBuffer;
 
 /**
- * Created by nitro888 on 15. 4. 5..
+ * Created by nitro888 on 15. 4. 6..
  */
-public class ScreenMeshRenderer extends ViewToGLRenderer {
+public class ScreenMeshGLRenderer extends ViewToGLRenderer {
     private Context mContext;
-    private static final String TAG                     = ScreenMeshRenderer.class.getSimpleName();
+    private static final String TAG                     = ScreenMeshGLRenderer.class.getSimpleName();
 
     private float[]             mModelMatrix            = new float[16];
     private float[]             mMVPMatrix              = new float[16];
@@ -34,11 +32,11 @@ public class ScreenMeshRenderer extends ViewToGLRenderer {
     private int                 mTextureCoordinateHandle;
     private int                 mProgramHandle;
 
-    private final FloatBuffer[] mModelBuffer;
+    private final FloatBuffer[] mModelBuffer;         // vertex, texture, normal
 
-    public ScreenMeshRenderer(Context context,int meshId) {
+    public ScreenMeshGLRenderer(Context context,int meshId) {
         mContext                = context;
-        mModelBuffer            = WaveFrontObjHelper.loadObj(mContext,meshId);
+        mModelBuffer            = WaveFrontObjHelper.loadObj(mContext, meshId);
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0, 0, 0); // Obj appears below user.
     }
@@ -55,7 +53,7 @@ public class ScreenMeshRenderer extends ViewToGLRenderer {
         final int fragmentShaderHandle  = ShaderHelper.compileShader(GLES20.GL_FRAGMENT_SHADER, sFragment);
 
         mProgramHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
-                        new String[]{"a_Position", "a_Normal", "a_TexCoordinate"});
+                new String[]{"a_Position", "a_Normal", "a_TexCoordinate"});
     }
 
     public void onSurfaceChanged(int width, int height) {
@@ -63,13 +61,13 @@ public class ScreenMeshRenderer extends ViewToGLRenderer {
 
         // Create a new perspective projection matrix. The height will stay the same
         // while the width will vary as per aspect ratio.
-        final float ratio = (float) width / height;
-        final float left = -ratio;
-        final float right = ratio;
-        final float bottom = -1.0f;
-        final float top = 1.0f;
-        final float near = 1.0f;
-        final float far = 10.0f;
+        final float ratio   = (float) width / height;
+        final float left    = -ratio;
+        final float right   = ratio;
+        final float bottom  = -1.0f;
+        final float top     = 1.0f;
+        final float near    = 1.0f;
+        final float far     = 10.0f;
 
         Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far);
         super.onSurfaceChanged(width, height);

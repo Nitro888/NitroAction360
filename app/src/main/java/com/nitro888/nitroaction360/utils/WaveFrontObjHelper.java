@@ -66,14 +66,14 @@ public class WaveFrontObjHelper {
             }
         }
 
-        final FloatBuffer[] mesh = new FloatBuffer[3];
+        final FloatBuffer[] mesh = new FloatBuffer[3];  // vertex, texture, normal
 
         mesh[0] = ByteBuffer.allocateDirect(vertexBuffer.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mesh[0].put(vertexBuffer).position(0);
-        mesh[1] = ByteBuffer.allocateDirect(normalBuffer.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        mesh[1].put(normalBuffer).position(0);
-        mesh[2] = ByteBuffer.allocateDirect(textureBuffer.length* 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        mesh[2].put(textureBuffer).position(0);
+        mesh[1] = ByteBuffer.allocateDirect(textureBuffer.length* 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mesh[1].put(textureBuffer).position(0);
+        mesh[2] = ByteBuffer.allocateDirect(normalBuffer.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mesh[2].put(normalBuffer).position(0);
 
         return mesh;
     }

@@ -58,7 +58,7 @@ public class NACardboardView extends CardboardView {
         }
     }
 
-    private class ScreenRenderer extends ScreenMeshRenderer implements NACardboardView.StereoRenderer {
+    private class ScreenRenderer extends CubeMeshGLRenderer implements NACardboardView.StereoRenderer {
 
         private static final float          Z_NEAR      = 5.0f;
         private static final float          Z_FAR       = 500.0f;
