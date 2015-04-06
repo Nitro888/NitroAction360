@@ -24,7 +24,7 @@ public class MainActivity extends CardboardActivity {
         mOverlayView    = (CardboardOverlayView) findViewById(R.id.overlay);
         mOverlayView.show3DToast("NitroAction 360 Start");
 
-        mNACardboardView.initRenderer(this, R.raw.plane, R.mipmap.test, R.raw.big_buck_bunny);
+        mNACardboardView.initRenderer(this, R.raw.plane, R.mipmap.test, R.raw.kodak_pixpro_sp360_01);
 
     }
 }

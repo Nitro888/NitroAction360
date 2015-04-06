@@ -1,6 +1,8 @@
 package com.nitro888.nitroaction360.cardboard;
 
 import android.content.Context;
+import android.opengl.GLES10;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
@@ -42,7 +44,7 @@ public class ScreenMeshRenderer extends ViewToGLRenderer {
     }
 
     public void onSurfaceCreated(){
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
@@ -75,6 +77,7 @@ public class ScreenMeshRenderer extends ViewToGLRenderer {
 
     public void onDrawEye(float[] perspective, float[] view) {
         super.onDrawFrame();
+
         GLES20.glUseProgram(mProgramHandle);
 
         mMVPMatrixHandle        = GLES20.glGetUniformLocation(mProgramHandle,"u_MVPMatrix");
@@ -113,7 +116,6 @@ public class ScreenMeshRenderer extends ViewToGLRenderer {
         */
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6); // check!
-        GLES20.glFinish();
 
         checkGLError("drawing obj");
     }
