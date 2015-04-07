@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
+import com.google.vrtoolkit.cardboard.Eye;
 import com.nitro888.nitroaction360.R;
 import com.nitro888.nitroaction360.utils.RawResourceReader;
 import com.nitro888.nitroaction360.utils.ShaderHelper;
@@ -27,13 +28,14 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
 
     private float[]                 mProjectionMatrix   = new float[16];
 
+    private int                     mProgramHandle;
     private int                     mMVPMatrixHandle;
     private int                     mMVMatrixHandle;
     private int                     mTextureUniformHandle;
     private int                     mPositionHandle;
     private int                     mNormalHandle;
     private int                     mTextureCoordinateHandle;
-    private int                     mProgramHandle;
+    private int                     mScreenOffsetHandle;
 
     private final MeshBufferHelper  mModelBuffer;       // vertex, texture, normal
 
@@ -54,7 +56,7 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
         final int fragmentShaderHandle  = ShaderHelper.compileShader(GLES20.GL_FRAGMENT_SHADER, sFragment);
 
         mProgramHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
-                        new String[]{"a_Position", "a_Normal", "a_TexCoordinate"});
+                            new String[]{"a_Position", "a_Normal", "a_TexCoordinate"});
     }
 
     public void onSurfaceChanged(int width, int height) {
@@ -72,7 +74,7 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
         super.onSurfaceChanged(width, height);
     }
 
-    public void onDrawEye(float[] perspective, float[] view) {
+    public void onDrawEye(float[] perspective, float[] view, float[] offset) {
         super.onDrawFrame();
 
         GLES20.glUseProgram(mProgramHandle);
@@ -80,6 +82,8 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
         mMVPMatrixHandle        = GLES20.glGetUniformLocation(mProgramHandle,"u_MVPMatrix");
         mMVMatrixHandle         = GLES20.glGetUniformLocation(mProgramHandle,"u_MVMatrix");
         mTextureUniformHandle   = GLES20.glGetUniformLocation(mProgramHandle,"u_Texture");
+        mScreenOffsetHandle     = GLES20.glGetUniformLocation(mProgramHandle,"u_Offset");
+
         mPositionHandle         = GLES20.glGetAttribLocation(mProgramHandle, "a_Position");
         mNormalHandle           = GLES20.glGetAttribLocation(mProgramHandle, "a_Normal");
         mTextureCoordinateHandle= GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");
@@ -108,6 +112,7 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVMatrix, 0);
         //Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, mMVMatrix, 0);
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
+        GLES20.glUniform4f(mScreenOffsetHandle,offset[0],offset[1],offset[2],offset[3]);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mModelBuffer.getCount());
     }

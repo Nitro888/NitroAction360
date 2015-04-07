@@ -89,8 +89,10 @@ public class NACardboardView extends CardboardView {
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
             checkGLError("colorParam");
             Matrix.multiplyMM(mView, 0, eye.getEyeView(), 0, mCamera, 0);
-            float[] perspective = eye.getPerspective(Z_NEAR, Z_FAR);
-            super.onDrawEye(perspective,mView);
+
+            float[] offset = ScreenType.getSideBySideScreenOffset(eye.getType());
+
+            super.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView,offset);
         }
         @Override
         public void onFinishFrame(Viewport viewport) {
