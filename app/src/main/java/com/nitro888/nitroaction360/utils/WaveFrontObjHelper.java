@@ -13,7 +13,8 @@ import java.util.ArrayList;
 
 /**
  * Created by nitro888 on 15. 4. 5..
- * Exports Option is Z Foward, Y Up and UV and Normal
+ * Exports Option is -Z Foward, Y Up and UV and Normal
+ * UV mirror - Y Axis
  */
 public class WaveFrontObjHelper {
     private static final String TAG                     = WaveFrontObjHelper.class.getSimpleName();
