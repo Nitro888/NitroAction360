@@ -73,7 +73,7 @@ public class ScreenType {
         final float[]   transform = new float[4];
 
         switch (iTilt) {
-            case 0: transform[0]    = 90.0f;    break;
+            case 0: transform[0]    = 75.0f;    break;
             case 1: transform[0]    = 35.0f;    break;
             case 3: transform[0]    = -45.0f;   break;
             case 4: transform[0]    = -90.0f;   break;

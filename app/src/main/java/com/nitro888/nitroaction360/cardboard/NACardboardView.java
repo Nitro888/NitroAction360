@@ -100,7 +100,7 @@ public class NACardboardView extends CardboardView {
 
             super.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView,
                     ScreenType.getSideBySideScreenOffset(eye.getType()),
-                    ScreenType.getScreenScaleRatioRotation(1,1.2f,mScreenWidth,mScreenHeight));
+                    ScreenType.getScreenScaleRatioRotation(0,1.0f,mScreenWidth,mScreenHeight));
         }
         @Override
         public void onFinishFrame(Viewport viewport) {
