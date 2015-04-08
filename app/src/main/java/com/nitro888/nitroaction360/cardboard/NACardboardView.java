@@ -25,6 +25,10 @@ public class NACardboardView extends CardboardView {
     private MediaPlayer         mMediaPlayer    = null;
     private ScreenRenderer      mScreenRenderer;
 
+    private int                 mScreenWidth    = 1;
+    private int                 mScreenHeight   = 1;
+
+
     public NACardboardView (Context context) {
         super(context);
         mContext        = context;
@@ -55,7 +59,6 @@ public class NACardboardView extends CardboardView {
             mMediaPlayer.setDataSource(
                     afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
-
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -72,7 +75,7 @@ public class NACardboardView extends CardboardView {
 
         @Override
         public void onSurfaceCreated(EGLConfig config) {
-            GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+            GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GLES20.glEnable(GLES20.GL_CULL_FACE);
             GLES20.glEnable(GLES20.GL_DEPTH_TEST);
             super.onSurfaceCreated();
@@ -90,9 +93,14 @@ public class NACardboardView extends CardboardView {
             checkGLError("colorParam");
             Matrix.multiplyMM(mView, 0, eye.getEyeView(), 0, mCamera, 0);
 
-            float[] offset = ScreenType.getSideBySideScreenOffset(eye.getType());
+            if(mMediaPlayer!=null) {
+                mScreenWidth    = mMediaPlayer.getVideoWidth();
+                mScreenHeight   = mMediaPlayer.getVideoHeight();
+            }
 
-            super.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView,offset);
+            super.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView,
+                    ScreenType.getSideBySideScreenOffset(eye.getType()),
+                    ScreenType.getScreenScaleRatioRotation(1,1.2f,mScreenWidth,mScreenHeight));
         }
         @Override
         public void onFinishFrame(Viewport viewport) {

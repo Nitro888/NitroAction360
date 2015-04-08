@@ -35,7 +35,7 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
     //-------------------------------------------------------------------
     // for MediaPlayer
     //-------------------------------------------------------------------
-    private MediaPlayer mMediaPlayer;
+    private MediaPlayer mMediaPlayer    = null;
 
     public void setMediPlayer(MediaPlayer mp){
         mTextureBlenderTarget   = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
@@ -52,6 +52,8 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
             } catch (IOException t) {
                 Log.e(TAG, "media player prepare failed");
             }
+            mTextureWidth   = mMediaPlayer.getVideoWidth();
+            mTextureHeight  = mMediaPlayer.getVideoHeight();
             mMediaPlayer.start();
         }
     };
@@ -74,8 +76,10 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
         releaseSurface();
         mGlSurfaceTexture = createTexture();
         if (mGlSurfaceTexture > 0){
-            //attach the texture to a surface.
-            //It's a clue class for rendering an android view to gl level
+            if(mMediaPlayer!=null) {
+                mTextureWidth   = mMediaPlayer.getVideoWidth();
+                mTextureHeight  = mMediaPlayer.getVideoHeight();
+            }
             mSurfaceTexture = new SurfaceTexture(mGlSurfaceTexture);
             mSurfaceTexture.setDefaultBufferSize(mTextureWidth, mTextureHeight);
             mSurface        = new Surface(mSurfaceTexture);
@@ -87,8 +91,10 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
         releaseSurface();
         mGlSurfaceTexture = createTexture();
         if (mGlSurfaceTexture > 0){
-            //attach the texture to a surface.
-            //It's a clue class for rendering an android view to gl level
+            if(mMediaPlayer!=null) {
+                mTextureWidth   = mMediaPlayer.getVideoWidth();
+                mTextureHeight  = mMediaPlayer.getVideoHeight();
+            }
             mSurfaceTexture = new SurfaceTexture(mGlSurfaceTexture);
             mSurfaceTexture.setDefaultBufferSize(mTextureWidth, mTextureHeight);
             mSurface        = new Surface(mSurfaceTexture);

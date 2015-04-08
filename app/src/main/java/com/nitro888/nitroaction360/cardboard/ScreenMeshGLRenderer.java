@@ -45,7 +45,7 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
     }
 
     public void onSurfaceCreated(){
-        GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
@@ -74,7 +74,7 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
         super.onSurfaceChanged(width, height);
     }
 
-    public void onDrawEye(float[] perspective, float[] view, float[] offset) {
+    public void onDrawEye(float[] perspective, float[] view, float[] offset, float[] rationAndRotation) {
         super.onDrawFrame();
 
         GLES20.glUseProgram(mProgramHandle);
@@ -94,6 +94,8 @@ public class ScreenMeshGLRenderer extends ViewToGLRenderer {
 
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0, 0, 0);
+        Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
+        Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
 
         mModelBuffer.getBuffer()[0].position(0);
         GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 0, mModelBuffer.getBuffer()[0]);
