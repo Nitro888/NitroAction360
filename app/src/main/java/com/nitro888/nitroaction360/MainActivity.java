@@ -28,7 +28,7 @@ public class MainActivity extends CardboardActivity implements YouTubePlayer.OnI
         mOverlayView    = (CardboardOverlayView) findViewById(R.id.overlay);
         mOverlayView.show3DToast("NitroAction 360 Start");
 
-        mNACardboardView.initRenderer(this, R.raw.plane_sq, R.mipmap.test, R.raw.test);
+        mNACardboardView.initRenderer(this, R.raw.plane_sq, R.raw.test, R.raw.test);
 
         onCreateYouTube();
     }
