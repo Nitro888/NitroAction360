@@ -5,17 +5,18 @@ import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.nitro888.nitroaction360.cardboard.CardboardOverlayView;
+import com.nitro888.nitroaction360.cardboard.NACardboardOverlayGUIView;
 import com.nitro888.nitroaction360.cardboard.NACardboardView;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
+
 /**
  * Created by nitro888 on 15. 4. 5..
  */
 public class MainActivity extends CardboardActivity implements YouTubePlayer.OnInitializedListener {
 
-    private CardboardOverlayView    mOverlayView;
-    private NACardboardView         mNACardboardView;
+    private NACardboardOverlayGUIView   mNAOverlayView;
+    private NACardboardView             mNACardboardView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,8 +26,8 @@ public class MainActivity extends CardboardActivity implements YouTubePlayer.OnI
         mNACardboardView = (NACardboardView) findViewById(R.id.cardboard_view);
         setCardboardView(mNACardboardView);
 
-        mOverlayView    = (CardboardOverlayView) findViewById(R.id.overlay);
-        mOverlayView.show3DToast("NitroAction 360 Start");
+        mNAOverlayView    = (NACardboardOverlayGUIView) findViewById(R.id.overlay);
+        mNAOverlayView.show3DToast("NitroAction 360 Start");
 
         mNACardboardView.initRenderer(this, R.raw.plane_sq, R.raw.test, R.raw.test);
 

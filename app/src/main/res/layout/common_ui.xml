@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
-    <com.nitro888.nitroaction360.cardboard.CardboardOverlayView
+    <com.nitro888.nitroaction360.cardboard.NACardboardOverlayGUIView
         android:id="@+id/overlay"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -26,5 +26,128 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     -->
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <com.nitro888.nitroaction360.cardboard.HeadHorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/playerL"
+            android:layout_gravity="center_horizontal|bottom">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_folderL"
+                    android:src="@drawable/ic_folder_black_18dp"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_skip_previousL"
+                    android:src="@drawable/ic_skip_previous_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_fast_rewindL"
+                    android:src="@drawable/ic_fast_rewind_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_play_stopL"
+                    android:src="@drawable/ic_play_arrow_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_fast_forwardL"
+                    android:src="@drawable/ic_fast_forward_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_skip_nextL"
+                    android:src="@drawable/ic_skip_next_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_settingL"
+                    android:src="@drawable/ic_settings_black_18dp" />
+
+            </LinearLayout>
+        </com.nitro888.nitroaction360.cardboard.HeadHorizontalScrollView>
+
+        <com.nitro888.nitroaction360.cardboard.HeadHorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/playerR"
+            android:layout_gravity="center_horizontal|bottom">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_folderR"
+                    android:src="@drawable/ic_folder_black_18dp"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_skip_previousR"
+                    android:src="@drawable/ic_skip_previous_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_fast_rewindR"
+                    android:src="@drawable/ic_fast_rewind_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_play_stopR"
+                    android:src="@drawable/ic_play_arrow_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_fast_forwardR"
+                    android:src="@drawable/ic_fast_forward_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_skip_nextR"
+                    android:src="@drawable/ic_skip_next_black_18dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_settingR"
+                    android:src="@drawable/ic_settings_black_18dp" />
+
+            </LinearLayout>
+        </com.nitro888.nitroaction360.cardboard.HeadHorizontalScrollView>
+
+    </LinearLayout>
 
 </RelativeLayout>
