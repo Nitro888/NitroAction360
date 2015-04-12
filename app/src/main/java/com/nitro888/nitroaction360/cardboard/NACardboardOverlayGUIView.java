@@ -205,6 +205,10 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
         } else {
             if(mLeftView.getLookAtBtnID()!=-1) {
                 onGUIButtonClick(mLeftView.getLookAtBtnID());
+            } else {
+                isActivateGUI   = false;
+                activateSensor(isActivateGUI);
+                activateGUI(isActivateGUI);
             }
         }
     }
@@ -263,6 +267,9 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
 
     private void processBtn(int btnID) {
         switch (btnID) {
+            case R.id.btn_closeL:
+            case R.id.btn_back_L:
+                break;
             case R.id.btn_leftL:
                 browserPreviousPage();
                 break;
@@ -295,8 +302,12 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
 
         if(mLeftView.getLookAtBtnID()!=-1) {
             switch (mLeftView.getLookAtBtnID()) {
+                // browser
                 case R.id.btn_leftL:
                     msg = "Previous Page";
+                    break;
+                case R.id.btn_closeL:
+                    msg = "Close";
                     break;
                 case R.id.btn_rightL:
                     msg = "Next Page";
@@ -318,6 +329,64 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
                     break;
                 case R.id.btn_file06L:
                     msg = mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+5);
+                    break;
+
+                // player
+                case R.id.btn_folderL:
+                    msg = "Folder Menu";
+                    break;
+                case R.id.btn_screen_upL:
+                    msg = "Screen Up";
+                    break;
+                case R.id.btn_settingL:
+                    msg = "Setting Menu";
+                    break;
+                case R.id.btn_fast_rewindL:
+                    msg = "Fast Rewind";
+                    break;
+                case R.id.btn_playL:
+                    msg = "Play";
+                    break;
+                case R.id.btn_fast_forwardL:
+                    msg = "Fast Forward";
+                    break;
+                case R.id.btn_skip_previousL:
+                    msg = "Skip Previous";
+                    break;
+                case R.id.btn_screen_downL:
+                    msg = "Screen Down";
+                    break;
+                case R.id.btn_skip_nextL:
+                    msg = "Skip Next";
+                    break;
+
+                // setting
+                case R.id.btn_sbs_3d_L:
+                    msg = "Side By Side 3D Mode";
+                    break;
+                case R.id.btn_dome_L:
+                    msg = "Dome Screen";
+                    break;
+                case R.id.btn_screen_sizeup_L:
+                    msg = "Screen Size Up";
+                    break;
+                case R.id.btn_2d_L:
+                    msg = "2D Mode";
+                    break;
+                case R.id.btn_back_L:
+                    msg = "Close";
+                    break;
+                case R.id.btn_screen_sizeReset_L:
+                    msg = "Screen Size Reset";
+                    break;
+                case R.id.btn_tb_3d_L:
+                    msg = "Top And Bottom 3D Mode";
+                    break;
+                case R.id.btn_panorama_l:
+                    msg = "Panorama Screen";
+                    break;
+                case R.id.btn_screen_sizedown_L:
+                    msg = "Screen Size Down";
                     break;
             }
         }

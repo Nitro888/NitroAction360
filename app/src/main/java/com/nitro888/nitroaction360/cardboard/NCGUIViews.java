@@ -139,6 +139,8 @@ public class NCGUIViews extends ViewGroup {
     }
 
     public int getLookAtBtnID() {
+        if(getVisibility()==View.INVISIBLE)
+            mSelectImgBtnID = -1;
         return mSelectImgBtnID;
     }
 
