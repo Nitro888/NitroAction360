@@ -33,16 +33,27 @@ public class FileExplorer {
         File f          = new File(dirPath);
         File[] files    = f.listFiles();
 
-        for(int i=0; i < files.length; i++)
-        {
-            File file = files[i];
+        if(!f.getParent().equals("/")) {
+            path.add(f.getParent());
+            item.add("../");
+        }
 
-            if(!file.isHidden() && file.canRead()){
-                path.add(file.getPath());
-                if(file.isDirectory())
-                    item.add(file.getName() + "/");
-                else if(isMediaFileType(file.getName()))
-                    item.add(file.getName());
+        if(files!=null) {
+            for(int i=0; i < files.length; i++)
+            {
+                File file = files[i];
+
+                if(!file.isHidden() && file.canRead()){
+
+                    if(file.isDirectory()) {
+                        path.add(file.getPath());
+                        item.add(file.getName() + "/");
+                    }
+                    else if(isMediaFileType(file.getName())) {
+                        path.add(file.getPath());
+                        item.add(file.getName());
+                    }
+                }
             }
         }
 
@@ -53,14 +64,10 @@ public class FileExplorer {
 
         return result;
     }
-    public static boolean isDirectory(String path) {
+    public static int selectItem(String path) { // 0 = directory, 1=can't read, 2=media file
         final File file = new File(path);
-        return file.isDirectory();
-    }
-    public static int isMediaFile(String path) { // 0 = directory, 1=can't read, 2=media file
-        final File file = new File(path);
+        if(!file.canRead())     return -1;
         if(file.isDirectory())  return 0;
-        if(!file.canRead())     return 1;
-        return 2;
+        return 1;
     }
 }

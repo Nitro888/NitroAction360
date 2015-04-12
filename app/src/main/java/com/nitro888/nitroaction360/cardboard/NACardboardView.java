@@ -13,6 +13,11 @@ import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import javax.microedition.khronos.egl.EGLConfig;
 
 /**
@@ -38,19 +43,40 @@ public class NACardboardView extends CardboardView {
         mContext        = context;
     }
 
-    public void initRenderer (Context context, int meshId, int textureID, int movieID) {
+    public void initRenderer (Context context, int meshId1, int meshId2) {
         mContext        = context;
 
-        createMediaPlayer(movieID);
+        if(mMediaPlayer==null)
+            mMediaPlayer    = new MediaPlayer();
 
-        mScreenRenderer = new ScreenRenderer(context,meshId);
+        mScreenRenderer = new ScreenRenderer(context,meshId1);
         mScreenRenderer.setMediPlayer(mMediaPlayer);
 
         setRenderer((StereoRenderer)mScreenRenderer);
     }
+    public void playMovie(String fileName) {
+        if(mMediaPlayer==null)  return;
 
+        try {
+            FileInputStream fileInputStream = new FileInputStream(new File(fileName));
+            FileDescriptor  fd              = fileInputStream.getFD();
+
+            mMediaPlayer.setDataSource(fd);
+            mMediaPlayer.prepare();
+            mMediaPlayer.start();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+    }
+
+    public void pauseMovie() {
+        if(mMediaPlayer==null)  return;
+        mMediaPlayer.pause();
+    }
+    /*
     private void createMediaPlayer(int ResourceID) {
-        mMediaPlayer    = new MediaPlayer();
+        if(mMediaPlayer==null)
+            mMediaPlayer    = new MediaPlayer();
 
         try {
             //mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
@@ -63,7 +89,7 @@ public class NACardboardView extends CardboardView {
             Log.e(TAG, e.getMessage(), e);
         }
     }
-
+    */
     private class ScreenRenderer extends ScreenMeshGLRenderer implements NACardboardView.StereoRenderer {
         private float[]                     mCamera     = new float[16];
         private float[]                     mView       = new float[16];
@@ -94,8 +120,10 @@ public class NACardboardView extends CardboardView {
             Matrix.multiplyMM(mView, 0, eye.getEyeView(), 0, mCamera, 0);
 
             if(mMediaPlayer!=null) {
-                mScreenWidth    = mMediaPlayer.getVideoWidth();
-                mScreenHeight   = mMediaPlayer.getVideoHeight();
+                if(mMediaPlayer.isPlaying()) {
+                    mScreenWidth    = mMediaPlayer.getVideoWidth();
+                    mScreenHeight   = mMediaPlayer.getVideoHeight();
+                }
             }
 
             super.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView,

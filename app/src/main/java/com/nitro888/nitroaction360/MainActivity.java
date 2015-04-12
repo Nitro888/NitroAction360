@@ -1,6 +1,7 @@
 package com.nitro888.nitroaction360;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -15,7 +16,7 @@ import com.google.vrtoolkit.cardboard.CardboardActivity;
  */
 public class MainActivity extends CardboardActivity implements YouTubePlayer.OnInitializedListener {
 
-    private NACardboardOverlayGUIView   mNAOverlayView;
+    private NACardboardOverlayGUIView   mNAOverlayGUIView;
     private NACardboardView             mNACardboardView;
 
     @Override
@@ -24,16 +25,25 @@ public class MainActivity extends CardboardActivity implements YouTubePlayer.OnI
         setContentView(R.layout.common_ui);
 
         mNACardboardView = (NACardboardView) findViewById(R.id.cardboard_view);
+        mNACardboardView.initRenderer(this, R.raw.plane_sq, R.raw.dome);
         setCardboardView(mNACardboardView);
 
-        mNAOverlayView    = (NACardboardOverlayGUIView) findViewById(R.id.overlay);
-        mNAOverlayView.show3DToast("NitroAction 360 Start");
-
-        mNACardboardView.initRenderer(this, R.raw.plane_sq, R.raw.test, R.raw.test);
+        mNAOverlayGUIView    = (NACardboardOverlayGUIView) findViewById(R.id.overlay);
+        mNAOverlayGUIView.setCardboardView(mNACardboardView);
+        //mNAOverlayGUIView.show3DToast("NitroAction 360 Start");
 
         onCreateYouTube();
     }
 
+    @Override
+    public void onCardboardTrigger() {
+        mNAOverlayGUIView.onCardboardTrigger();
+    }
+
+    public void onGUIButtonClick(View view)
+    {
+        mNAOverlayGUIView.onGUIButtonClick(view.getId());
+    }
 
 
     // for youtube test

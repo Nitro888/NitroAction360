@@ -43,9 +43,11 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
     }
     private void setMediPlayerToSurface() {
         if(mSurface==null) return;
+
         mMediaPlayer.setSurface(mSurface);
         mMediaPlayer.setScreenOnWhilePlaying(true);
 
+        /*
         if(!mMediaPlayer.isPlaying()){
             try {
                 mMediaPlayer.prepare();
@@ -55,7 +57,7 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
             mTextureWidth   = mMediaPlayer.getVideoWidth();
             mTextureHeight  = mMediaPlayer.getVideoHeight();
             mMediaPlayer.start();
-        }
+        }*/
     };
 
     //-------------------------------------------------------------------
@@ -77,8 +79,10 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
         mGlSurfaceTexture = createTexture();
         if (mGlSurfaceTexture > 0){
             if(mMediaPlayer!=null) {
-                mTextureWidth   = mMediaPlayer.getVideoWidth();
-                mTextureHeight  = mMediaPlayer.getVideoHeight();
+                if(mMediaPlayer.isPlaying()) {
+                    mTextureWidth   = mMediaPlayer.getVideoWidth();
+                    mTextureHeight  = mMediaPlayer.getVideoHeight();
+                }
             }
             mSurfaceTexture = new SurfaceTexture(mGlSurfaceTexture);
             mSurfaceTexture.setDefaultBufferSize(mTextureWidth, mTextureHeight);
@@ -91,7 +95,7 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
         releaseSurface();
         mGlSurfaceTexture = createTexture();
         if (mGlSurfaceTexture > 0){
-            if(mMediaPlayer!=null) {
+            if(mMediaPlayer.isPlaying()) {
                 mTextureWidth   = mMediaPlayer.getVideoWidth();
                 mTextureHeight  = mMediaPlayer.getVideoHeight();
             }

@@ -3,10 +3,14 @@ package com.nitro888.nitroaction360.cardboard;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.ThumbnailUtils;
+import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -15,17 +19,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.nitro888.nitroaction360.R;
+import com.nitro888.nitroaction360.utils.FileExplorer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nitro888 on 15. 4. 10..
  */
 public class NACardboardOverlayGUIView extends LinearLayout implements SensorEventListener {
-    private final CardboardOverlayEyeView   leftView;
-    private final CardboardOverlayEyeView   rightView;
-    private AlphaAnimation                  textFadeAnimation;
+    private NACardboardView                 mNACardboardView    = null;
+    private final CardboardOverlayEyeView   mLeftView;
+    private final CardboardOverlayEyeView   mRightView;
+    private AlphaAnimation                  mTextFadeAnimation;
+    private Vibrator                        mVibrator;
 
     public NACardboardOverlayGUIView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,36 +48,44 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f);
         params.setMargins(0, 0, 0, 0);
 
-        leftView = new CardboardOverlayEyeView(context, attrs);
-        leftView.setLayoutParams(params);
-        addView(leftView);
+        mLeftView = new CardboardOverlayEyeView(context, attrs, R.id.PlayerL,R.id.BrowserL,R.id.SettingL);
+        mLeftView.setLayoutParams(params);
+        addView(mLeftView);
 
-        rightView = new CardboardOverlayEyeView(context, attrs);
-        rightView.setLayoutParams(params);
-        addView(rightView);
+        mRightView = new CardboardOverlayEyeView(context, attrs, R.id.PlayerR,R.id.BrowserR,R.id.SettingR);
+        mRightView.setLayoutParams(params);
+        addView(mRightView);
 
         // Set some reasonable defaults.
         setDepthOffset(0.016f);
         setColor(Color.rgb(150, 255, 180));
         setVisibility(View.VISIBLE);
 
-        textFadeAnimation = new AlphaAnimation(1.0f, 0.0f);
-        textFadeAnimation.setDuration(5000);
+        mTextFadeAnimation = new AlphaAnimation(1.0f, 0.0f);
+        mTextFadeAnimation.setDuration(5000);
+
+        // init Vibrator
+        mVibrator   = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
         // init sensor
         initSensor();
     }
 
+    public void setCardboardView(NACardboardView naCardboardView) {
+        mNACardboardView    = naCardboardView;
+    }
+
     public void show3DToast(String message) {
         setText(message);
         setTextAlpha(1f);
-        textFadeAnimation.setAnimationListener(new EndAnimationListener() {
+
+        mTextFadeAnimation.setAnimationListener(new EndAnimationListener() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 setTextAlpha(0f);
             }
         });
-        startAnimation(textFadeAnimation);
+        //startAnimation(mTextFadeAnimation);
     }
 
     private abstract class EndAnimationListener implements Animation.AnimationListener {
@@ -73,74 +94,56 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
     }
 
     private void setDepthOffset(float offset) {
-        leftView.setOffset(offset);
-        rightView.setOffset(-offset);
+        mLeftView.setOffset(offset);
+        mRightView.setOffset(-offset);
     }
 
     private void setText(String text) {
-        leftView.setText(text);
-        rightView.setText(text);
+        mLeftView.setText(text);
+        mRightView.setText(text);
     }
 
     private void setTextAlpha(float alpha) {
-        leftView.setTextViewAlpha(alpha);
-        rightView.setTextViewAlpha(alpha);
+        mLeftView.setTextViewAlpha(alpha);
+        mRightView.setTextViewAlpha(alpha);
     }
 
     private void setColor(int color) {
-        leftView.setColor(color);
-        rightView.setColor(color);
+        mLeftView.setColor(color);
+        mRightView.setColor(color);
     }
 
     /*
         for head tracking
-        https://github.com/pscholl/glass_snippets/blob/master/lib/src/main/java/de/tud/ess/HeadListView.java
     */
-    private static final float  INVALID_X = 10;
-    private static final float  INVALID_Z = 10;
     private static final String TAG = NACardboardOverlayGUIView.class.getSimpleName();
     private Sensor              mSensor;
     private SensorManager       mSensorManager;
     private int                 mLastAccuracyXZ;
-    private float               mStartX = INVALID_X;
-    private float               mStartZ = INVALID_Z;
-    private int                 mLastPositionX = -1;
-    private int                 mLastPositionZ = -1;
-    private static final int    SENSOR_RATE_uS = 400000;
-    private static final float  VELOCITY_X = (float) (Math.PI / 180 * 2); // scroll one item per 2°
-    private static final float  VELOCITY_Z = (float) (Math.PI / 180 * 2); // scroll one item per 2°
+    private static final float  INVALID         = 10000;
+    private float               mStartPitch     = INVALID;
+    private float               mStartAzimuth   = INVALID;
+    private static final float  DEFINITION      = (float) (Math.PI / 180 * 0.2f);
 
     public void initSensor() {
         mSensorManager  = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         mSensor         = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-
-        //activate();
     }
 
-    public void activate() {
+    private void activateSensor(boolean isActivate) {
         if (mSensor == null)
             return;
 
-        mStartX = INVALID_X;
-        mStartZ = INVALID_Z;
-
-        mLastPositionX = -1;
-        mLastPositionZ = -1;
-
-        mSensorManager.registerListener(this, mSensor, SENSOR_RATE_uS);
-        Log.d(TAG, "Automatic scrolling enabled");
-    }
-
-    public void deactivate() {
-        mSensorManager.unregisterListener(this);
-
-        mStartX = INVALID_X;
-        mStartZ = INVALID_Z;
-
-        mLastPositionX = -1;
-        mLastPositionZ = -1;
-
-        Log.d(TAG, "Automatic scrolling disabled");
+        if(isActivate) {
+            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
+            Log.d(TAG, "Automatic scrolling enabled");
+        }
+        else {
+            mSensorManager.unregisterListener(this);
+            Log.d(TAG, "Automatic scrolling disabled");
+            mStartPitch      = INVALID;
+            mStartAzimuth    = INVALID;
+        }
     }
 
     @Override
@@ -149,8 +152,8 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
     }
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float[] mat = new float[9],
-                orientation = new float[3];
+        float[] mat         = new float[9];
+        float[] orientation = new float[3];
 
         if (mLastAccuracyXZ == SensorManager.SENSOR_STATUS_UNRELIABLE)
             return;
@@ -159,19 +162,240 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
         SensorManager.remapCoordinateSystem(mat, SensorManager.AXIS_X, SensorManager.AXIS_Z, mat);
         SensorManager.getOrientation(mat, orientation);
 
-        float   z = orientation[0], // see https://developers.google.com/glass/develop/gdk/location-sensors/index
-                x = orientation[1],
-                y = orientation[2];
+        //http://developer.android.com/intl/ko/reference/android/hardware/SensorManager.html#getOrientation(float[], float[])
+        float   azimuth = orientation[0];
+        float   pitch   = orientation[1];
 
-        if (mStartX == INVALID_X)   mStartX = x;
-        if (mStartZ == INVALID_Z)   mStartZ = z;
+        if (mStartPitch == INVALID)    mStartPitch    = pitch;
+        if (mStartAzimuth == INVALID)  mStartAzimuth  = azimuth;
 
-        int positionX = (int) ((mStartX - x) * -1 / VELOCITY_X);
-        int positionZ = (int) ((mStartZ - z) * -1 / VELOCITY_Z);
+        int result_pitch    = (int) ((mStartPitch - pitch) * -1 / DEFINITION);
+        int result_azimuth  = (int) ((mStartAzimuth - azimuth) * -1 / DEFINITION);
 
-        Log.d(TAG, "Look At ( "+positionX+" , " + + positionZ + " )");
+        mLeftView.moveTo(result_azimuth,result_pitch);
+        mRightView.moveTo(result_azimuth,result_pitch);
 
+        update3DToast();
+    }
 
+    /*
+    UI Control
+     */
+    public static  int                  GUI_PLAYER_CTRL     = 0;
+    public static  int                  GUI_BROWSER_CTRL    = 1;
+    public static  int                  GUI_SETTING_CTRL    = 2;
+    public static  int                  ITEMS_PER_PAGE      = 6;
+    private boolean                     isActivateGUI       = false;
+    private int                         mBtnGUI_ID_R        = -1;
+    private int                         mBtnGUI_ID_L        = -1;
+    private int                         mActivateGUILayerID = GUI_PLAYER_CTRL;
+    private String                      mFolder             = "";
+    private int                         mFolderPage         = 0;
+    private List<String>[]              mFolderFiles;
+    //private final List<BitmapDrawable>  mThumbnail          = new ArrayList<BitmapDrawable>();
+    //private final List<Bitmap>          mBitmapThumbnails   = new ArrayList<Bitmap>();
+    private final List<String>          mFolderThumbnails   = new ArrayList<String>();
+
+    public void onCardboardTrigger() {
+
+        mVibrator.vibrate(50);
+
+        if(!isActivateGUI) {
+            isActivateGUI   = true;
+            activateSensor(isActivateGUI);
+            activateGUI(isActivateGUI);
+
+            browserOpen();
+        } else {
+            if(mLeftView.getLookAtBtnID()!=-1) {
+                onGUIButtonClick(mLeftView.getLookAtBtnID());
+            }
+        }
+    }
+
+    private void activateGUI(boolean isActivate) {
+        mLeftView.activateGUI(isActivate,mActivateGUILayerID);
+        mRightView.activateGUI(isActivate,mActivateGUILayerID);
+    }
+
+    public void onGUIButtonClick(int btnID) {
+        String btnIDAsString    = getResources().getResourceEntryName(btnID);
+        String btnBtnIDString   = btnIDAsString.substring(0,btnIDAsString.length()-1);
+
+        char last = btnIDAsString.charAt(btnIDAsString.length()-1);
+
+        if(!((last=='L')||(last=='R')))
+            return;
+
+        if(last=='L')   {
+            mBtnGUI_ID_L = btnID;
+            last='R';
+        }
+        else {
+            mBtnGUI_ID_R = btnID;
+            last='L';
+        }
+
+        if((mBtnGUI_ID_L!=-1)&&(mBtnGUI_ID_R!=-1)) {
+            mBtnGUI_ID_L = -1;
+            mBtnGUI_ID_R = -1;
+            return;
+        }
+
+        int BtnID   = getResources().getIdentifier( btnBtnIDString+last,
+                getResources().getResourceTypeName(btnID),
+                getResources().getResourcePackageName(btnID));
+
+        final ImageButton btn = ((ImageButton)findViewById(BtnID));
+
+        btn.performClick();
+        btn.setPressed(true);
+        btn.invalidate();
+
+        btn.postDelayed(new Runnable() {
+            public void run() {
+                btn.setPressed(false);
+                btn.invalidate();
+            }
+        }, 40);
+
+        processBtn(btnID);
+    }
+
+    private void processBtn(int btnID) {
+        switch (btnID) {
+            case R.id.btn_leftL:
+                browserPreviousPage();
+                break;
+            case R.id.btn_rightL:
+                browserNextPage();
+                break;
+            case R.id.btn_file01L:
+                browserSelectItem(0);
+                break;
+            case R.id.btn_file02L:
+                browserSelectItem(1);
+                break;
+            case R.id.btn_file03L:
+                browserSelectItem(2);
+                break;
+            case R.id.btn_file04L:
+                browserSelectItem(3);
+                break;
+            case R.id.btn_file05L:
+                browserSelectItem(4);
+                break;
+            case R.id.btn_file06L:
+                browserSelectItem(5);
+                break;
+        }
+    }
+
+    private void update3DToast() {
+        String  msg = "";
+
+        if(mLeftView.getLookAtBtnID()!=-1) {
+            switch (mLeftView.getLookAtBtnID()) {
+                case R.id.btn_leftL:
+                    msg = "Previous Page";
+                    break;
+                case R.id.btn_rightL:
+                    msg = "Next Page";
+                    break;
+                case R.id.btn_file01L:
+                    msg = mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+0);
+                    break;
+                case R.id.btn_file02L:
+                    msg = mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+1);
+                    break;
+                case R.id.btn_file03L:
+                    msg = mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+2);
+                    break;
+                case R.id.btn_file04L:
+                    msg = mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+3);
+                    break;
+                case R.id.btn_file05L:
+                    msg = mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+4);
+                    break;
+                case R.id.btn_file06L:
+                    msg = mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+5);
+                    break;
+            }
+        }
+
+        show3DToast(msg);
+    }
+
+    /*
+    UI Control  - browser
+    */
+    private void browserOpen(){
+        browserSelectDir(mFolder);
+        mActivateGUILayerID = GUI_BROWSER_CTRL;
+        activateGUI(isActivateGUI);
+    }
+
+    private void browserSelectDir(String folder){
+        if(folder.equals(""))
+            mFolder = FileExplorer.getRoot();
+        else
+            mFolder = folder;
+
+        mFolderFiles    = FileExplorer.getDir(mFolder);
+        mFolderPage     = 0;
+        mFolderThumbnails.clear();
+
+        for(int i=0 ; i < mFolderFiles[0].size() ; i++)
+            if(FileExplorer.selectItem(mFolderFiles[0].get(i))==0)
+                mFolderThumbnails.add("");
+            else if(FileExplorer.selectItem(mFolderFiles[0].get(i))==1)
+                mFolderThumbnails.add(mFolderFiles[0].get(i));
+
+        updateBrowserController();
+    }
+
+    private void browserNextPage(){
+        mFolderPage++;
+        int maxPage = (mFolderThumbnails.size()%ITEMS_PER_PAGE)>0?(mFolderThumbnails.size()/ITEMS_PER_PAGE)+1:mFolderThumbnails.size()/ITEMS_PER_PAGE;
+        if(mFolderPage>=maxPage) mFolderPage=maxPage-1;
+        updateBrowserController();
+    }
+
+    private void browserPreviousPage(){
+        mFolderPage--;
+        if(mFolderPage<0)       mFolderPage=0;
+        updateBrowserController();
+    }
+
+    private void updateBrowserController() {
+        int listStart   = mFolderPage*ITEMS_PER_PAGE;
+        int listEnd     = mFolderThumbnails.size()>(listStart+ITEMS_PER_PAGE)?listStart+ITEMS_PER_PAGE:mFolderThumbnails.size();
+
+        final BitmapDrawable[] thumbnails   = new BitmapDrawable[listEnd-listStart];
+        for(int i=0 ; i < thumbnails.length ; i++ ) {
+            if(mFolderThumbnails.get(i+listStart).equals(""))
+                thumbnails[i]   = null;
+            else
+                thumbnails[i]   = new BitmapDrawable(getResources(),
+                        ThumbnailUtils.createVideoThumbnail(
+                                mFolderThumbnails.get(i + listStart), MediaStore.Video.Thumbnails.MINI_KIND));
+        }
+
+        mLeftView.updateBrowserController(thumbnails);
+        mRightView.updateBrowserController(thumbnails);
+    }
+
+    private void browserSelectItem(int btnIndex){
+        int type = FileExplorer.selectItem(mFolderFiles[0].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
+
+        switch (type) {
+            case 0:
+                browserSelectDir(mFolderFiles[0].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
+                break;
+            case 1:
+                mNACardboardView.playMovie(mFolderFiles[0].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
+                break;
+        }
     }
 
     /**
@@ -181,17 +405,26 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
      * <p>This is a helper class for CardboardOverlayView.
      */
     private class CardboardOverlayEyeView extends ViewGroup {
-        private final ImageView imageView;
-        private final TextView textView;
+        private final ImageView     imageView;
+        private final TextView      textView;
+        private final NCGUIViews    guiViews;
         private float offset;
 
-        public CardboardOverlayEyeView(Context context, AttributeSet attrs) {
+        public CardboardOverlayEyeView(Context context, AttributeSet attrs, int playerID, int browserID, int settingID) {
             super(context, attrs);
+
+            // add GUI
+            guiViews = new NCGUIViews(context, attrs, playerID, browserID, settingID);
+            addView(guiViews);
+            guiViews.setVisibility(View.INVISIBLE);
+
+            // add imageView
             imageView = new ImageView(context, attrs);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             imageView.setAdjustViewBounds(true);  // Preserve aspect ratio.
             addView(imageView);
 
+            // add textView
             textView = new TextView(context, attrs);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14.0f);
             textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
@@ -201,7 +434,7 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
         }
 
         public void setColor(int color) {
-            imageView.setColorFilter(color);
+            //imageView.setColorFilter(color);
             textView.setTextColor(color);
         }
 
@@ -217,11 +450,35 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
             this.offset = offset;
         }
 
+        public void moveTo(int x, int y) {
+            guiViews.moveTo(x,y);
+        };
+
+        /*
+        UI Control
+        */
+        public void activateGUI(boolean isActivate, int LayoutID) {
+            if(isActivate) {
+                guiViews.layoutReset(LayoutID);
+                guiViews.setVisibility(View.VISIBLE);
+            } else {
+                guiViews.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        public int getLookAtBtnID() {
+            return guiViews.getLookAtBtnID();
+        }
+
+        public void updateBrowserController(BitmapDrawable[] thumbnails) {
+            guiViews.updateBrowserController(thumbnails);
+        }
+
         @Override
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
             // Width and height of this ViewGroup.
-            final int width = right - left;
-            final int height = bottom - top;
+            final int width     = right - left;
+            final int height    = bottom - top;
 
             // The size of the image, given as a fraction of the dimension as a ViewGroup.
             // We multiply both width and heading with this number to compute the image's bounding
@@ -236,19 +493,25 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
             final float verticalTextPos = 0.52f;
 
             // Layout ImageView
-            float imageMargin = (1.0f - imageSize) / 2.0f;
-            float leftMargin = (int) (width * (imageMargin + offset));
-            float topMargin = (int) (height * (imageMargin + verticalImageOffset));
+            float imageMargin   = (1.0f - imageSize) / 2.0f;
+            float leftMargin    = (int) (width * (imageMargin + offset));
+            float topMargin     = (int) (height * (imageMargin + verticalImageOffset));
             imageView.layout(
                     (int) leftMargin, (int) topMargin,
                     (int) (leftMargin + width * imageSize), (int) (topMargin + height * imageSize));
 
             // Layout TextView
-            leftMargin = offset * width;
-            topMargin = height * verticalTextPos;
+            leftMargin          = offset * width;
+            topMargin           = height * verticalTextPos;
             textView.layout(
                     (int) leftMargin, (int) topMargin,
                     (int) (leftMargin + width), (int) (topMargin + height * (1.0f - verticalTextPos)));
+
+            // Layout GUI
+            leftMargin          = offset * width;
+            guiViews.layout(
+                    (int) leftMargin, 0,
+                    (int) (leftMargin + width), height);
         }
     }
 }
