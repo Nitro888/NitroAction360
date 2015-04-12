@@ -181,10 +181,10 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
     /*
     UI Control
      */
-    public static  int                  GUI_PLAYER_CTRL     = 0;
-    public static  int                  GUI_BROWSER_CTRL    = 1;
-    public static  int                  GUI_SETTING_CTRL    = 2;
-    public static  int                  ITEMS_PER_PAGE      = 6;
+    public static  final int            GUI_PLAYER_CTRL     = 0;
+    public static  final int            GUI_BROWSER_CTRL    = 1;
+    public static  final int            GUI_SETTING_CTRL    = 2;
+    public static  final int            ITEMS_PER_PAGE      = 6;
     private boolean                     isActivateGUI       = false;
     private int                         mBtnGUI_ID_R        = -1;
     private int                         mBtnGUI_ID_L        = -1;
@@ -192,8 +192,6 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
     private String                      mFolder             = "";
     private int                         mFolderPage         = 0;
     private List<String>[]              mFolderFiles;
-    //private final List<BitmapDrawable>  mThumbnail          = new ArrayList<BitmapDrawable>();
-    //private final List<Bitmap>          mBitmapThumbnails   = new ArrayList<Bitmap>();
     private final List<String>          mFolderThumbnails   = new ArrayList<String>();
 
     public void onCardboardTrigger() {
@@ -204,8 +202,6 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
             isActivateGUI   = true;
             activateSensor(isActivateGUI);
             activateGUI(isActivateGUI);
-
-            browserOpen();
         } else {
             if(mLeftView.getLookAtBtnID()!=-1) {
                 onGUIButtonClick(mLeftView.getLookAtBtnID());
@@ -214,6 +210,9 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
     }
 
     private void activateGUI(boolean isActivate) {
+        if(mNACardboardView.isPlaying()&&isActivate)    preparePlayerController();
+        else if(isActivate)                             prepareBrowserController();
+
         mLeftView.activateGUI(isActivate,mActivateGUILayerID);
         mRightView.activateGUI(isActivate,mActivateGUILayerID);
     }
@@ -327,12 +326,19 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
     }
 
     /*
-    UI Control  - browser
+        UI Control  - player controller
     */
-    private void browserOpen(){
+    private void preparePlayerController() {
+        mNACardboardView.pauseMovie();
+        mActivateGUILayerID = GUI_PLAYER_CTRL;
+    }
+
+    /*
+        UI Control  - browser
+    */
+    private void prepareBrowserController(){
         browserSelectDir(mFolder);
         mActivateGUILayerID = GUI_BROWSER_CTRL;
-        activateGUI(isActivateGUI);
     }
 
     private void browserSelectDir(String folder){
@@ -393,6 +399,9 @@ public class NACardboardOverlayGUIView extends LinearLayout implements SensorEve
                 browserSelectDir(mFolderFiles[0].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
                 break;
             case 1:
+                isActivateGUI   = false;
+                activateSensor(isActivateGUI);
+                activateGUI(isActivateGUI);
                 mNACardboardView.playMovie(mFolderFiles[0].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
                 break;
         }

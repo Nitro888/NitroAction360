@@ -1,7 +1,6 @@
 package com.nitro888.nitroaction360.cardboard;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
@@ -16,7 +15,6 @@ import com.google.vrtoolkit.cardboard.Viewport;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -49,11 +47,19 @@ public class NACardboardView extends CardboardView {
         if(mMediaPlayer==null)
             mMediaPlayer    = new MediaPlayer();
 
-        mScreenRenderer = new ScreenRenderer(context,meshId1);
+        mScreenRenderer = new ScreenRenderer(context, meshId1, meshId2);
         mScreenRenderer.setMediPlayer(mMediaPlayer);
 
         setRenderer((StereoRenderer)mScreenRenderer);
     }
+
+    /*
+        Play movie
+    */
+    public boolean isPlaying() {
+        return mMediaPlayer.isPlaying();
+    }
+
     public void playMovie(String fileName) {
         if(mMediaPlayer==null)  return;
 
@@ -73,6 +79,22 @@ public class NACardboardView extends CardboardView {
         if(mMediaPlayer==null)  return;
         mMediaPlayer.pause();
     }
+
+    public void skipForward() {
+
+    }
+    public void skipPrevious() {
+
+    }
+
+    public void fastForward() {
+        //mMediaPlayer.
+
+    }
+    public void fastRewind() {
+
+    }
+
     /*
     private void createMediaPlayer(int ResourceID) {
         if(mMediaPlayer==null)
@@ -90,13 +112,52 @@ public class NACardboardView extends CardboardView {
         }
     }
     */
+
+    /*
+        Setting Screen
+    */
+    public void setScreenShapeType(int screenID) {
+        mScreenRenderer.setScreenShapeType(screenID);
+    }
+    public void setScreenRenderType(int renderType) {
+        mScreenRenderer.setScreenRenderType(renderType);
+    }
+    public void setScreenTiltPosition(float degree) {
+        mScreenRenderer.setScreenTiltPosition(degree);
+    }
+    public void setScreenScale(float scale) {
+        mScreenRenderer.setScreenScale(scale);
+    }
+
+
     private class ScreenRenderer extends ScreenMeshGLRenderer implements NACardboardView.StereoRenderer {
         private float[]                     mCamera     = new float[16];
         private float[]                     mView       = new float[16];
         private float[]                     mHeadView   = new float[16];
+        private int                         mScreenShapeType;
+        private int                         mScreenRenderType;
+        private float                       mScreenTiltPosition;
+        private float                       mScreenScale;
 
-        public ScreenRenderer(Context context,int meshId) {
-            super(context,meshId);
+        public ScreenRenderer(Context context, int meshId1, int meshId2) {
+            super(context,meshId1,meshId2);
+            mScreenShapeType        = meshId1;
+            mScreenRenderType       = ScreenType.SCREEN_2D;
+            mScreenTiltPosition     = 0.0f;
+            mScreenScale            = 1.0f;
+        }
+
+        public void setScreenShapeType(int screenID) {
+            mScreenShapeType        = screenID;
+        }
+        public void setScreenRenderType(int renderType) {
+            mScreenRenderType       = renderType;
+        }
+        public void setScreenTiltPosition(float degree) {
+            mScreenTiltPosition     = degree;
+        }
+        public void setScreenScale(float scale) {
+            mScreenScale = scale;
         }
 
         @Override
@@ -127,8 +188,9 @@ public class NACardboardView extends CardboardView {
             }
 
             super.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView,
-                    ScreenType.getSideBySideScreenOffset(eye.getType()),
-                    ScreenType.getScreenScaleRatioRotation(0,1.0f,mScreenWidth,mScreenHeight));
+                    ScreenType.getScreenOffset(mScreenRenderType,eye.getType()),
+                    ScreenType.getScreenScaleRatioRotation(mScreenTiltPosition,mScreenScale,mScreenWidth,mScreenHeight),
+                    mScreenShapeType);
         }
         @Override
         public void onFinishFrame(Viewport viewport) {
