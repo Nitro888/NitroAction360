@@ -6,7 +6,6 @@ attribute vec4  a_Position;
 attribute vec3  a_Normal;
 attribute vec2  a_TexCoordinate;
 
-
 varying vec3    v_Position;
 varying vec3    v_Normal;
 varying vec2    v_TexCoordinate;

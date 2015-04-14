@@ -6,35 +6,56 @@ import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.nitro888.nitroaction360.cardboard.NACardboardOverlayGUIView;
-import com.nitro888.nitroaction360.cardboard.NACardboardView;
+import com.google.vrtoolkit.cardboard.CardboardView;
+import com.nitro888.nitroaction360.cardboard.NACardboardOverlayView;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
+import com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout;
+import com.nitro888.nitroaction360.nitroaction.NAScreenGLRenderer;
+import com.nitro888.nitroaction360.nitroaction.NAViewsToGLRenderer;
+import com.nitro888.nitroaction360.utils.ScreenTypeHelper;
 
 /**
  * Created by nitro888 on 15. 4. 5..
  */
-public class MainActivity extends CardboardActivity implements YouTubePlayer.OnInitializedListener {
+public class MainActivity extends CardboardActivity /*implements YouTubePlayer.OnInitializedListener*/ {
 
-    private NACardboardOverlayGUIView   mNAOverlayGUIView;
-    private NACardboardView             mNACardboardView;
+    private NACardboardOverlayView      mNACardboardOverlayView;
+    private CardboardView               mCardboardView;
+
+    private NAViewsToGLRenderer         mNAViewsToGLRenderer;
+    private NAScreenGLRenderer          mNAScreenGLRenderer;
+    private NAGUIRelativeLayout         mNAGUIRelativeLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_ui);
 
-        mNACardboardView = (NACardboardView) findViewById(R.id.cardboard_view);
-        mNACardboardView.initRenderer(this, R.raw.plane_sq, R.raw.dome);
-        setCardboardView(mNACardboardView);
+        // ViewsToGLRenderer
+        mNAViewsToGLRenderer    = new NAViewsToGLRenderer();
 
-        mNAOverlayGUIView    = (NACardboardOverlayGUIView) findViewById(R.id.overlay);
-        mNAOverlayGUIView.setCardboardView(mNACardboardView);
-        //mNAOverlayGUIView.show3DToast("NitroAction 360 Start");
+        // Screen
+        mNAScreenGLRenderer     = new NAScreenGLRenderer(this);
+        mNAScreenGLRenderer.setViewToGLRenderer(mNAViewsToGLRenderer);
 
-        onCreateYouTube();
+        // GUI
+        mNAGUIRelativeLayout    = (NAGUIRelativeLayout) findViewById(R.id.GUI);
+        mNAGUIRelativeLayout.setViewToGLRenderer(mNAViewsToGLRenderer);
+
+        // Cardboard
+        mCardboardView          = (CardboardView) findViewById(R.id.cardboard_view);
+        mCardboardView.setRenderer((CardboardView.StereoRenderer) mNAScreenGLRenderer);
+
+        mNACardboardOverlayView = (NACardboardOverlayView) findViewById(R.id.overlay);
+        mNACardboardOverlayView.show3DToast("NitroAction 360 Start");
+
+        // youtube
+        //onCreateYouTube();
+
+        setCardboardView(mCardboardView);
     }
-
+/*
     @Override
     public void onCardboardTrigger() {
         mNAOverlayGUIView.onCardboardTrigger();
@@ -52,14 +73,13 @@ public class MainActivity extends CardboardActivity implements YouTubePlayer.OnI
     private YouTubePlayer           youTubePlayer;
     private YouTubePlayerFragment   youTubePlayerFragment;
 
-    private static final int RQS_ErrorDialog = 1;
+    private static final int        RQS_ErrorDialog = 1;
 
     private MyPlayerStateChangeListener myPlayerStateChangeListener;
     private MyPlaybackEventListener     myPlaybackEventListener;
 
 
     private void onCreateYouTube() {
-        /*
         youTubePlayerFragment = (YouTubePlayerFragment)getFragmentManager()
                 .findFragmentById(R.id.youtubeplayerfragment);
         youTubePlayerFragment.initialize(YouTubeKey.API_KEY, this);
@@ -67,7 +87,6 @@ public class MainActivity extends CardboardActivity implements YouTubePlayer.OnI
 
         myPlayerStateChangeListener = new MyPlayerStateChangeListener();
         myPlaybackEventListener     = new MyPlaybackEventListener();
-        */
     }
 
     @Override
@@ -141,4 +160,5 @@ public class MainActivity extends CardboardActivity implements YouTubePlayer.OnI
         public void onStopped() {
         }
     }
+    */
 }

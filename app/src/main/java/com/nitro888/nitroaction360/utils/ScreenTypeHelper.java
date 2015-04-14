@@ -1,14 +1,21 @@
-package com.nitro888.nitroaction360.cardboard;
+package com.nitro888.nitroaction360.utils;
 
 import com.google.vrtoolkit.cardboard.Eye;
+import com.nitro888.nitroaction360.R;
+
 /**
- * Created by nitro888 on 15. 4. 8..
+ * Created by nitro888 on 15. 4. 14..
  */
-public class ScreenType {
-    public static final int   SCREEN_2D       = 0;
-    public static final int   SCREEN_3D_SBS   = 1;
-    public static final int   SCREEN_3D_TLBR  = 2;
-    public static final int   SCREEN_3D_TRBL  = 3;
+public class ScreenTypeHelper {
+    public static final int     SCREEN_2D       = 0;
+    public static final int     SCREEN_3D_SBS   = 1;
+    public static final int     SCREEN_3D_TLBR  = 2;
+    public static final int     SCREEN_3D_TRBL  = 3;
+
+    public final static int     SCREEN_CURVE    = R.raw.plane_sq;
+    public final static int     SCREEN_DOME     = R.raw.dome;
+    public final static int     SCREEN_GUI      = R.raw.plane_sq;   // GUI
+
 
     public static float[] getScreenOffset(int renderType, int side){
         switch (renderType) {

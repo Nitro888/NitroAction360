@@ -5,532 +5,283 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/PlayerL"
-        android:rowCount="3"
-        android:columnCount="3">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_folderL"
-            android:src="@drawable/ic_folder_black_48dp"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_upL"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:src="@drawable/ic_vertical_align_top_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_settingL"
-            android:src="@drawable/ic_settings_black_48dp"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:layout_alignBottom="@+id/playerR"
-            android:layout_toRightOf="@+id/playerR"
-            android:layout_toEndOf="@+id/playerR"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_fast_rewindL"
-            android:src="@drawable/ic_fast_rewind_black_48dp"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_playL"
-            android:src="@drawable/ic_play_arrow_black_48dp"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_fast_forwardL"
-            android:src="@drawable/ic_fast_forward_black_48dp"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_skip_previousL"
-            android:src="@drawable/ic_skip_previous_black_48dp"
-            android:layout_row="2"
-            android:layout_column="0"
-            android:layout_below="@+id/playerR"
-            android:layout_alignRight="@+id/playerR"
-            android:layout_alignEnd="@+id/playerR"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_downL"
-            android:layout_row="2"
-            android:layout_column="1"
-            android:src="@drawable/ic_vertical_align_bottom_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_skip_nextL"
-            android:src="@drawable/ic_skip_next_black_48dp"
-            android:layout_row="2"
-            android:layout_column="2"
-            android:onClick="onGUIButtonClick" />
-
-    </GridLayout>
-
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/PlayerR"
-        android:rowCount="3"
-        android:columnCount="3">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_folderR"
-            android:src="@drawable/ic_folder_black_48dp"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_upR"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:src="@drawable/ic_vertical_align_top_black_48dp"
-            android:nestedScrollingEnabled="false"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_settingR"
-            android:src="@drawable/ic_settings_black_48dp"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:layout_alignBottom="@+id/playerL"
-            android:layout_toRightOf="@+id/playerL"
-            android:layout_toEndOf="@+id/playerL"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_fast_rewindR"
-            android:src="@drawable/ic_fast_rewind_black_48dp"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_playR"
-            android:src="@drawable/ic_play_arrow_black_48dp"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_fast_forwardR"
-            android:src="@drawable/ic_fast_forward_black_48dp"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_skip_previousR"
-            android:src="@drawable/ic_skip_previous_black_48dp"
-            android:layout_row="2"
-            android:layout_column="0"
-            android:layout_below="@+id/playerL"
-            android:layout_alignRight="@+id/playerL"
-            android:layout_alignEnd="@+id/playerL"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_downR"
-            android:layout_row="2"
-            android:layout_column="1"
-            android:src="@drawable/ic_vertical_align_bottom_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_skip_nextR"
-            android:src="@drawable/ic_skip_next_black_48dp"
-            android:layout_row="2"
-            android:layout_column="2"
-            android:onClick="onGUIButtonClick" />
-
-    </GridLayout>
-
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:rowCount="3"
-        android:columnCount="3"
-        android:id="@+id/BrowserL">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_leftL"
-            android:src="@drawable/ic_keyboard_arrow_left_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_closeL"
-            android:src="@drawable/ic_cancel_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_rightL"
-            android:src="@drawable/ic_keyboard_arrow_right_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file01L"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file02L"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file03L"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file04L"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file05L"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file06L"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-    </GridLayout>
-
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:rowCount="3"
-        android:columnCount="3"
-        android:id="@+id/BrowserR">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_leftR"
-            android:src="@drawable/ic_keyboard_arrow_left_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_closeR"
-            android:src="@drawable/ic_cancel_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_rightR"
-            android:src="@drawable/ic_keyboard_arrow_right_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file01R"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file02R"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file03R"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file04R"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file05R"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_file06R"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:onClick="onGUIButtonClick" />
-    </GridLayout>
-
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/SettingL"
-        android:columnCount="3"
-        android:rowCount="3">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_sbs_3d_L"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:onClick="onGUIButtonClick"
-            android:src="@drawable/ic_view_week_black_48dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_dome_L"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:onClick="onGUIButtonClick"
-            android:src="@drawable/ic_panorama_fisheye_black_48dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_sizeup_L"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:src="@drawable/ic_exposure_plus_1_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_2d_L"
-            android:src="@drawable/ic_crop_16_9_black_48dp"
-            android:onClick="onGUIButtonClick"
-            android:layout_row="1"
-            android:layout_column="0" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_back_L"
-            android:src="@drawable/ic_cancel_black_48dp"
-            android:onClick="onGUIButtonClick"
-            android:layout_row="1"
-            android:layout_column="1" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_sizeReset_L"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:onClick="onGUIButtonClick"
-            android:src="@drawable/ic_exposure_zero_black_48dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_tb_3d_L"
-            android:layout_row="2"
-            android:layout_column="0"
-            android:onClick="onGUIButtonClick"
-            android:src="@drawable/ic_view_stream_black_48dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_panorama_l"
-            android:src="@drawable/ic_panorama_horizontal_black_48dp"
-            android:onClick="onGUIButtonClick"
-            android:layout_row="2"
-            android:layout_column="1" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_sizedown_L"
-            android:layout_row="2"
-            android:layout_column="2"
-            android:src="@drawable/ic_exposure_minus_1_black_48dp"
-            android:onClick="onGUIButtonClick" />
-    </GridLayout>
-
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/SettingR"
-        android:columnCount="3"
-        android:rowCount="3">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_sbs_3d_R"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:onClick="onGUIButtonClick"
-            android:src="@drawable/ic_view_week_black_48dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_dome_R"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:onClick="onGUIButtonClick"
-            android:src="@drawable/ic_panorama_fisheye_black_48dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_sizeup_R"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:src="@drawable/ic_exposure_plus_1_black_48dp"
-            android:onClick="onGUIButtonClick" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_2d_R"
-            android:src="@drawable/ic_crop_16_9_black_48dp"
-            android:onClick="onGUIButtonClick"
-            android:layout_row="1"
-            android:layout_column="0" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_back_R"
-            android:src="@drawable/ic_cancel_black_48dp"
-            android:onClick="onGUIButtonClick"
-            android:layout_row="1"
-            android:layout_column="1" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_sizeReset_R"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:onClick="onGUIButtonClick"
-            android:src="@drawable/ic_exposure_zero_black_48dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_tb_3d_R"
-            android:layout_row="2"
-            android:layout_column="0"
-            android:onClick="onGUIButtonClick"
-            android:src="@drawable/ic_view_stream_black_48dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_panorama_R"
-            android:src="@drawable/ic_panorama_horizontal_black_48dp"
-            android:onClick="onGUIButtonClick"
-            android:layout_row="2"
-            android:layout_column="1" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_screen_sizedown_R"
-            android:layout_row="2"
-            android:layout_column="2"
-            android:src="@drawable/ic_exposure_minus_1_black_48dp"
-            android:onClick="onGUIButtonClick" />
-    </GridLayout>
-
-    <com.nitro888.nitroaction360.cardboard.NACardboardView
+    <com.google.vrtoolkit.cardboard.CardboardView
         android:id="@+id/cardboard_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
-    <com.nitro888.nitroaction360.cardboard.NACardboardOverlayGUIView
+    <com.nitro888.nitroaction360.cardboard.NACardboardOverlayView
         android:id="@+id/overlay"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
+
+
+    <com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/GUI">
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/Setting"
+            android:columnCount="3"
+            android:rowCount="3">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_sbs_3d_"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:onClick="onGUIButtonClick"
+                android:src="@drawable/ic_view_week_black_48dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_dome_"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:onClick="onGUIButtonClick"
+                android:src="@drawable/ic_panorama_fisheye_black_48dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_screen_sizeup_"
+                android:layout_row="0"
+                android:layout_column="2"
+                android:src="@drawable/ic_exposure_plus_1_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_2d_"
+                android:src="@drawable/ic_crop_16_9_black_48dp"
+                android:onClick="onGUIButtonClick"
+                android:layout_row="1"
+                android:layout_column="0" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_back_"
+                android:src="@drawable/ic_cancel_black_48dp"
+                android:onClick="onGUIButtonClick"
+                android:layout_row="1"
+                android:layout_column="1" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_screen_sizeReset_"
+                android:layout_row="1"
+                android:layout_column="2"
+                android:onClick="onGUIButtonClick"
+                android:src="@drawable/ic_exposure_zero_black_48dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_tb_3d_"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:onClick="onGUIButtonClick"
+                android:src="@drawable/ic_view_stream_black_48dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_panorama_l"
+                android:src="@drawable/ic_panorama_horizontal_black_48dp"
+                android:onClick="onGUIButtonClick"
+                android:layout_row="2"
+                android:layout_column="1" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_screen_sizedown_"
+                android:layout_row="2"
+                android:layout_column="2"
+                android:src="@drawable/ic_exposure_minus_1_black_48dp"
+                android:onClick="onGUIButtonClick" />
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rowCount="3"
+            android:columnCount="3"
+            android:id="@+id/Browser">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_left"
+                android:src="@drawable/ic_keyboard_arrow_left_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_close"
+                android:src="@drawable/ic_cancel_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_right"
+                android:src="@drawable/ic_keyboard_arrow_right_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_file01"
+                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_file02"
+                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_file03"
+                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_file04"
+                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_file05"
+                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_file06"
+                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:onClick="onGUIButtonClick" />
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/Player"
+            android:rowCount="3"
+            android:columnCount="3">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_folder"
+                android:src="@drawable/ic_folder_black_48dp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_screen_up"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:src="@drawable/ic_vertical_align_top_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_setting"
+                android:src="@drawable/ic_settings_black_48dp"
+                android:layout_row="0"
+                android:layout_column="2"
+                android:layout_alignBottom="@+id/playerR"
+                android:layout_toRightOf="@+id/playerR"
+                android:layout_toEndOf="@+id/playerR"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_fast_rewind"
+                android:src="@drawable/ic_fast_rewind_black_48dp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_play"
+                android:src="@drawable/ic_play_arrow_black_48dp"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_fast_forward"
+                android:src="@drawable/ic_fast_forward_black_48dp"
+                android:layout_row="1"
+                android:layout_column="2"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_skip_previous"
+                android:src="@drawable/ic_skip_previous_black_48dp"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:layout_below="@+id/playerR"
+                android:layout_alignRight="@+id/playerR"
+                android:layout_alignEnd="@+id/playerR"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_screen_down"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:src="@drawable/ic_vertical_align_bottom_black_48dp"
+                android:onClick="onGUIButtonClick" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_skip_next"
+                android:src="@drawable/ic_skip_next_black_48dp"
+                android:layout_row="2"
+                android:layout_column="2"
+                android:onClick="onGUIButtonClick" />
+
+        </GridLayout>
+    </com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout>
+
 
     <!--
     <fragment
