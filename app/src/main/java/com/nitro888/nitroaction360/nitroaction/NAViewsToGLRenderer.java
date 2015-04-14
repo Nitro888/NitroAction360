@@ -2,8 +2,10 @@ package com.nitro888.nitroaction360.nitroaction;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Canvas;
 import android.graphics.SurfaceTexture;
+import android.media.MediaPlayer;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
@@ -64,7 +66,46 @@ public class NAViewsToGLRenderer {
         // GUI Size Setting
 
         for(int i = 0 ; i < mSurfaces.length ; i ++ )   createSurface(i);
+        //testPlay();
     }
+
+    // Play test
+    /*
+    private MediaPlayer mMediaPlayer            = null;
+
+    private void testPlay() {
+        if(mMediaPlayer==null)
+            mMediaPlayer    = new MediaPlayer();
+
+        try {
+            //mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+            AssetFileDescriptor afd = mContext.getResources().openRawResourceFd(R.raw.big_buck_bunny);
+            mMediaPlayer.setDataSource(
+                    afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            afd.close();
+            mMediaPlayer.prepare();
+            setTextureSize();
+            mMediaPlayer.start();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+        mMediaPlayer.setSurface(getSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER));
+        mMediaPlayer.setScreenOnWhilePlaying(true);
+    }
+    private void setTextureSize() {
+        setTextureWidth(
+                NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,
+                mMediaPlayer.getVideoWidth());
+        setTextureHeight(
+                NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,
+                mMediaPlayer.getVideoHeight());
+        createSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER);
+        mMediaPlayer.setSurface(getSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER));
+        mMediaPlayer.setScreenOnWhilePlaying(true);
+    }
+    */
+    // Play test
 
     public void createSurface (int typeID) {
         mSurfaces[typeID].createSurface();
