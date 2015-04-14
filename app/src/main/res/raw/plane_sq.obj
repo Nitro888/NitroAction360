@@ -1,6 +1,6 @@
 # Blender v2.73 (sub 0) OBJ File: 'plene_sq.blend'
 # www.blender.org
-o Plane_Plane.009
+o Plane
 v -10.000000 -10.000000 -12.000000
 v 10.000000 -10.000000 -12.000000
 v -10.000000 10.000000 -12.000000

@@ -1,16 +1,17 @@
 package com.nitro888.nitroaction360.nitroaction;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.SurfaceTexture;
-import android.media.MediaPlayer;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.util.Log;
 import android.view.Surface;
 
-import javax.microedition.khronos.egl.EGLConfig;
+import com.nitro888.nitroaction360.R;
+
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -20,15 +21,14 @@ import javax.microedition.khronos.opengles.GL10;
 // from ViewToGLRenderer
 // https://github.com/ArtemBogush/AndroidViewToGLRendering
 //-------------------------------------------------------------------
-public class NAViewsToGLRenderer implements GLSurfaceView.Renderer {
-
+public class NAViewsToGLRenderer {
+    private Context             mContext;
     private static final String TAG = NAViewsToGLRenderer.class.getSimpleName();
 
     private static final int    DEFAULT_TEXTURE_WIDTH           = 1024;
     private static final int    DEFAULT_TEXTURE_HEIGHT          = 1024;
 
-    private MediaPlayer         mMediaPlayer                    = null;
-
+    public static final int     SURFACE_TEXTURE_EMPTY           = 0;
     public static final int     SURFACE_TEXTURE_FOR_GUI         = 0;
     public static final int     SURFACE_TEXTURE_FOR_MEDIAPLAYER = 1;
     public static final int     SURFACE_TEXTURE_FOR_SCREEN      = 2;
@@ -38,7 +38,9 @@ public class NAViewsToGLRenderer implements GLSurfaceView.Renderer {
 
     private static surfaceTexture[] mSurfaces                   = new surfaceTexture[SURFACE_TEXTURE_MAX];
 
-    public NAViewsToGLRenderer() {
+    public NAViewsToGLRenderer(Context context) {
+        mContext                = context;
+
         for(int i = 0 ; i < mSurfaces.length ; i ++ ) {
             mSurfaces[i]    = new surfaceTexture();
             mSurfaces[i].setActivate(true);
@@ -53,40 +55,26 @@ public class NAViewsToGLRenderer implements GLSurfaceView.Renderer {
         return mSurfaces[typeID].isActivate();
     }
 
-    @Override
-    public void onDrawFrame(GL10 gl){
-        onDrawFrame();
+    public void onSurfaceChanged(){
+        // GUI Size Setting
+        setTextureWidth(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI,
+                ((Activity) mContext).findViewById(R.id.GUI).getWidth());
+        setTextureHeight(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI,
+                ((Activity) mContext).findViewById(R.id.GUI).getHeight());
+        // GUI Size Setting
+
+        for(int i = 0 ; i < mSurfaces.length ; i ++ )   createSurface(i);
+    }
+
+    public void createSurface (int typeID) {
+        mSurfaces[typeID].createSurface();
     }
 
     public void onDrawFrame(){
         synchronized (this){
-            for(int i = 0 ; i < mSurfaces.length ; i ++ ) {
+            for(int i = 0 ; i < mSurfaces.length ; i ++ )
                 mSurfaces[i].onDrawFrame();
-            }
         }
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height){
-        onSurfaceChanged(width,height);
-    }
-
-    public void onSurfaceChanged(int width, int height){
-        for(int i = 0 ; i < mSurfaces.length ; i ++ ) {
-            mSurfaces[i].onSurfaceChanged(width,height);
-        }
-    }
-
-    @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config){
-        final String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
-        gl.glDisable(GL10.GL_DITHER);
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,GL10.GL_FASTEST);
-        gl.glClearColor(0,0,0,0);
-        gl.glEnable(GL10.GL_CULL_FACE);
-        gl.glShadeModel(GL10.GL_SMOOTH);
-        gl.glEnable(GL10.GL_DEPTH_TEST);
-        Log.d(TAG, extensions);
     }
 
     public int getGLSurfaceTexture(int typeID){
@@ -122,15 +110,15 @@ public class NAViewsToGLRenderer implements GLSurfaceView.Renderer {
     }
 
     private class surfaceTexture {
-        private boolean         mIsActivate = false;
+        private boolean         mIsActivate         = false;
         private SurfaceTexture  mSurfaceTexture;
         private Surface         mSurface;
 
-        private int             mGlSurfaceTexture;
+        private int             mGlSurfaceTexture   = SURFACE_TEXTURE_EMPTY;
         private Canvas          mSurfaceCanvas;
 
-        private int             mTextureWidth = DEFAULT_TEXTURE_WIDTH;
-        private int             mTextureHeight = DEFAULT_TEXTURE_HEIGHT;
+        private int             mTextureWidth       = DEFAULT_TEXTURE_WIDTH;
+        private int             mTextureHeight      = DEFAULT_TEXTURE_HEIGHT;
 
         public void setActivate (boolean activate) {
             mIsActivate = activate;
@@ -141,17 +129,21 @@ public class NAViewsToGLRenderer implements GLSurfaceView.Renderer {
         }
 
         public void onDrawFrame(){
+            if(mGlSurfaceTexture==SURFACE_TEXTURE_EMPTY)
+                return;
+
             synchronized (this){
                 if(mIsActivate)
                     mSurfaceTexture.updateTexImage();
             }
         }
 
-        public void onSurfaceChanged(int width, int height){
+        public void createSurface() {
             if(mIsActivate) {
+                //Log.d(TAG,"private class surfaceTexture onSurfaceChanged : "+mTextureWidth+","+mTextureHeight);
                 releaseSurface();
                 mGlSurfaceTexture = createTexture();
-                if (mGlSurfaceTexture > 0){
+                if (mGlSurfaceTexture > SURFACE_TEXTURE_EMPTY){
                     //attach the texture to a surface.
                     //It's a clue class for rendering an android view to gl level
                     mSurfaceTexture = new SurfaceTexture(mGlSurfaceTexture);
@@ -173,7 +165,8 @@ public class NAViewsToGLRenderer implements GLSurfaceView.Renderer {
         }
 
         private int createTexture(){
-            int[] textures = new int[1];
+            mGlSurfaceTexture   = SURFACE_TEXTURE_EMPTY;
+            int[] textures      = new int[1];
 
             // Generate the texture to where android view will be rendered
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -229,10 +222,10 @@ public class NAViewsToGLRenderer implements GLSurfaceView.Renderer {
         }
 
         public void setTextureWidth(int textureWidth) {
-            mTextureWidth = textureWidth;
+            mTextureWidth   = textureWidth;
         }
         public void setTextureHeight(int textureHeight) {
-            mTextureHeight = textureHeight;
+            mTextureHeight  = textureHeight;
         }
     }
 

@@ -14,7 +14,7 @@ public class ScreenTypeHelper {
 
     public final static int     SCREEN_CURVE    = R.raw.plane_sq;
     public final static int     SCREEN_DOME     = R.raw.dome;
-    public final static int     SCREEN_GUI      = R.raw.plane_sq;   // GUI
+    public final static int     SCREEN_GUI      = R.raw.plane_sq_gui;   // GUI
 
 
     public static float[] getScreenOffset(int renderType, int side){

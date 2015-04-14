@@ -66,7 +66,14 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
 
     @Override
     public void onSurfaceCreated(EGLConfig config) {
+        //mNAViewsToGLRenderer.onSurfaceCreated(null,config);
         mCore.onSurfaceCreated();
+    }
+    @Override
+    public void onSurfaceChanged(int width, int height){
+        if(mNAViewsToGLRenderer!=null)
+            mNAViewsToGLRenderer.onSurfaceChanged();
+        mCore.onSurfaceChanged(width,height);
     }
     @Override
     public void onNewFrame(HeadTransform headTransform) {
@@ -79,6 +86,9 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
 
         Matrix.multiplyMM(mView, 0, eye.getEyeView(), 0, mCamera, 0);
 
+        if(mNAViewsToGLRenderer!=null)
+            mNAViewsToGLRenderer.onDrawFrame();
+
         mCore.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView,
                 ScreenTypeHelper.getScreenOffset(mScreenRenderType, eye.getType()),
                 mScreenShapeType);
@@ -88,10 +98,6 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
     }
     @Override
     public void onRendererShutdown() {
-    }
-    @Override
-    public void onSurfaceChanged(int width, int height){
-        mCore.onSurfaceChanged(width,height);
     }
 
     private class NAScreenGLRendererCore {
@@ -188,6 +194,9 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         }
 
         private void renderMesh(MeshBufferHelper renderMesh, float[] view, float[] offset) {
+            if(mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID)==NAViewsToGLRenderer.SURFACE_TEXTURE_EMPTY)
+                return;
+
             GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glUniform1i(mTextureUniformHandle, 0);
@@ -215,6 +224,9 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         }
 
         private void renderGUI(MeshBufferHelper renderMesh, float[] view, float[] offset) {
+            if(mNAViewsToGLRenderer.getGLSurfaceTexture(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI)==NAViewsToGLRenderer.SURFACE_TEXTURE_EMPTY)
+                return;
+
             GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mNAViewsToGLRenderer.getGLSurfaceTexture(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI));
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glUniform1i(mTextureUniformHandle, 0);

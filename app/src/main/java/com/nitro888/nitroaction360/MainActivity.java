@@ -2,18 +2,17 @@ package com.nitro888.nitroaction360;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.nitro888.nitroaction360.cardboard.NACardboardOverlayView;
+import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
 import com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout;
+import com.nitro888.nitroaction360.nitroaction.NAMediaPlayer;
 import com.nitro888.nitroaction360.nitroaction.NAScreenGLRenderer;
 import com.nitro888.nitroaction360.nitroaction.NAViewsToGLRenderer;
-import com.nitro888.nitroaction360.utils.ScreenTypeHelper;
 
 /**
  * Created by nitro888 on 15. 4. 5..
@@ -26,6 +25,7 @@ public class MainActivity extends CardboardActivity /*implements YouTubePlayer.O
     private NAViewsToGLRenderer         mNAViewsToGLRenderer;
     private NAScreenGLRenderer          mNAScreenGLRenderer;
     private NAGUIRelativeLayout         mNAGUIRelativeLayout;
+    private NAMediaPlayer               mNAMediaPlayer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MainActivity extends CardboardActivity /*implements YouTubePlayer.O
         setContentView(R.layout.common_ui);
 
         // ViewsToGLRenderer
-        mNAViewsToGLRenderer    = new NAViewsToGLRenderer();
+        mNAViewsToGLRenderer    = new NAViewsToGLRenderer(this);
 
         // Screen
         mNAScreenGLRenderer     = new NAScreenGLRenderer(this);
@@ -43,6 +43,10 @@ public class MainActivity extends CardboardActivity /*implements YouTubePlayer.O
         mNAGUIRelativeLayout    = (NAGUIRelativeLayout) findViewById(R.id.GUI);
         mNAGUIRelativeLayout.setViewToGLRenderer(mNAViewsToGLRenderer);
 
+        // MediaPlayer
+        mNAMediaPlayer          = new NAMediaPlayer(this);
+        mNAMediaPlayer.setViewToGLRenderer(mNAViewsToGLRenderer);
+
         // Cardboard
         mCardboardView          = (CardboardView) findViewById(R.id.cardboard_view);
         mCardboardView.setRenderer((CardboardView.StereoRenderer) mNAScreenGLRenderer);
@@ -50,22 +54,22 @@ public class MainActivity extends CardboardActivity /*implements YouTubePlayer.O
         mNACardboardOverlayView = (NACardboardOverlayView) findViewById(R.id.overlay);
         mNACardboardOverlayView.show3DToast("NitroAction 360 Start");
 
+        //mNAMediaPlayer.testPlay();
+
         // youtube
         //onCreateYouTube();
 
         setCardboardView(mCardboardView);
     }
+
+    public void onGUIButtonClick(View view) {
+    }
+
 /*
     @Override
     public void onCardboardTrigger() {
         mNAOverlayGUIView.onCardboardTrigger();
     }
-
-    public void onGUIButtonClick(View view)
-    {
-        mNAOverlayGUIView.onGUIButtonClick(view.getId());
-    }
-
 
     // for youtube test
     public static final String VIDEO_ID = "zKtAuflyc5w";

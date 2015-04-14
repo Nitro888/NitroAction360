@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
@@ -104,7 +105,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         // notify the canvas is updated
         mNAViewsToGLRenderer.onDrawViewEnd(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI);
     }
-
     public void setViewToGLRenderer(NAViewsToGLRenderer viewTOGLRenderer){
         mNAViewsToGLRenderer = viewTOGLRenderer;
     }
