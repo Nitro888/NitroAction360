@@ -27,43 +27,50 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     private GridLayout          mPlayController             = null;
     private GridLayout          mBrowserController          = null;
     private GridLayout          mSettingController          = null;
+    private boolean             mFinishInit                 = false;
+    private int                 mLookAtBtnIndex             = -1;
 
     public NAGUIRelativeLayout(Context context) {
         super(context);
         setWillNotDraw(false);
-        mContext                = context;
-        initLayout();
+        mContext            = context;
     }
 
     public NAGUIRelativeLayout (Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
-        mContext                = context;
-        initLayout();
+        mContext            = context;
     }
 
     private void initLayout() {
         mPlayController     = (GridLayout) findViewById(mPlayControllerLayoutID);
         mBrowserController  = (GridLayout) findViewById(mBrowserControllerLayoutID);
         mSettingController  = (GridLayout) findViewById(mSettingControllerLayoutID);
+        menuOpen(-1);
+        mFinishInit         = true;
     }
 
-    public void layoutReset(int showGUI) {
+    public void menuOpen(int showGUI) {
         switch (showGUI) {
-            case 0: // play controller
+            case R.id.Player: // play controller
                 mPlayController.setVisibility(View.VISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
                 break;
-            case 1: // browser controller
+            case R.id.Browser: // browser controller
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.VISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
                 break;
-            case 2: // setting controller
+            case R.id.Setting: // setting controller
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.VISIBLE);
+                break;
+            default:
+                mPlayController.setVisibility(View.INVISIBLE);
+                mBrowserController.setVisibility(View.INVISIBLE);
+                mSettingController.setVisibility(View.INVISIBLE);
                 break;
         }
     }
@@ -84,6 +91,25 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         }
     }
 
+    public void lookAtBtn(int indexBtn) {
+        mLookAtBtnIndex = indexBtn;
+    }
+
+    private void updateBtnAlpha() {
+        GridLayout views    = null;
+
+        if(mPlayController.getVisibility()==View.VISIBLE)           views   = mPlayController;
+        else if(mBrowserController.getVisibility()==View.VISIBLE)   views   = mBrowserController;
+        else if(mSettingController.getVisibility()==View.VISIBLE)   views   = mSettingController;
+
+        if(views!=null) {
+            for(int i = 0 ; i < views.getChildCount() ; i++) {
+                if(mLookAtBtnIndex==i)  views.getChildAt(i).setAlpha(1.0f);
+                else                    views.getChildAt(i).setAlpha(0.5f);
+            }
+        }
+    }
+
     //-------------------------------------------------------------------
     // from ViewToGLRenderer
     // https://github.com/ArtemBogush/AndroidViewToGLRendering
@@ -91,7 +117,10 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     // draw magic
     @Override
     protected void dispatchDraw( Canvas canvas ) {
-        if(mNAViewsToGLRenderer==null) return;
+        if(mNAViewsToGLRenderer==null)  return;
+        if(!mFinishInit)                initLayout();
+
+        updateBtnAlpha();
 
         //returns canvas attached to gl texture to draw on
         Canvas glAttachedCanvas = mNAViewsToGLRenderer.onDrawViewBegin(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI);

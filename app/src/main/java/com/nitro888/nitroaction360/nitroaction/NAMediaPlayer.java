@@ -4,8 +4,6 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 
-import com.nitro888.nitroaction360.R;
-
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -81,6 +79,6 @@ public class NAMediaPlayer {
                 mMediaPlayer.getVideoHeight());
         mNAViewsToGLRenderer.createSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER);
         mMediaPlayer.setSurface(mNAViewsToGLRenderer.getSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER));
-        mMediaPlayer.setScreenOnWhilePlaying(true);
+        //mMediaPlayer.setScreenOnWhilePlaying(true);
     }
 }

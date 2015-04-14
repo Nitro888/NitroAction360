@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.opengl.GLES11Ext;
@@ -33,10 +34,9 @@ public class NAViewsToGLRenderer {
     public static final int     SURFACE_TEXTURE_EMPTY           = 0;
     public static final int     SURFACE_TEXTURE_FOR_GUI         = 0;
     public static final int     SURFACE_TEXTURE_FOR_MEDIAPLAYER = 1;
-    public static final int     SURFACE_TEXTURE_FOR_SCREEN      = 2;
-    public static final int     SURFACE_TEXTURE_FOR_PHOTO       = 3;
-    public static final int     SURFACE_TEXTURE_FOR_YOUTUBE     = 4;
-    private static final int    SURFACE_TEXTURE_MAX             = 5;
+    public static final int     SURFACE_TEXTURE_FOR_PHOTO       = 2;
+    public static final int     SURFACE_TEXTURE_FOR_YOUTUBE     = 3;
+    private static final int    SURFACE_TEXTURE_MAX             = 4;
 
     private static surfaceTexture[] mSurfaces                   = new surfaceTexture[SURFACE_TEXTURE_MAX];
 
@@ -66,32 +66,29 @@ public class NAViewsToGLRenderer {
         // GUI Size Setting
 
         for(int i = 0 ; i < mSurfaces.length ; i ++ )   createSurface(i);
-        //testPlay();
+        testPlay();
     }
 
     // Play test
-    /*
     private MediaPlayer mMediaPlayer            = null;
 
     private void testPlay() {
-        if(mMediaPlayer==null)
+        if(mMediaPlayer==null) {
             mMediaPlayer    = new MediaPlayer();
 
-        try {
-            //mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-            AssetFileDescriptor afd = mContext.getResources().openRawResourceFd(R.raw.big_buck_bunny);
-            mMediaPlayer.setDataSource(
-                    afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            afd.close();
-            mMediaPlayer.prepare();
-            setTextureSize();
-            mMediaPlayer.start();
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            try {
+                //mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+                AssetFileDescriptor afd = mContext.getResources().openRawResourceFd(R.raw.big_buck_bunny);
+                mMediaPlayer.setDataSource(
+                        afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                afd.close();
+                mMediaPlayer.prepare();
+                setTextureSize();
+                mMediaPlayer.start();
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
         }
-
-        mMediaPlayer.setSurface(getSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER));
-        mMediaPlayer.setScreenOnWhilePlaying(true);
     }
     private void setTextureSize() {
         setTextureWidth(
@@ -102,9 +99,8 @@ public class NAViewsToGLRenderer {
                 mMediaPlayer.getVideoHeight());
         createSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER);
         mMediaPlayer.setSurface(getSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER));
-        mMediaPlayer.setScreenOnWhilePlaying(true);
+        //mMediaPlayer.setScreenOnWhilePlaying(true);
     }
-    */
     // Play test
 
     public void createSurface (int typeID) {
@@ -238,6 +234,7 @@ public class NAViewsToGLRenderer {
                 if (mSurface != null) {
                     try {
                         mSurfaceCanvas = mSurface.lockCanvas(null);
+                        mSurfaceCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     }catch (Exception e){
                         Log.e(TAG, "error while rendering view to gl: " + e);
                     }
