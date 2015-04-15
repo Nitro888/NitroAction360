@@ -282,7 +282,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     views.getChildAt(i).setAlpha(1.0f);
                     mLookAtBtnResourceID    = views.getChildAt(i).getId();
                 }
-                else                    views.getChildAt(i).setAlpha(0.5f);
+                else                    views.getChildAt(i).setAlpha(0.8f);
             }
         }
     }

@@ -17,20 +17,20 @@ public class ScreenTypeHelper {
     public final static int     SCREEN_GUI      = R.raw.plane_sq_gui;   // GUI
 
 
-    public static float[] getScreenOffset(int renderType, int side){
+    public static float[] getScreenOffset(int renderType, int eyeType){
         switch (renderType) {
             case SCREEN_3D_SBS:
-                return getSideBySideScreenOffset(side);
+                return getSideBySideScreenOffset(eyeType);
             case SCREEN_3D_TLBR:
-                return getTLBRScreenOffset(side);
+                return getTLBRScreenOffset(eyeType);
             case SCREEN_3D_TRBL:
-                return getTRBLScreenOffset(side);
+                return getTRBLScreenOffset(eyeType);
         }
 
-        return getFullScreenOffset(side);
+        return getFullScreenOffset(eyeType);
     }
 
-    private static float[] getFullScreenOffset(int side){
+    private static float[] getFullScreenOffset(int eyeType){
         final float[] offset = new float[4];
         offset[0]   = 1.0f; // width
         offset[1]   = 1.0f; // height
@@ -38,57 +38,57 @@ public class ScreenTypeHelper {
         offset[3]   = 0.0f; // offsetH
         return offset;
     }
-    private static float[] getSideBySideScreenOffset(int side){
+    private static float[] getSideBySideScreenOffset(int eyeType){
         final float[] offset = new float[4];
 
-        if(side == Eye.Type.LEFT) {
+        if(eyeType == Eye.Type.LEFT) {
             offset[0]   = 0.5f; // width
             offset[1]   = 1.0f; // height
             offset[2]   = 0.0f; // offsetW
             offset[3]   = 0.0f; // offsetH
-        } else if(side == Eye.Type.RIGHT) {
+        } else if(eyeType == Eye.Type.RIGHT) {
             offset[0]   = 0.5f; // width
             offset[1]   = 1.0f; // height
             offset[2]   = 0.5f; // offsetW
             offset[3]   = 0.0f; // offsetH
         } else {
-            return getFullScreenOffset(side);
+            return getFullScreenOffset(eyeType);
         }
         return offset;
     }
-    private static float[] getTLBRScreenOffset(int side){
+    private static float[] getTLBRScreenOffset(int eyeType){
         final float[] offset = new float[4];
 
-        if(side == Eye.Type.LEFT) {
+        if(eyeType == Eye.Type.LEFT) {
             offset[0]   = 1.0f; // width
             offset[1]   = 0.5f; // height
             offset[2]   = 0.0f; // offsetW
             offset[3]   = 0.0f; // offsetH
-        } else if(side == Eye.Type.RIGHT) {
+        } else if(eyeType == Eye.Type.RIGHT) {
             offset[0]   = 1.0f; // width
             offset[1]   = 0.5f; // height
             offset[2]   = 0.0f; // offsetW
             offset[3]   = 0.5f; // offsetH
         } else {
-            return getFullScreenOffset(side);
+            return getFullScreenOffset(eyeType);
         }
         return offset;
     }
-    private static float[] getTRBLScreenOffset(int side){
+    private static float[] getTRBLScreenOffset(int eyeType){
         final float[] offset = new float[4];
 
-        if(side == Eye.Type.LEFT) {
+        if(eyeType == Eye.Type.LEFT) {
             offset[0]   = 1.0f; // width
             offset[1]   = 0.5f; // height
             offset[2]   = 0.0f; // offsetW
             offset[3]   = 0.5f; // offsetH
-        } else if(side == Eye.Type.RIGHT) {
+        } else if(eyeType == Eye.Type.RIGHT) {
             offset[0]   = 1.0f; // width
             offset[1]   = 0.5f; // height
             offset[2]   = 0.0f; // offsetW
             offset[3]   = 0.0f; // offsetH
         } else {
-            return getFullScreenOffset(side);
+            return getFullScreenOffset(eyeType);
         }
         return offset;
     }

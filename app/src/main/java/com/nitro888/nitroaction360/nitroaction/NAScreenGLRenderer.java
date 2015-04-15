@@ -91,9 +91,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         if(mNAViewsToGLRenderer!=null)
             mNAViewsToGLRenderer.onDrawFrame();
 
-        mCore.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView,
-                ScreenTypeHelper.getScreenOffset(mScreenRenderType, eye.getType()),
-                mScreenShapeType);
+        mCore.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView, eye.getType());
     }
     @Override
     public void onFinishFrame(Viewport viewport) {
@@ -156,10 +154,11 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1.0f, 1.0f, Z_NEAR, Z_FAR);
         }
 
-        public void onDrawEye(float[] perspective, float[] view, float[] offset, int screenType) {
+        public void onDrawEye(float[] perspective, float[] view, int eyeType) {
             if(mNAViewsToGLRenderer==null)  return;
 
             float[] perspectiveView     = view; // perspective or view
+            float[] offset              = ScreenTypeHelper.getScreenOffset(mScreenRenderType, eyeType);
 
             GLES20.glUseProgram(mProgramHandle);
 
@@ -183,8 +182,10 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
             Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
 
-            if(ScreenTypeHelper.SCREEN_CURVE==screenType)   renderMesh(mModelBuffer1,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
-            else                                            renderMesh(mModelBuffer2,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
+            if(ScreenTypeHelper.SCREEN_CURVE==mScreenShapeType)
+                renderMesh(mModelBuffer1,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
+            else
+                renderMesh(mModelBuffer2,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
 
             rationAndRotation   = ScreenTypeHelper.getScreenScaleRatioRotation(
                                             mScreenTiltPosition,mScreenScale,
@@ -196,6 +197,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
             Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
 
+            offset              = ScreenTypeHelper.getScreenOffset(ScreenTypeHelper.SCREEN_2D, eyeType);
             renderMesh(mModelBuffer3,perspectiveView,offset,mNAViewsToGLRenderer.getGLSurfaceTexture(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI));
 
             int btn = checkLookingAtObject(perspectiveView,rationAndRotation);
