@@ -5,6 +5,7 @@ import android.content.Context;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
@@ -34,8 +35,8 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
     private float[]                     mView               = new float[16];
     private float[]                     mHeadView           = new float[16];
 
-    private int                         mScreenShapeType    = ScreenTypeHelper.SCREEN_CURVE;
-    private int                         mScreenRenderType   = ScreenTypeHelper.SCREEN_2D;
+    private int                         mScreenShapeType    = ScreenTypeHelper.SCREEN_SHAPE_CURVE;
+    private int                         mScreenRenderType   = ScreenTypeHelper.SCREEN_RENDER_2D;
     private float                       mScreenTiltPosition = 0.0f;
     private float                       mScreenScale        = 1.0f;
 
@@ -44,6 +45,10 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
     private NAScreenGLRendererCore      mCore;
     private NAViewsToGLRenderer         mNAViewsToGLRenderer= null;
     private int                         mBtnIndex           = -1;
+
+    private static final float          STEP_TILT           = 5.0f;
+    private static final float          STEP_SCALE          = 0.1f;
+
 
     public NAScreenGLRenderer(Context context) {
         mContext                = context;
@@ -55,11 +60,16 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
     public void setScreenRenderType(int renderType) {
         mScreenRenderType       = renderType;
     }
-    public void setScreenTiltPosition(float degree) {
-        mScreenTiltPosition     = degree;
+    public void setScreenTiltPosition(float step) {
+        mScreenTiltPosition     +=STEP_TILT*step;
+
+        if(step==0.0f)                  mScreenTiltPosition = 0.0f;
+        if(mScreenTiltPosition>90.0f)   mScreenTiltPosition = 90.0f;
+        if(mScreenTiltPosition<-90.0f)  mScreenTiltPosition =-90.0f;
     }
-    public void setScreenScale(float scale) {
-        mScreenScale            = scale;
+    public void setScreenScale(float step) {
+        if(step==0.0f)  mScreenScale = 1.0f;
+        else            mScreenScale +=STEP_SCALE*step;
     }
 
     public void setViewToGLRenderer(NAViewsToGLRenderer viewTOGLRenderer){
@@ -91,7 +101,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         if(mNAViewsToGLRenderer!=null)
             mNAViewsToGLRenderer.onDrawFrame();
 
-        mCore.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR),mView, eye.getType());
+        mCore.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR), mView, eye.getType());
     }
     @Override
     public void onFinishFrame(Viewport viewport) {
@@ -125,8 +135,8 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         public NAScreenGLRendererCore(Context context) {
             mContext                = context;
 
-            mModelBuffer1           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_CURVE);
-            mModelBuffer2           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_DOME);
+            mModelBuffer1           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_SHAPE_CURVE);
+            mModelBuffer2           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_SHAPE_DOME);
             mModelBuffer3           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_GUI);
 
             initBtnPosition();
@@ -182,22 +192,22 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
             Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
 
-            if(ScreenTypeHelper.SCREEN_CURVE==mScreenShapeType)
+            if(ScreenTypeHelper.SCREEN_SHAPE_CURVE==mScreenShapeType)
                 renderMesh(mModelBuffer1,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
             else
                 renderMesh(mModelBuffer2,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
 
             rationAndRotation   = ScreenTypeHelper.getScreenScaleRatioRotation(
-                                            mScreenTiltPosition,mScreenScale,
+                                            mScreenTiltPosition,1.0f,
                                             mNAViewsToGLRenderer.getTextureWidth(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI),
                                             mNAViewsToGLRenderer.getTextureHeight(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI));
 
             Matrix.setIdentityM(mModelMatrix, 0);
             Matrix.translateM(mModelMatrix, 0, 0, 0, 0);
-            Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
+            //Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
             Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
 
-            offset              = ScreenTypeHelper.getScreenOffset(ScreenTypeHelper.SCREEN_2D, eyeType);
+            offset              = ScreenTypeHelper.getScreenOffset(ScreenTypeHelper.SCREEN_RENDER_2D, eyeType);
             renderMesh(mModelBuffer3,perspectiveView,offset,mNAViewsToGLRenderer.getGLSurfaceTexture(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI));
 
             int btn = checkLookingAtObject(perspectiveView,rationAndRotation);
@@ -271,7 +281,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             }
         }
 
-        private int checkLookingAtObject(float[] perspectiveView, float[] rationAndRotation) {
+        private int checkLookingAtObject(float[] perspectiveView, float[] ratioAndRotation) {
             float[] initVec             = { 0, 0, 0, 1.0f };
             float[] objPositionVec      = new float[4];
             int     btnIndex            = -1;
@@ -279,8 +289,8 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             for(int i=0 ; i < mBtnPosition.length ; i++) {
                 Matrix.setIdentityM(mModelMatrix, 0);
                 Matrix.translateM(mModelMatrix, 0, mBtnPosition[i][0], mBtnPosition[i][1], mBtnPosition[i][2]);
-                //Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
-                Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
+                //Matrix.setRotateM(mModelMatrix,0,ratioAndRotation[0],1.0f,0.0f,0.0f);
+                Matrix.scaleM(mModelMatrix,0,ratioAndRotation[1],ratioAndRotation[2],ratioAndRotation[3]);
                 Matrix.multiplyMM(mMVMatrix, 0, perspectiveView, 0, mModelMatrix, 0);
                 Matrix.multiplyMV(objPositionVec, 0, mMVMatrix, 0, initVec, 0);
 

@@ -1,6 +1,7 @@
 package com.nitro888.nitroaction360;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.nitro888.nitroaction360.Ads.NAGLAdView;
@@ -62,21 +63,52 @@ public class MainActivity extends CardboardActivity {
         setCardboardView(mCardboardView);
     }
 
+    // for browser controller
+    public void openMovie(String fileName) {
+        mNAMediaPlayer.openMovieFile(fileName);
+    }
+
+    // for play controller
+    public void fastRewind() {
+        mNAMediaPlayer.fastRewind();
+    }
+    public void fastForward() {
+        mNAMediaPlayer.fastForward();
+    }
+    public void play() {
+        mNAMediaPlayer.play();
+    }
+    public void pause() {
+        mNAMediaPlayer.pause();
+    }
+    public void skipPrevious() {
+        mNAMediaPlayer.skipPrevious();
+    }
+    public void skipNext() {
+        mNAMediaPlayer.skipNext();
+    }
+
+    // for setting controller
     public void setScreenShapeType(int screenID) {
         mNAScreenGLRenderer.setScreenShapeType(screenID);
     }
     public void setScreenRenderType(int renderType) {
         mNAScreenGLRenderer.setScreenRenderType(renderType);
     }
-    public void setScreenTiltPosition(float degree) {
-        mNAScreenGLRenderer.setScreenTiltPosition(degree);
+    public void setScreenTiltPosition(float step) {
+        mNAScreenGLRenderer.setScreenTiltPosition(step);
     }
-    public void setScreenScale(float scale) {
-        mNAScreenGLRenderer.setScreenScale(scale);
+    public void setScreenScale(float step) {
+        mNAScreenGLRenderer.setScreenScale(step);
     }
 
     @Override
     public void onCardboardTrigger() {
         mNAGUIRelativeLayout.onCardboardTrigger();
+    }
+
+    public void onGUIButtonClick(View view)
+    {
+        mNAGUIRelativeLayout.onGUIButtonClick(view.getId());
     }
 }

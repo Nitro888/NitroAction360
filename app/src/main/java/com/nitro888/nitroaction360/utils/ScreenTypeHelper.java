@@ -7,23 +7,23 @@ import com.nitro888.nitroaction360.R;
  * Created by nitro888 on 15. 4. 14..
  */
 public class ScreenTypeHelper {
-    public static final int     SCREEN_2D       = 0;
-    public static final int     SCREEN_3D_SBS   = 1;
-    public static final int     SCREEN_3D_TLBR  = 2;
-    public static final int     SCREEN_3D_TRBL  = 3;
+    public static final int     SCREEN_RENDER_2D       = 0;
+    public static final int     SCREEN_RENDER_3D_SBS   = 1;
+    public static final int     SCREEN_RENDER_3D_TLBR  = 2;
+    public static final int     SCREEN_RENDER_3D_TRBL  = 3;
 
-    public final static int     SCREEN_CURVE    = R.raw.plane_sq;
-    public final static int     SCREEN_DOME     = R.raw.dome;
-    public final static int     SCREEN_GUI      = R.raw.plane_sq_gui;   // GUI
+    public final static int     SCREEN_SHAPE_CURVE      = R.raw.plane_sq;
+    public final static int     SCREEN_SHAPE_DOME       = R.raw.dome;
+    public final static int     SCREEN_GUI              = R.raw.plane_sq_gui;   // GUI
 
 
     public static float[] getScreenOffset(int renderType, int eyeType){
         switch (renderType) {
-            case SCREEN_3D_SBS:
+            case SCREEN_RENDER_3D_SBS:
                 return getSideBySideScreenOffset(eyeType);
-            case SCREEN_3D_TLBR:
+            case SCREEN_RENDER_3D_TLBR:
                 return getTLBRScreenOffset(eyeType);
-            case SCREEN_3D_TRBL:
+            case SCREEN_RENDER_3D_TRBL:
                 return getTRBLScreenOffset(eyeType);
         }
 
@@ -95,9 +95,6 @@ public class ScreenTypeHelper {
 
     public static float[] getScreenScaleRatioRotation(float fTilt, float fScale, int iWidth, int iHeight) {
         final float[]   transform = new float[4];
-
-        if(fTilt>90.0f)    fTilt = 90.0f;
-        if(fTilt<-90.0f)   fTilt =-90.0f;
 
         transform[0]    =   fTilt;
         transform[1]    =   1.0f*fScale;
