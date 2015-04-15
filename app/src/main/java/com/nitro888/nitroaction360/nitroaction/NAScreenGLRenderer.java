@@ -135,7 +135,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         }
 
         public void onSurfaceCreated(){
-            GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
+            GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GLES20.glEnable(GLES20.GL_CULL_FACE);
             GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 

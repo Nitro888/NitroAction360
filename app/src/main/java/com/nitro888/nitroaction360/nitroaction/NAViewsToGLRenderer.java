@@ -13,7 +13,9 @@ import android.opengl.GLUtils;
 import android.util.Log;
 import android.view.Surface;
 
+import com.nitro888.nitroaction360.MainActivity;
 import com.nitro888.nitroaction360.R;
+import com.nitro888.nitroaction360.utils.ScreenTypeHelper;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -34,9 +36,8 @@ public class NAViewsToGLRenderer {
     public static final int     SURFACE_TEXTURE_EMPTY           = 0;
     public static final int     SURFACE_TEXTURE_FOR_GUI         = 0;
     public static final int     SURFACE_TEXTURE_FOR_MEDIAPLAYER = 1;
-    public static final int     SURFACE_TEXTURE_FOR_PHOTO       = 2;
-    public static final int     SURFACE_TEXTURE_FOR_YOUTUBE     = 3;
-    private static final int    SURFACE_TEXTURE_MAX             = 4;
+    public static final int     SURFACE_TEXTURE_FOR_ADS         = 2;
+    private static final int    SURFACE_TEXTURE_MAX             = 3;
 
     private static surfaceTexture[] mSurfaces                   = new surfaceTexture[SURFACE_TEXTURE_MAX];
 
@@ -77,11 +78,16 @@ public class NAViewsToGLRenderer {
             mMediaPlayer    = new MediaPlayer();
 
             try {
-                //mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+                //mMediaPlayer.setDataSource("http://r3---sn-i3b7rn7y.googlevideo.com/videoplayback?mm=31&pl=22&id=o-AB19EI2gRyr35MVVuK-omLCq2BmwaYh6MIXVfIyUe0tl&dur=291.596&ip=219.76.4.12&mt=1429044631&mv=m&ms=au&fexp=900720%2C907263%2C932627%2C932631%2C934954%2C9407115%2C9407432%2C9408023%2C9408041%2C9408195%2C9408347%2C9408469%2C9408707%2C946008%2C947233%2C947243%2C948124%2C948607%2C948703%2C951703%2C952612%2C952626%2C952637%2C957201%2C961404%2C961406&sver=3&initcwndbps=1166250&sparams=dur%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Cmime%2Cmm%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Csource%2Cupn%2Cexpire&ipbits=0&expire=1429066342&mime=video%2Fmp4&ratebypass=yes&key=yt5&signature=A37F57940178EBC327CFBFF5AF06658970B180E6.48F6A6C5E750957E8244A73D440CAF69D0C9731E&nh=IgpwcjAzLmhrZzAxKgkxMjcuMC4wLjE&source=youtube&itag=22&upn=ReNITzQVZrc&title=AutoErotique+-+Asphyxiation+%28Official+Video%29");
+                mMediaPlayer.setDataSource("http://r4---sn-aigllnl7.googlevideo.com/videoplayback?key=yt5&nh=IgpwcjAzLmxocjE0KgkxMjcuMC4wLjE&source=youtube&pl=32&mime=video%2Fmp4&ratebypass=yes&signature=601E6A5E4A032F5C295C858F782B72ACE46FB9B9.E471B6CB46FD43233E63BB09FA89637FC1482405&itag=22&sparams=dur%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Cmime%2Cmm%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Csource%2Cupn%2Cexpire&initcwndbps=2012500&id=o-AMJkrriZ14baBApZqhgB1vADp6i2tHXETo-RntwkoNj_&fexp=900226%2C900720%2C907263%2C932627%2C932631%2C934954%2C9405265%2C9407115%2C9407433%2C9407718%2C9407925%2C9408137%2C9408347%2C9408705%2C940940%2C947233%2C947243%2C948124%2C948703%2C951703%2C952612%2C952626%2C952637%2C957201%2C961404%2C961406&ipbits=0&mm=31&ms=au&mv=m&dur=206.634&mt=1429075081&ip=2a02%3A2498%3Ae002%3A88%3A68%3A%3A2&sver=3&expire=1429096752&upn=s86SxpXf2Fg&title=Demo+Sexy+Dance+3D+sbs+3DTV%21");
+                /*
                 AssetFileDescriptor afd = mContext.getResources().openRawResourceFd(R.raw.big_buck_bunny);
                 mMediaPlayer.setDataSource(
                         afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
                 afd.close();
+                */
+                ((MainActivity) mContext).setScreenRenderType(ScreenTypeHelper.SCREEN_3D_SBS);
+
                 mMediaPlayer.prepare();
                 setTextureSize();
                 mMediaPlayer.start();
