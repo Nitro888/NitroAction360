@@ -3,6 +3,7 @@ package com.nitro888.nitroaction360.nitroaction;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
@@ -79,11 +80,10 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
         if(!isActivateGUI) {
             menuOpen(mActivateGUILayerID);
-
+            ((MainActivity) mContext).pause();
         } else {
             if(mLookAtBtnIndex!=-1) {
                 onGUIButtonClick(mLookAtBtnResourceID);
-                ((MainActivity) mContext).pause();
             } else {
                 menuOpen(-1);
             }
@@ -229,7 +229,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
             mBrowserController.getChildAt(i+3).setVisibility(View.VISIBLE);
             ((ImageButton)mBrowserController.getChildAt(i+3)).setImageResource(
-                    thumbnails[i] == null ? R.drawable.ic_folder_black_48dp : R.drawable.ic_play_circle_outline_black_48dp
+                    thumbnails[i] == null ? R.drawable.ic_folder_white_48dp : R.drawable.ic_play_circle_outline_white_48dp
             );
 
             mBrowserController.getChildAt(i+3).setBackground(thumbnails[i]==null?backImg:thumbnails[i]);
@@ -434,7 +434,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             mLookAtBtnResourceID = mLookAtBtnIndex;
     }
 
-    private void updateBtnAlpha() {
+    private void updateBtnColorA() {
         GridLayout views    = null;
 
         if(mPlayController.getVisibility()==View.VISIBLE)           views   = mPlayController;
@@ -444,10 +444,14 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         if(views!=null) {
             for(int i = 0 ; i < views.getChildCount() ; i++) {
                 if(mLookAtBtnIndex==i)  {
-                    views.getChildAt(i).setAlpha(2.0f);
+                    ((ImageButton)views.getChildAt(i)).setColorFilter(Color.rgb(255, 255, 255));
+                    views.getChildAt(i).setAlpha(1.0f);
                     mLookAtBtnResourceID    = views.getChildAt(i).getId();
                 }
-                else                    views.getChildAt(i).setAlpha(1.0f);
+                else {
+                    ((ImageButton)views.getChildAt(i)).setColorFilter(Color.rgb(128, 128, 128));
+                    views.getChildAt(i).setAlpha(0.6f);
+                }
             }
         }
     }
@@ -463,7 +467,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         if(mNAViewsToGLRenderer==null)  return;
         if(!mFinishInit)                initLayout();
 
-        updateBtnAlpha();
+        updateBtnColorA();
         update3DToast();
 
         //returns canvas attached to gl texture to draw on

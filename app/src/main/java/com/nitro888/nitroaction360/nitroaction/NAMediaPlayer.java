@@ -15,7 +15,7 @@ import java.io.FileInputStream;
 /**
  * Created by nitro888 on 15. 4. 14..
  */
-public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener{
+public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnPreparedListener{
     private static final String         TAG                     = NAMediaPlayer.class.getSimpleName();
     private Context                     mContext;
 
@@ -24,9 +24,16 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     private MediaPlayer                 mMediaPlayer            = null;
     private SeekBar                     seekBarProgress         = null;
 
+    private final static int            STEP_SKIP               = 60000;
+    private final static int            STEP_FAST               = 30000;
+    private int                         mCurrentPosition        = 0;
+    private boolean                     mIsSetDataSource        = false;
+
     public NAMediaPlayer(Context context) {
         mContext                = context;
         mMediaPlayer            = new MediaPlayer();
+
+        mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnBufferingUpdateListener(this);
         mMediaPlayer.setOnCompletionListener(this);
     }
@@ -45,21 +52,14 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     public void openMovieFile(String fileName) {
         if(mMediaPlayer==null)  return;
 
-        mMediaPlayer.reset();
+       Log.d(TAG,"openMovieFile");
 
-        Log.d(TAG,"openMovieFile : " + fileName);
+        mMediaPlayer.reset();
 
         try {
             FileInputStream fileInputStream = new FileInputStream(new File(fileName));
             FileDescriptor fd               = fileInputStream.getFD();
             mMediaPlayer.setDataSource(fd);
-
-            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                    setTextureSize();
-                }
-            });
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -69,17 +69,12 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     public void openMovieStream(String url) {
         if(mMediaPlayer==null)  return;
 
+        Log.d(TAG,"openMovieStream");
+
         mMediaPlayer.reset();
 
         try {
             mMediaPlayer.setDataSource(url);
-
-            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                    setTextureSize();
-                }
-            });
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -87,33 +82,69 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     }
 
     public void play() {
-        if(mMediaPlayer==null)  return;
+        if((mMediaPlayer==null)||(!mIsSetDataSource))  return;
+
+        Log.d(TAG,"play");
+
+        mMediaPlayer.seekTo(mCurrentPosition);
         mMediaPlayer.start();
     }
 
     public void pause() {
-        if(mMediaPlayer==null)  return;
+        if((mMediaPlayer==null)||(!mIsSetDataSource))  return;
+
+        Log.d(TAG,"pause");
+
+        mCurrentPosition= mMediaPlayer.getCurrentPosition();
         mMediaPlayer.pause();
     }
 
     public void skipPrevious() {
-        if(mMediaPlayer==null)  return;
+        if((mMediaPlayer==null)||(!mIsSetDataSource))  return;
 
+        Log.d(TAG,"skipPrevious");
+
+        int now         = mMediaPlayer.getCurrentPosition() - STEP_SKIP;
+
+        if(now>0)   mMediaPlayer.seekTo(now);
+        else        mMediaPlayer.seekTo(0);
+        mCurrentPosition= mMediaPlayer.getCurrentPosition();
     }
 
     public void skipNext() {
-        if(mMediaPlayer==null)  return;
+        if((mMediaPlayer==null)||(!mIsSetDataSource))  return;
 
+        Log.d(TAG,"skipNext");
+
+        int end         = mMediaPlayer.getDuration();
+        int now         = mMediaPlayer.getCurrentPosition() + STEP_SKIP;
+
+        if(now<end) mMediaPlayer.seekTo(now);
+        mCurrentPosition= mMediaPlayer.getCurrentPosition();
     }
 
     public void fastRewind() {
-        if(mMediaPlayer==null)  return;
+        if((mMediaPlayer==null)||(!mIsSetDataSource))  return;
 
+        Log.d(TAG,"fastRewind");
+
+        int now     = mMediaPlayer.getCurrentPosition() - STEP_FAST;
+
+        if(now>0)   mMediaPlayer.seekTo(now);
+        else        mMediaPlayer.seekTo(0);
+        mCurrentPosition= mMediaPlayer.getCurrentPosition();
     }
 
     public void fastForward() {
-        if(mMediaPlayer==null)  return;
+        if((mMediaPlayer==null)||(!mIsSetDataSource))  return;
 
+        Log.d(TAG,"fastForward");
+
+        int end     = mMediaPlayer.getDuration();
+        int now     = mMediaPlayer.getCurrentPosition() + STEP_FAST;
+
+        if(now<end) mMediaPlayer.seekTo(now);
+        mCurrentPosition= mMediaPlayer.getCurrentPosition();
     }
 
     private void setTextureSize() {
@@ -129,10 +160,18 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     }
 
     @Override
+    public void onPrepared(MediaPlayer player) {
+        mIsSetDataSource    = true;
+        player.start();
+        setTextureSize();
+    }
+
+    @Override
     public void onCompletion(MediaPlayer mp) {
         // MediaPlayer onCompletion event handler. Method which calls then song playing is complete
         //buttonPlayPause.setImageResource(R.drawable.button_play);
         Log.d(TAG,"onCompletion");
+        mIsSetDataSource    = false;
     }
 
     @Override

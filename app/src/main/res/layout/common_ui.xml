@@ -39,7 +39,7 @@
                 android:id="@+id/btn_sbs_3d"
                 android:layout_row="0"
                 android:layout_column="0"
-                android:src="@drawable/ic_view_week_black_48dp"
+                android:src="@drawable/ic_view_week_white_48dp"
                 android:onClick="onGUIButtonClick" />
 
             <ImageButton
@@ -48,7 +48,7 @@
                 android:id="@+id/btn_dome"
                 android:layout_row="0"
                 android:layout_column="1"
-                android:src="@drawable/ic_panorama_fisheye_black_48dp"
+                android:src="@drawable/ic_panorama_fisheye_white_48dp"
                 android:onClick="onGUIButtonClick" />
 
             <ImageButton
@@ -57,14 +57,14 @@
                 android:id="@+id/btn_screen_sizeup"
                 android:layout_row="0"
                 android:layout_column="2"
-                android:src="@drawable/ic_exposure_plus_1_black_48dp"
+                android:src="@drawable/ic_exposure_plus_1_white_48dp"
                 android:onClick="onGUIButtonClick" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_2d"
-                android:src="@drawable/ic_crop_16_9_black_48dp"
+                android:src="@drawable/ic_crop_16_9_white_48dp"
                 android:layout_row="1"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick" />
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_back"
-                android:src="@drawable/ic_cancel_black_48dp"
+                android:src="@drawable/ic_cancel_white_48dp"
                 android:layout_row="1"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick" />
@@ -84,7 +84,7 @@
                 android:id="@+id/btn_screen_sizeReset"
                 android:layout_row="1"
                 android:layout_column="2"
-                android:src="@drawable/ic_exposure_zero_black_48dp"
+                android:src="@drawable/ic_exposure_zero_white_48dp"
                 android:onClick="onGUIButtonClick" />
 
             <ImageButton
@@ -93,14 +93,14 @@
                 android:id="@+id/btn_tb_3d"
                 android:layout_row="2"
                 android:layout_column="0"
-                android:src="@drawable/ic_view_stream_black_48dp"
+                android:src="@drawable/ic_view_stream_white_48dp"
                 android:onClick="onGUIButtonClick" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_panorama"
-                android:src="@drawable/ic_panorama_horizontal_black_48dp"
+                android:src="@drawable/ic_panorama_horizontal_white_48dp"
                 android:layout_row="2"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick" />
@@ -111,7 +111,7 @@
                 android:id="@+id/btn_screen_sizedown"
                 android:layout_row="2"
                 android:layout_column="2"
-                android:src="@drawable/ic_exposure_minus_1_black_48dp"
+                android:src="@drawable/ic_exposure_minus_1_white_48dp"
                 android:onClick="onGUIButtonClick" />
         </GridLayout>
 
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_left"
-                android:src="@drawable/ic_keyboard_arrow_left_black_48dp"
+                android:src="@drawable/ic_keyboard_arrow_left_white_48dp"
                 android:layout_row="0"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick" />
@@ -135,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_close"
-                android:src="@drawable/ic_cancel_black_48dp"
+                android:src="@drawable/ic_cancel_white_48dp"
                 android:layout_row="0"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick" />
@@ -144,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_right"
-                android:src="@drawable/ic_keyboard_arrow_right_black_48dp"
+                android:src="@drawable/ic_keyboard_arrow_right_white_48dp"
                 android:layout_row="0"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick" />
@@ -153,7 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_file01"
-                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="1"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick" />
@@ -162,7 +162,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_file02"
-                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="1"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick" />
@@ -171,7 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_file03"
-                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="1"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick" />
@@ -180,7 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_file04"
-                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="2"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick" />
@@ -189,7 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_file05"
-                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="2"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick" />
@@ -198,7 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_file06"
-                android:src="@drawable/ic_play_circle_outline_black_48dp"
+                android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="2"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick" />
@@ -215,7 +215,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_folder"
-                android:src="@drawable/ic_folder_black_48dp"
+                android:src="@drawable/ic_folder_white_48dp"
                 android:layout_row="0"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick" />
@@ -226,14 +226,14 @@
                 android:id="@+id/btn_screen_up"
                 android:layout_row="0"
                 android:layout_column="1"
-                android:src="@drawable/ic_vertical_align_top_black_48dp"
+                android:src="@drawable/ic_vertical_align_top_white_48dp"
                 android:onClick="onGUIButtonClick" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_setting"
-                android:src="@drawable/ic_settings_black_48dp"
+                android:src="@drawable/ic_settings_white_48dp"
                 android:layout_row="0"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick" />
@@ -242,7 +242,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_fast_rewind"
-                android:src="@drawable/ic_fast_rewind_black_48dp"
+                android:src="@drawable/ic_fast_rewind_white_48dp"
                 android:layout_row="1"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick" />
@@ -251,7 +251,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_play"
-                android:src="@drawable/ic_play_arrow_black_48dp"
+                android:src="@drawable/ic_play_arrow_white_48dp"
                 android:layout_row="1"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick" />
@@ -260,7 +260,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_fast_forward"
-                android:src="@drawable/ic_fast_forward_black_48dp"
+                android:src="@drawable/ic_fast_forward_white_48dp"
                 android:layout_row="1"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick" />
@@ -269,7 +269,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_skip_previous"
-                android:src="@drawable/ic_skip_previous_black_48dp"
+                android:src="@drawable/ic_skip_previous_white_48dp"
                 android:layout_row="2"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick" />
@@ -280,14 +280,14 @@
                 android:id="@+id/btn_screen_down"
                 android:layout_row="2"
                 android:layout_column="1"
-                android:src="@drawable/ic_vertical_align_bottom_black_48dp"
+                android:src="@drawable/ic_vertical_align_bottom_white_48dp"
                 android:onClick="onGUIButtonClick" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_skip_next"
-                android:src="@drawable/ic_skip_next_black_48dp"
+                android:src="@drawable/ic_skip_next_white_48dp"
                 android:layout_row="2"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick" />
