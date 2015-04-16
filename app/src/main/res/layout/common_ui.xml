@@ -29,7 +29,7 @@
         <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/Setting"
+            android:id="@+id/GUI_Setting"
             android:columnCount="3"
             android:rowCount="3">
 
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:rowCount="3"
             android:columnCount="3"
-            android:id="@+id/Browser">
+            android:id="@+id/GUI_Browser">
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -207,15 +207,15 @@
         <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/Player"
+            android:id="@+id/GUI_Player"
             android:rowCount="3"
             android:columnCount="3">
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_folder"
-                android:src="@drawable/ic_folder_white_48dp"
+                android:id="@+id/btn_home"
+                android:src="@drawable/ic_home_white_48dp"
                 android:layout_row="0"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick" />
@@ -293,21 +293,62 @@
                 android:onClick="onGUIButtonClick" />
 
         </GridLayout>
-    </com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout>
 
-    <com.nitro888.nitroaction360.Ads.NAGLAdView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/AdViewFrame">
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id">
-        </com.google.android.gms.ads.AdView>
-    </com.nitro888.nitroaction360.Ads.NAGLAdView>
+            android:id="@+id/GUI_Home">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/GUI_Home_Btns">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_folder"
+                        android:src="@drawable/ic_folder_white_48dp" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_youtube"
+                        android:src="@drawable/ic_youtube_48dp" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_settingH"
+                        android:src="@drawable/ic_settings_white_48dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.gms.ads.AdView
+                        android:id="@+id/adView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"
+                        ads:adSize="BANNER"
+                        ads:adUnitId="@string/banner_ad_unit_id"
+                        android:layout_span="3">
+                    </com.google.android.gms.ads.AdView>
+                </TableRow>
+
+            </TableLayout>
+
+        </RelativeLayout>
+
+    </com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout>
+
+
 
 </RelativeLayout>

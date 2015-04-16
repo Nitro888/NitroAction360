@@ -4,16 +4,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.google.vrtoolkit.cardboard.CardboardView;
-import com.nitro888.nitroaction360.Ads.NAGLAdView;
 import com.nitro888.nitroaction360.cardboard.NACardboardOverlayView;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
 import com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout;
 import com.nitro888.nitroaction360.nitroaction.NAMediaPlayer;
 import com.nitro888.nitroaction360.nitroaction.NAScreenGLRenderer;
 import com.nitro888.nitroaction360.nitroaction.NAViewsToGLRenderer;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 /**
  * Created by nitro888 on 15. 4. 5..
@@ -23,7 +19,6 @@ public class MainActivity extends CardboardActivity {
     private NACardboardOverlayView      mNACardboardOverlayView;
     private CardboardView               mCardboardView;
 
-    private NAGLAdView                  mNAGLAdView;
     private NAViewsToGLRenderer         mNAViewsToGLRenderer;
     private NAScreenGLRenderer          mNAScreenGLRenderer;
     private NAGUIRelativeLayout         mNAGUIRelativeLayout;
@@ -40,10 +35,6 @@ public class MainActivity extends CardboardActivity {
         // GUI
         mNAGUIRelativeLayout    = (NAGUIRelativeLayout) findViewById(R.id.GUI);
         mNAGUIRelativeLayout.setViewToGLRenderer(mNAViewsToGLRenderer);
-
-        // AdView
-        mNAGLAdView             = (NAGLAdView) findViewById(R.id.AdViewFrame);
-        mNAGLAdView.setViewToGLRenderer(mNAViewsToGLRenderer);
 
         // MediaPlayer
         mNAMediaPlayer          = new NAMediaPlayer(this);
