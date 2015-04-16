@@ -41,7 +41,12 @@
                 android:layout_row="0"
                 android:layout_column="0"
                 android:src="@drawable/ic_view_week_white_48dp"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -50,7 +55,12 @@
                 android:layout_row="0"
                 android:layout_column="1"
                 android:src="@drawable/ic_panorama_fisheye_white_48dp"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -59,7 +69,12 @@
                 android:layout_row="0"
                 android:layout_column="2"
                 android:src="@drawable/ic_exposure_plus_1_white_48dp"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -68,7 +83,12 @@
                 android:src="@drawable/ic_crop_16_9_white_48dp"
                 android:layout_row="1"
                 android:layout_column="0"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -77,7 +97,12 @@
                 android:src="@drawable/ic_cancel_white_48dp"
                 android:layout_row="1"
                 android:layout_column="1"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -86,7 +111,12 @@
                 android:layout_row="1"
                 android:layout_column="2"
                 android:src="@drawable/ic_exposure_zero_white_48dp"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -95,7 +125,12 @@
                 android:layout_row="2"
                 android:layout_column="0"
                 android:src="@drawable/ic_view_stream_white_48dp"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -104,7 +139,12 @@
                 android:src="@drawable/ic_panorama_horizontal_white_48dp"
                 android:layout_row="2"
                 android:layout_column="1"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -113,7 +153,12 @@
                 android:layout_row="2"
                 android:layout_column="2"
                 android:src="@drawable/ic_exposure_minus_1_white_48dp"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
         </GridLayout>
 
         <GridLayout
@@ -130,7 +175,12 @@
                 android:src="@drawable/ic_keyboard_arrow_left_white_48dp"
                 android:layout_row="0"
                 android:layout_column="0"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -139,7 +189,12 @@
                 android:src="@drawable/ic_cancel_white_48dp"
                 android:layout_row="0"
                 android:layout_column="1"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -148,7 +203,12 @@
                 android:src="@drawable/ic_keyboard_arrow_right_white_48dp"
                 android:layout_row="0"
                 android:layout_column="2"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -157,7 +217,12 @@
                 android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="1"
                 android:layout_column="0"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -166,7 +231,12 @@
                 android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="1"
                 android:layout_column="1"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -175,7 +245,12 @@
                 android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="1"
                 android:layout_column="2"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -184,7 +259,12 @@
                 android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="2"
                 android:layout_column="0"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -193,7 +273,12 @@
                 android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="2"
                 android:layout_column="1"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -202,7 +287,12 @@
                 android:src="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_row="2"
                 android:layout_column="2"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
         </GridLayout>
 
         <GridLayout
@@ -219,7 +309,12 @@
                 android:src="@drawable/ic_home_white_48dp"
                 android:layout_row="0"
                 android:layout_column="0"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -228,7 +323,12 @@
                 android:layout_row="0"
                 android:layout_column="1"
                 android:src="@drawable/ic_vertical_align_top_white_48dp"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -237,7 +337,12 @@
                 android:src="@drawable/ic_settings_white_48dp"
                 android:layout_row="0"
                 android:layout_column="2"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -246,7 +351,12 @@
                 android:src="@drawable/ic_fast_rewind_white_48dp"
                 android:layout_row="1"
                 android:layout_column="0"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -255,7 +365,12 @@
                 android:src="@drawable/ic_play_arrow_white_48dp"
                 android:layout_row="1"
                 android:layout_column="1"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -264,7 +379,12 @@
                 android:src="@drawable/ic_fast_forward_white_48dp"
                 android:layout_row="1"
                 android:layout_column="2"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -273,7 +393,12 @@
                 android:src="@drawable/ic_skip_previous_white_48dp"
                 android:layout_row="2"
                 android:layout_column="0"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -282,7 +407,12 @@
                 android:layout_row="2"
                 android:layout_column="1"
                 android:src="@drawable/ic_vertical_align_bottom_white_48dp"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -291,7 +421,12 @@
                 android:src="@drawable/ic_skip_next_white_48dp"
                 android:layout_row="2"
                 android:layout_column="2"
-                android:onClick="onGUIButtonClick" />
+                android:onClick="onGUIButtonClick"
+                android:maxHeight="80dp"
+                android:maxWidth="107dp"
+                android:minHeight="80dp"
+                android:minWidth="107dp"
+                android:scaleType="fitCenter" />
 
         </GridLayout>
 
@@ -313,19 +448,38 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_folder"
-                        android:src="@drawable/ic_folder_white_48dp" />
+                        android:src="@drawable/ic_folder_white_48dp"
+                        android:maxWidth="107dp"
+                        android:maxHeight="80dp"
+                        android:minHeight="80dp"
+                        android:minWidth="107dp"
+                        android:onClick="onGUIButtonClick"
+                        android:scaleType="fitCenter"
+                        android:nestedScrollingEnabled="true" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_youtube"
-                        android:src="@drawable/ic_youtube_48dp" />
+                        android:src="@drawable/ic_youtube_48dp"
+                        android:maxWidth="107dp"
+                        android:maxHeight="80dp"
+                        android:minHeight="80dp"
+                        android:minWidth="107dp"
+                        android:onClick="onGUIButtonClick"
+                        android:scaleType="fitCenter" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_settingH"
-                        android:src="@drawable/ic_settings_white_48dp" />
+                        android:src="@drawable/ic_settings_white_48dp"
+                        android:maxWidth="107dp"
+                        android:maxHeight="80dp"
+                        android:minHeight="80dp"
+                        android:minWidth="107dp"
+                        android:onClick="onGUIButtonClick"
+                        android:scaleType="fitCenter" />
                 </TableRow>
 
                 <TableRow
