@@ -36,8 +36,7 @@ public class NAViewsToGLRenderer {
     public static final int     SURFACE_TEXTURE_EMPTY           = 0;
     public static final int     SURFACE_TEXTURE_FOR_GUI         = 0;
     public static final int     SURFACE_TEXTURE_FOR_MEDIAPLAYER = 1;
-    public static final int     SURFACE_TEXTURE_FOR_ADS         = 2;
-    private static final int    SURFACE_TEXTURE_MAX             = 3;
+    private static final int    SURFACE_TEXTURE_MAX             = 2;
 
     private static surfaceTexture[] mSurfaces                   = new surfaceTexture[SURFACE_TEXTURE_MAX];
 
