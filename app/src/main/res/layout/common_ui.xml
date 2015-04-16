@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ui_layout"
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -348,7 +349,6 @@
         </RelativeLayout>
 
     </com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout>
-
 
 
 </RelativeLayout>
