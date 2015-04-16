@@ -42,9 +42,9 @@
                 android:layout_column="0"
                 android:src="@drawable/ic_view_week_white_48dp"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -56,9 +56,9 @@
                 android:layout_column="1"
                 android:src="@drawable/ic_panorama_fisheye_white_48dp"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -70,9 +70,9 @@
                 android:layout_column="2"
                 android:src="@drawable/ic_exposure_plus_1_white_48dp"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -84,9 +84,9 @@
                 android:layout_row="1"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -98,9 +98,9 @@
                 android:layout_row="1"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -112,9 +112,9 @@
                 android:layout_column="2"
                 android:src="@drawable/ic_exposure_zero_white_48dp"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -126,9 +126,9 @@
                 android:layout_column="0"
                 android:src="@drawable/ic_view_stream_white_48dp"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -140,9 +140,9 @@
                 android:layout_row="2"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -154,9 +154,9 @@
                 android:layout_column="2"
                 android:src="@drawable/ic_exposure_minus_1_white_48dp"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
         </GridLayout>
@@ -176,9 +176,9 @@
                 android:layout_row="0"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -190,9 +190,9 @@
                 android:layout_row="0"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -204,9 +204,9 @@
                 android:layout_row="0"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -218,9 +218,9 @@
                 android:layout_row="1"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -232,9 +232,9 @@
                 android:layout_row="1"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -246,9 +246,9 @@
                 android:layout_row="1"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -260,9 +260,9 @@
                 android:layout_row="2"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -274,9 +274,9 @@
                 android:layout_row="2"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -288,9 +288,9 @@
                 android:layout_row="2"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
         </GridLayout>
@@ -310,9 +310,9 @@
                 android:layout_row="0"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -324,9 +324,9 @@
                 android:layout_column="1"
                 android:src="@drawable/ic_vertical_align_top_white_48dp"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -338,9 +338,9 @@
                 android:layout_row="0"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -352,23 +352,23 @@
                 android:layout_row="1"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_play"
-                android:src="@drawable/ic_play_arrow_white_48dp"
+                android:id="@+id/btn_stop_pause_play"
+                android:src="@drawable/ic_pause_white_48dp"
                 android:layout_row="1"
                 android:layout_column="1"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -380,9 +380,9 @@
                 android:layout_row="1"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -394,9 +394,9 @@
                 android:layout_row="2"
                 android:layout_column="0"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -408,9 +408,9 @@
                 android:layout_column="1"
                 android:src="@drawable/ic_vertical_align_bottom_white_48dp"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -422,9 +422,9 @@
                 android:layout_row="2"
                 android:layout_column="2"
                 android:onClick="onGUIButtonClick"
-                android:maxHeight="80dp"
+                android:maxHeight="95dp"
                 android:maxWidth="107dp"
-                android:minHeight="80dp"
+                android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
@@ -450,8 +450,8 @@
                         android:id="@+id/btn_folder"
                         android:src="@drawable/ic_folder_white_48dp"
                         android:maxWidth="107dp"
-                        android:maxHeight="80dp"
-                        android:minHeight="80dp"
+                        android:maxHeight="95dp"
+                        android:minHeight="95dp"
                         android:minWidth="107dp"
                         android:onClick="onGUIButtonClick"
                         android:scaleType="fitCenter"
@@ -463,8 +463,8 @@
                         android:id="@+id/btn_youtube"
                         android:src="@drawable/ic_youtube_48dp"
                         android:maxWidth="107dp"
-                        android:maxHeight="80dp"
-                        android:minHeight="80dp"
+                        android:maxHeight="95dp"
+                        android:minHeight="95dp"
                         android:minWidth="107dp"
                         android:onClick="onGUIButtonClick"
                         android:scaleType="fitCenter" />
@@ -475,8 +475,8 @@
                         android:id="@+id/btn_settingH"
                         android:src="@drawable/ic_settings_white_48dp"
                         android:maxWidth="107dp"
-                        android:maxHeight="80dp"
-                        android:minHeight="80dp"
+                        android:maxHeight="95dp"
+                        android:minHeight="95dp"
                         android:minWidth="107dp"
                         android:onClick="onGUIButtonClick"
                         android:scaleType="fitCenter" />

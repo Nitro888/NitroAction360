@@ -19,6 +19,10 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     private static final String         TAG                     = NAMediaPlayer.class.getSimpleName();
     private Context                     mContext;
 
+    public static final int             PLAYER_STOP             = 0;
+    public static final int             PLAYER_PLAY             = 1;
+    public static final int             PLAYER_PAUSE            = 2;
+
     private NAViewsToGLRenderer         mNAViewsToGLRenderer    = null;
 
     private MediaPlayer                 mMediaPlayer            = null;
@@ -28,6 +32,7 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     private final static int            STEP_FAST               = 30000;
     private int                         mCurrentPosition        = 0;
     private boolean                     mIsSetDataSource        = false;
+    private int                         mPlayState              = PLAYER_STOP;
 
     public NAMediaPlayer(Context context) {
         mContext                = context;
@@ -40,6 +45,10 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
 
     public void setViewToGLRenderer(NAViewsToGLRenderer viewTOGLRenderer){
         mNAViewsToGLRenderer    = viewTOGLRenderer;
+    }
+
+    public int  getPlayState() {
+        return mPlayState;
     }
 
     /*
@@ -81,22 +90,24 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
         }
     }
 
-    public void play() {
+    public void playOrPause() {
         if((mMediaPlayer==null)||(!mIsSetDataSource))  return;
 
-        Log.d(TAG,"play");
+        Log.d(TAG,"playOrPause");
 
-        mMediaPlayer.seekTo(mCurrentPosition);
-        mMediaPlayer.start();
-    }
+        switch (mPlayState) {
+            case PLAYER_PAUSE:
+                mPlayState          = PLAYER_PLAY;
+                mMediaPlayer.seekTo(mCurrentPosition);
+                mMediaPlayer.start();
+                break;
+            case PLAYER_PLAY:
+                mPlayState          = PLAYER_PAUSE;
+                mCurrentPosition= mMediaPlayer.getCurrentPosition();
+                mMediaPlayer.pause();
+                break;
+        }
 
-    public void pause() {
-        if((mMediaPlayer==null)||(!mIsSetDataSource))  return;
-
-        Log.d(TAG,"pause");
-
-        mCurrentPosition= mMediaPlayer.getCurrentPosition();
-        mMediaPlayer.pause();
     }
 
     public void skipPrevious() {
@@ -162,6 +173,7 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     @Override
     public void onPrepared(MediaPlayer player) {
         mIsSetDataSource    = true;
+        mPlayState          = PLAYER_PLAY;
         player.start();
         setTextureSize();
     }
@@ -171,6 +183,7 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
         // MediaPlayer onCompletion event handler. Method which calls then song playing is complete
         //buttonPlayPause.setImageResource(R.drawable.button_play);
         Log.d(TAG,"onCompletion");
+        mPlayState          = PLAYER_STOP;
         mIsSetDataSource    = false;
     }
 

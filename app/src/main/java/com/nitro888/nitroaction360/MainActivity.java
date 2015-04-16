@@ -66,11 +66,11 @@ public class MainActivity extends CardboardActivity {
     public void fastForward() {
         mNAMediaPlayer.fastForward();
     }
-    public void play() {
-        mNAMediaPlayer.play();
+    public void playOrPause() {
+        mNAMediaPlayer.playOrPause();
     }
-    public void pause() {
-        mNAMediaPlayer.pause();
+    public int  getPlayState(){
+        return mNAMediaPlayer.getPlayState();
     }
     public void skipPrevious() {
         mNAMediaPlayer.skipPrevious();

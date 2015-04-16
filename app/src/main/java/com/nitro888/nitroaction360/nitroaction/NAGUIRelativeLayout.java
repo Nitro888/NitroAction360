@@ -100,7 +100,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
         if(!isActivateGUI) {
             menuOpen(mActivateGUILayerID);
-            ((MainActivity) mContext).pause();
         } else {
             if(mLookAtBtnIndex!=-1) {
                 onGUIButtonClick(mLookAtBtnResourceID);
@@ -333,8 +332,19 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_fast_rewind:
                     ((MainActivity) mContext).fastRewind();
                     break;
-                case R.id.btn_play:
-                    ((MainActivity) mContext).play();
+                case R.id.btn_stop_pause_play:
+                    ((MainActivity) mContext).playOrPause();
+                    switch(((MainActivity) mContext).getPlayState()) {
+                        case NAMediaPlayer.PLAYER_STOP:
+                            ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_stop_white_48dp);
+                            return;
+                        case NAMediaPlayer.PLAYER_PAUSE:
+                            ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_play_arrow_white_48dp);
+                            return;
+                        case NAMediaPlayer.PLAYER_PLAY:
+                            ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_pause_white_48dp);
+                            return;
+                    }
                     break;
                 case R.id.btn_fast_forward:
                     ((MainActivity) mContext).fastForward();
@@ -436,8 +446,18 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_fast_rewind:
                     msg = "Fast Rewind";
                     break;
-                case R.id.btn_play:
-                    msg = "Play";
+                case R.id.btn_stop_pause_play:
+                    switch(((MainActivity) mContext).getPlayState()) {
+                        case NAMediaPlayer.PLAYER_STOP:
+                            msg = "stop";
+                            return;
+                        case NAMediaPlayer.PLAYER_PAUSE:
+                            msg = "Play";
+                            return;
+                        case NAMediaPlayer.PLAYER_PLAY:
+                            msg = "pause";
+                            return;
+                    }
                     break;
                 case R.id.btn_fast_forward:
                     msg = "Fast Forward";
