@@ -107,13 +107,14 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         mADRequest              = new AdRequest.Builder().build();
         mAdView.loadAd(mADRequest);
 
-        updateTimeAndProgress(true);
+        updateGUI(true);
         updateTitle("");
 
         menuOpen(mActivateGUILayerID);
         mFinishInit         = true;
 
         ((MainActivity) mContext).setSeekBarProgress(mPlayerProgress);
+        findViewById(R.id.text_pages).setBackground(findViewById(R.id.btn_left).getBackground());
     }
 
     public void onCardboardTrigger() {
@@ -176,23 +177,24 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     public void onGUIButtonClick(int btnID) {
-        mLookAtBtnResourceID    = btnID;
+        if( findViewById(mLookAtBtnResourceID) instanceof ImageButton) {
+            mLookAtBtnResourceID    = btnID;
+            /*
+            final ImageButton btn = ((ImageButton)findViewById(mLookAtBtnResourceID));
+            btn.performClick();
 
-        final ImageButton btn = ((ImageButton)findViewById(mLookAtBtnResourceID));
+            btn.setPressed(true);
+            btn.invalidate();
 
-        //btn.performClick();
-        /*
-        btn.setPressed(true);
-        btn.invalidate();
-
-        btn.postDelayed(new Runnable() {
-            public void run() {
-                btn.setPressed(false);
-                btn.invalidate();
-            }
-        }, 100);
-        */
-        processBtn();
+            btn.postDelayed(new Runnable() {
+                public void run() {
+                    btn.setPressed(false);
+                    btn.invalidate();
+                }
+            }, 100);
+            */
+            processBtn();
+        }
     }
 
     /*
@@ -200,6 +202,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     */
     private String                      mFolder             = "";
     private int                         mFolderPage         = 0;
+    private int                         mFolderPageMax      = 0;
     private List<String>[]              mFolderFiles;
     private final List<String>          mFolderThumbnails   = new ArrayList<String>();
 
@@ -210,7 +213,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             mFolder = folder;
 
         mFolderFiles    = FileExplorer.getDir(mFolder);
-        mFolderPage     = 0;
         mFolderThumbnails.clear();
 
         for(int i=0 ; i < mFolderFiles[0].size() ; i++)
@@ -219,19 +221,21 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             else if(FileExplorer.selectItem(mFolderFiles[0].get(i))==1)
                 mFolderThumbnails.add(mFolderFiles[0].get(i));
 
+        mFolderPage     = 0;
+        mFolderPageMax  = (mFolderThumbnails.size()%ITEMS_PER_PAGE)>0?(mFolderThumbnails.size()/ITEMS_PER_PAGE)+1:mFolderThumbnails.size()/ITEMS_PER_PAGE;
+
         updateBrowserController();
     }
 
     private void browserNextPage(){
         mFolderPage++;
-        int maxPage = (mFolderThumbnails.size()%ITEMS_PER_PAGE)>0?(mFolderThumbnails.size()/ITEMS_PER_PAGE)+1:mFolderThumbnails.size()/ITEMS_PER_PAGE;
-        if(mFolderPage>=maxPage) mFolderPage=maxPage-1;
+        if(mFolderPage>=mFolderPageMax) mFolderPage=mFolderPageMax-1;
         updateBrowserController();
     }
 
     private void browserPreviousPage(){
         mFolderPage--;
-        if(mFolderPage<0)       mFolderPage=0;
+        if(mFolderPage<0)       mFolderPage=mFolderPageMax-1;
         updateBrowserController();
     }
 
@@ -299,10 +303,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         if((mLookAtBtnResourceID!=-1)&&(findViewById(mLookAtBtnResourceID).getVisibility()==View.VISIBLE))
         {
             switch (mLookAtBtnResourceID) {
-                case R.id.btn_close:
-                    menuOpen(-1);
-                    break;
-
                 // browser
                 case R.id.btn_left:
                     browserPreviousPage();
@@ -391,9 +391,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_left:
                     msg = "Previous Page";
                     break;
-                case R.id.btn_close:
-                    msg = "Close";
-                    break;
                 case R.id.btn_right:
                     msg = "Next Page";
                     break;
@@ -429,13 +426,13 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_stop_pause_play:
                     if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_STOP) {
                         msg = "stop";
-                        ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_stop_white_48dp);
+                        ((ImageButton) findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_stop_white_48dp);
                     } else if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PAUSE) {
                         msg = "play";
-                        ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_play_arrow_white_48dp);
+                        ((ImageButton) findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_play_arrow_white_48dp);
                     } else if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PLAY) {
                         msg = "pause";
-                        ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_pause_white_48dp);
+                        ((ImageButton) findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_pause_white_48dp);
                     }
                     break;
                 case R.id.btn_fast_forward:
@@ -495,11 +492,13 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         }
     }
 
-    private void updateTimeAndProgress(boolean isReset) {
+    private void updateGUI(boolean isReset) {
         if(isReset) {
+            ((TextView)findViewById(R.id.text_pages)).setText("");
             mPlayTextTimeController.setText("");
             mPlayerProgress.setProgress(0);
         } else {
+            ((TextView)findViewById(R.id.text_pages)).setText((mFolderPage+1)+"/"+mFolderPageMax);
             if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PLAY) {
                 int current     = ((MainActivity) mContext).getCurrentPosition();
                 int duration    = ((MainActivity) mContext).getDuration();
@@ -558,8 +557,8 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         if(!mFinishInit)                initLayout();
 
         updateBtnColorA();
+        updateGUI(false);
         update3DToast();
-        updateTimeAndProgress(false);
 
         //returns canvas attached to gl texture to draw on
         Canvas glAttachedCanvas = mNAViewsToGLRenderer.onDrawViewBegin(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI);

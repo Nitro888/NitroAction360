@@ -62,19 +62,24 @@
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
 
-            <ImageButton
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_close"
-                android:src="@drawable/ic_cancel_white_48dp"
-                android:layout_row="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="00/00"
+                android:id="@+id/text_pages"
                 android:layout_column="1"
-                android:onClick="onGUIButtonClick"
+                android:layout_row="0"
                 android:maxHeight="95dp"
                 android:maxWidth="107dp"
                 android:minHeight="95dp"
                 android:minWidth="107dp"
-                android:scaleType="fitCenter" />
+                android:singleLine="true"
+                android:gravity="center|center_vertical|center_horizontal"
+                android:onClick="onGUIButtonClick"
+                android:textColor="#ffffffff"
+                android:textStyle="bold"
+                android:textSize="28dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -173,6 +178,7 @@
                 android:minHeight="95dp"
                 android:minWidth="107dp"
                 android:scaleType="fitCenter" />
+
         </GridLayout>
 
         <GridLayout
