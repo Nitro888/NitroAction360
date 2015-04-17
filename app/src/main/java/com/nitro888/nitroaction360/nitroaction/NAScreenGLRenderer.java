@@ -216,7 +216,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             if(mBtnIndex!=btn) {
                 mBtnIndex   = btn;
 
-                ((NAGUIRelativeLayout)((Activity) mContext).findViewById(R.id.GUI)).lookAtBtn(mBtnIndex);
+                ((NAGUIRelativeLayout)((Activity) mContext).findViewById(R.id.GUI)).updateLookAtBtn(mBtnIndex);
 
                 new Thread(new Runnable() {
                     @Override

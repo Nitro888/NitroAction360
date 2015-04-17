@@ -12,11 +12,12 @@ import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TableRow;
+import android.widget.SeekBar;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -38,26 +39,34 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
     private NAViewsToGLRenderer mNAViewsToGLRenderer        = null;
 
-    private static final int    GUI_HOME_CTRL               = R.id.GUI_Home;
-    private static final int    GUI_HOME_BTN_CTRL           = R.id.GUI_Home_Btns;
+    private static final int    GUI_AD_CTRL                 = R.id.GUI_AD;
+
     private static final int    GUI_PLAYER_CTRL             = R.id.GUI_Player;
+    private static final int    GUI_PLAYER_BTN_CTRL         = R.id.GUI_Player_Btns;
+    private static final int    GUI_PLAYER_TITLE_CTRL       = R.id.GUI_Player_Title;
+    private static final int    GUI_PLAYER_TIME_CTRL        = R.id.GUI_Player_Time;
+    private static final int    GUI_PLAYER_PROGRESS_CTRL    = R.id.GUI_Player_ProgressBar;
+
     private static final int    GUI_BROWSER_CTRL            = R.id.GUI_Browser;
     private static final int    GUI_SETTING_CTRL            = R.id.GUI_Setting;
     public static  final int    ITEMS_PER_PAGE              = 6;
 
-    private RelativeLayout      mHomeController             = null;
-    private TableRow            mHomeBtnController          = null;
-    private GridLayout          mPlayController             = null;
-    private GridLayout          mBrowserController          = null;
-    private GridLayout          mSettingController          = null;
-    private boolean             mFinishInit                 = false;
+    private RelativeLayout      mAdController                   = null;
+    private TableLayout         mPlayController                 = null;
+    private GridLayout          mPlayBtnController              = null;
+    private TextView            mPlayTextTitleController        = null;
+    private TextView            mPlayTextTimeController         = null;
+    private SeekBar             mPlayerProgress                 = null;
+    private GridLayout          mBrowserController              = null;
+    private GridLayout          mSettingController              = null;
+    private boolean             mFinishInit                     = false;
 
     private Vibrator            mVibrator;
 
     private int                 mLookAtBtnIndex             = -1;
     private int                 mLookAtBtnResourceID        = -1;
     private boolean             isActivateGUI               = false;
-    private int                 mActivateGUILayerID         = GUI_HOME_CTRL;
+    private int                 mActivateGUILayerID         = GUI_PLAYER_CTRL;
 
     // for adView
     private AdView              mAdView                     = null;
@@ -80,18 +89,28 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     private void initLayout() {
-        mHomeController     = (RelativeLayout)  findViewById(GUI_HOME_CTRL);
-        mHomeBtnController  = (TableRow)        findViewById(GUI_HOME_BTN_CTRL);
-        mPlayController     = (GridLayout)      findViewById(GUI_PLAYER_CTRL);
-        mBrowserController  = (GridLayout)      findViewById(GUI_BROWSER_CTRL);
-        mSettingController  = (GridLayout)      findViewById(GUI_SETTING_CTRL);
+        Log.d(TAG,"test");
 
-        mAdView             = (AdView)          findViewById(R.id.adView);
-        mADRequest          = new AdRequest.Builder().build();
+        mAdController           = (RelativeLayout)  findViewById(GUI_AD_CTRL);
+        mPlayController         = (TableLayout)     findViewById(GUI_PLAYER_CTRL);
+
+        mPlayBtnController      = (GridLayout)      findViewById(GUI_PLAYER_BTN_CTRL);
+        mPlayTextTitleController= (TextView)        findViewById(GUI_PLAYER_TITLE_CTRL);
+        mPlayTextTimeController = (TextView)        findViewById(GUI_PLAYER_TIME_CTRL);
+        mPlayerProgress         = (SeekBar)         findViewById(GUI_PLAYER_PROGRESS_CTRL);
+
+        mBrowserController      = (GridLayout)      findViewById(GUI_BROWSER_CTRL);
+        mSettingController      = (GridLayout)      findViewById(GUI_SETTING_CTRL);
+
+        mAdView                 = (AdView)          findViewById(R.id.adView);
+        mADRequest              = new AdRequest.Builder().build();
         mAdView.loadAd(mADRequest);
 
+        updateTimeAndProgress("",0);
+        updateTitle("");
+
         menuOpen(-1);
-        mActivateGUILayerID = GUI_HOME_CTRL;
+        mActivateGUILayerID = GUI_PLAYER_CTRL;
         mFinishInit         = true;
     }
 
@@ -112,16 +131,16 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     private void menuOpen(int showGUI) {
 
         switch (showGUI) {
-            case GUI_HOME_CTRL:   // Home controller
+            case GUI_AD_CTRL:       // Ads controller
                 mActivateGUILayerID = showGUI;
-                mHomeController.setVisibility(View.VISIBLE);
+                mAdController.setVisibility(View.VISIBLE);
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
                 break;
             case GUI_PLAYER_CTRL:   // play controller
                 mActivateGUILayerID = showGUI;
-                mHomeController.setVisibility(View.INVISIBLE);
+                mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.VISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
@@ -129,21 +148,21 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             case GUI_BROWSER_CTRL:  // browser controller
                 mActivateGUILayerID = showGUI;
                 browserSelectDir(mFolder);
-                mHomeController.setVisibility(View.INVISIBLE);
+                mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.VISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
                 break;
             case GUI_SETTING_CTRL:  // setting controller
                 mActivateGUILayerID = showGUI;
-                mHomeController.setVisibility(View.INVISIBLE);
+                mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.VISIBLE);
                 break;
             default:
                 mActivateGUILayerID = GUI_PLAYER_CTRL;
-                mHomeController.setVisibility(View.INVISIBLE);
+                mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
@@ -240,6 +259,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 break;
             case 1:
                 menuOpen(-1);
+                updateTitle(mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
                 ((MainActivity) mContext).openMovie(mFolderFiles[0].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
                 break;
         }
@@ -267,7 +287,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
             ((ImageButton)mBrowserController.getChildAt(i+3)).setMaxWidth(width);
             ((ImageButton)mBrowserController.getChildAt(i+3)).setMaxHeight(height);
-
         }
     }
     /*
@@ -279,18 +298,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         {
             switch (mLookAtBtnResourceID) {
                 case R.id.btn_close:
-                case R.id.btn_back:
                     menuOpen(-1);
-                    break;
-
-                // home
-                case R.id.btn_folder:
-                    menuOpen(GUI_BROWSER_CTRL);
-                    break;
-                case R.id.btn_youtube:
-                    break;
-                case R.id.btn_settingH:
-                    menuOpen(GUI_SETTING_CTRL);
                     break;
 
                 // browser
@@ -320,11 +328,11 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     break;
 
                 // player
-                case R.id.btn_home:
-                    menuOpen(GUI_HOME_CTRL);
+                case R.id.btn_folder:
+                    menuOpen(GUI_BROWSER_CTRL);
                     break;
-                case R.id.btn_screen_up:
-                    ((MainActivity) mContext).setScreenTiltPosition(1.0f);
+                case R.id.btn_youtube:
+                    // next version
                     break;
                 case R.id.btn_setting:
                     menuOpen(GUI_SETTING_CTRL);
@@ -349,40 +357,35 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_fast_forward:
                     ((MainActivity) mContext).fastForward();
                     break;
-                case R.id.btn_skip_previous:
-                    ((MainActivity) mContext).skipPrevious();
-                    break;
-                case R.id.btn_screen_down:
-                    ((MainActivity) mContext).setScreenTiltPosition(-1.0f);
-                    break;
-                case R.id.btn_skip_next:
-                    ((MainActivity) mContext).skipNext();
-                    break;
 
                 // setting
                 case R.id.btn_sbs_3d:
                     ((MainActivity) mContext).setScreenRenderType(ScreenTypeHelper.SCREEN_RENDER_3D_SBS);
                     break;
-                case R.id.btn_dome:
-                    ((MainActivity) mContext).setScreenShapeType(ScreenTypeHelper.SCREEN_SHAPE_DOME);
-                    break;
-                case R.id.btn_screen_sizeup:
-                    ((MainActivity) mContext).setScreenScale(1.0f);
-                    break;
-                case R.id.btn_2d:
-                    ((MainActivity) mContext).setScreenRenderType(ScreenTypeHelper.SCREEN_RENDER_2D);
-                    break;
-                case R.id.btn_screen_sizeReset:
-                    ((MainActivity) mContext).setScreenScale(0.0f);
-                    break;
-                case R.id.btn_tb_3d:
-                    ((MainActivity) mContext).setScreenRenderType(ScreenTypeHelper.SCREEN_RENDER_3D_TLBR);
+                case R.id.btn_screen_up:
+                    ((MainActivity) mContext).setScreenTiltPosition(1.0f);
                     break;
                 case R.id.btn_panorama:
                     ((MainActivity) mContext).setScreenShapeType(ScreenTypeHelper.SCREEN_SHAPE_CURVE);
                     break;
+
                 case R.id.btn_screen_sizedown:
                     ((MainActivity) mContext).setScreenScale(-1.0f);
+                    break;
+                case R.id.btn_2d:
+                    ((MainActivity) mContext).setScreenRenderType(ScreenTypeHelper.SCREEN_RENDER_2D);
+                    break;
+                case R.id.btn_screen_sizeup:
+                    ((MainActivity) mContext).setScreenScale(1.0f);
+                    break;
+                case R.id.btn_tb_3d:
+                    ((MainActivity) mContext).setScreenRenderType(ScreenTypeHelper.SCREEN_RENDER_3D_TLBR);
+                    break;
+                case R.id.btn_screen_down:
+                    ((MainActivity) mContext).setScreenTiltPosition(-1.0f);
+                    break;
+                case R.id.btn_dome:
+                    ((MainActivity) mContext).setScreenShapeType(ScreenTypeHelper.SCREEN_SHAPE_DOME);
                     break;
             }
         }
@@ -393,17 +396,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
         if((mLookAtBtnResourceID!=-1)&&(findViewById(mLookAtBtnResourceID).getVisibility()==View.VISIBLE)) {
             switch (mLookAtBtnResourceID) {
-                // home
-                case R.id.btn_folder:
-                    msg = "Browser";
-                    break;
-                case R.id.btn_youtube:
-                    msg = "YouTube (Next Version)";
-                    break;
-                case R.id.btn_settingH:
-                    msg = "Setting";
-                    break;
-
                 // browser
                 case R.id.btn_left:
                     msg = "Previous Page";
@@ -434,14 +426,11 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     break;
 
                 // player
-                case R.id.btn_home:
-                    msg = "Home";
+                case R.id.btn_folder:
+                    msg = "Storage";
                     break;
-                case R.id.btn_screen_up:
-                    msg = "Screen Up";
-                    break;
-                case R.id.btn_setting:
-                    msg = "Setting";
+                case R.id.btn_youtube:
+                    msg = "YouTube (Next Version)";
                     break;
                 case R.id.btn_fast_rewind:
                     msg = "Fast Rewind";
@@ -462,37 +451,13 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_fast_forward:
                     msg = "Fast Forward";
                     break;
-                case R.id.btn_skip_previous:
-                    msg = "Skip Previous";
-                    break;
-                case R.id.btn_screen_down:
-                    msg = "Screen Down";
-                    break;
-                case R.id.btn_skip_next:
-                    msg = "Skip Next";
-                    break;
 
                 // setting
                 case R.id.btn_sbs_3d:
                     msg = "Side By Side 3D Mode";
                     break;
-                case R.id.btn_dome:
-                    msg = "Dome Screen";
-                    break;
-                case R.id.btn_screen_sizeup:
-                    msg = "Screen Size Up";
-                    break;
-                case R.id.btn_2d:
-                    msg = "2D Mode";
-                    break;
-                case R.id.btn_back:
-                    msg = "Close";
-                    break;
-                case R.id.btn_screen_sizeReset:
-                    msg = "Screen Size Reset";
-                    break;
-                case R.id.btn_tb_3d:
-                    msg = "Top And Bottom 3D Mode";
+                case R.id.btn_screen_up:
+                    msg = "Screen Up";
                     break;
                 case R.id.btn_panorama:
                     msg = "Panorama Screen";
@@ -500,19 +465,32 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_screen_sizedown:
                     msg = "Screen Size Down";
                     break;
+                case R.id.btn_2d:
+                    msg = "2D Mode";
+                    break;
+                case R.id.btn_screen_sizeup:
+                    msg = "Screen Size Up";
+                    break;
+                case R.id.btn_tb_3d:
+                    msg = "Top And Bottom 3D Mode";
+                    break;
+                case R.id.btn_screen_down:
+                    msg = "Screen Down";
+                    break;
+                case R.id.btn_dome:
+                    msg = "Dome Screen";
+                    break;
             }
         }
 
         ((NACardboardOverlayView)((Activity) mContext).findViewById(R.id.overlay)).show3DToast(msg);
     }
 
-    public void lookAtBtn(int indexBtn) {
-        mLookAtBtnIndex = indexBtn;
+    public void updateLookAtBtn(int indexBtn) {
+        mLookAtBtnIndex     = indexBtn;
+        GridLayout views    = null;
 
-        ViewGroup views     = null;
-
-        if(mHomeController.getVisibility()==View.VISIBLE)           views   = mHomeBtnController;
-        else if(mPlayController.getVisibility()==View.VISIBLE)      views   = mPlayController;
+        if(mPlayController.getVisibility()==View.VISIBLE)           views   = mPlayBtnController;
         else if(mBrowserController.getVisibility()==View.VISIBLE)   views   = mBrowserController;
         else if(mSettingController.getVisibility()==View.VISIBLE)   views   = mSettingController;
 
@@ -527,11 +505,19 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         }
     }
 
-    private void updateBtnColorA() {
-        ViewGroup views    = null;
+    public void updateTimeAndProgress(String Time, int progress) {
+        mPlayTextTimeController.setText(Time);
+        mPlayerProgress.setProgress(progress);
+    }
 
-        if(mHomeController.getVisibility()==View.VISIBLE)           views   = mHomeBtnController;
-        else if(mPlayController.getVisibility()==View.VISIBLE)      views   = mPlayController;
+    public void updateTitle(String title) {
+        mPlayTextTitleController.setText(title);
+    }
+
+    private void updateBtnColorA() {
+        GridLayout views    = null;
+
+        if(mPlayController.getVisibility()==View.VISIBLE)           views   = mPlayBtnController;
         else if(mBrowserController.getVisibility()==View.VISIBLE)   views   = mBrowserController;
         else if(mSettingController.getVisibility()==View.VISIBLE)   views   = mSettingController;
 
