@@ -410,10 +410,12 @@
                 android:text="Title"
                 android:id="@+id/GUI_Player_Title"
                 android:textAlignment="center"
-                android:gravity="center_horizontal"
                 android:textSize="20dp"
                 android:textColor="#ffffffff"
-                android:background="#58000000" />
+                android:background="#58000000"
+                android:maxWidth="210dp"
+                android:minWidth="210dp"
+                android:singleLine="true" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -421,20 +423,23 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="00:00:00 / 00:00:00"
                 android:id="@+id/GUI_Player_Time"
-                android:maxLines="1"
-                android:minLines="1"
                 android:singleLine="true"
                 android:textSize="30dp"
                 android:textAlignment="center"
-                android:gravity="center_horizontal"
+
                 android:textColor="#ffffffff"
-                android:background="#58000000" />
+                android:background="#58000000"
+                android:maxWidth="210dp"
+                android:minWidth="210dp"
+                android:gravity="center_horizontal" />
 
             <SeekBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/GUI_Player_ProgressBar"
-                android:background="#58000000" />
+                android:background="#58000000"
+                android:maxWidth="210dp"
+                android:minWidth="210dp" />
 
         </TableLayout>
 

@@ -26,7 +26,7 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     private NAViewsToGLRenderer         mNAViewsToGLRenderer    = null;
 
     private MediaPlayer                 mMediaPlayer            = null;
-    private SeekBar                     seekBarProgress         = null;
+    private SeekBar                     mSeekBarProgress        = null;
 
     private final static int            STEP_SKIP               = 60000;
     private final static int            STEP_FAST               = 30000;
@@ -158,6 +158,18 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
         mCurrentPosition= mMediaPlayer.getCurrentPosition();
     }
 
+    public void setSeekBarProgress(SeekBar seekBarProgress) {
+        mSeekBarProgress   = seekBarProgress;
+    }
+
+    public int getDuration() {
+        return mMediaPlayer.getDuration();
+    }
+
+    public int getCurrentPosition() {
+        return mMediaPlayer.getCurrentPosition();
+    }
+
     private void setTextureSize() {
         mNAViewsToGLRenderer.setTextureWidth(
                 NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,
@@ -190,11 +202,10 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
         // Method which updates the SeekBar secondary progress by current song loading from URL position
-        if(seekBarProgress!=null)
-            seekBarProgress.setSecondaryProgress(percent);
+        if(mSeekBarProgress!=null)
+            mSeekBarProgress.setSecondaryProgress(percent);
 
         Log.d(TAG,"buffer percent : " + percent);
         Log.d(TAG,"play : " + mp.getCurrentPosition() + " / " + mp.getDuration());
-
     }
 }

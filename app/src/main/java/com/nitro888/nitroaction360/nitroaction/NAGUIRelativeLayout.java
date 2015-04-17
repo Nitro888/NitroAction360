@@ -29,6 +29,7 @@ import com.nitro888.nitroaction360.utils.ScreenTypeHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by nitro888 on 15. 4. 13..
@@ -106,12 +107,14 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         mADRequest              = new AdRequest.Builder().build();
         mAdView.loadAd(mADRequest);
 
-        updateTimeAndProgress("",0);
+        updateTimeAndProgress(true);
         updateTitle("");
 
         menuOpen(-1);
         mActivateGUILayerID = GUI_PLAYER_CTRL;
         mFinishInit         = true;
+
+        ((MainActivity) mContext).setSeekBarProgress(mPlayerProgress);
     }
 
     public void onCardboardTrigger() {
@@ -260,7 +263,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             case 1:
                 menuOpen(-1);
                 updateTitle(mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
-                ((MainActivity) mContext).openMovie(mFolderFiles[0].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
+                ((MainActivity) mContext).openMovie(mFolderFiles[0].get(mFolderPage * ITEMS_PER_PAGE + btnIndex));
                 break;
         }
     }
@@ -436,16 +439,12 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     msg = "Fast Rewind";
                     break;
                 case R.id.btn_stop_pause_play:
-                    switch(((MainActivity) mContext).getPlayState()) {
-                        case NAMediaPlayer.PLAYER_STOP:
-                            msg = "stop";
-                            return;
-                        case NAMediaPlayer.PLAYER_PAUSE:
-                            msg = "Play";
-                            return;
-                        case NAMediaPlayer.PLAYER_PLAY:
-                            msg = "pause";
-                            return;
+                    if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_STOP) {
+                        msg = "stop";
+                    } else if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PAUSE) {
+                        msg = "stop";
+                    } else if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PLAY) {
+                        msg = "pause";
                     }
                     break;
                 case R.id.btn_fast_forward:
@@ -505,12 +504,32 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         }
     }
 
-    public void updateTimeAndProgress(String Time, int progress) {
-        mPlayTextTimeController.setText(Time);
-        mPlayerProgress.setProgress(progress);
+    private void updateTimeAndProgress(boolean isReset) {
+        if(isReset) {
+            mPlayTextTimeController.setText("");
+            mPlayerProgress.setProgress(0);
+        } else {
+            if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PLAY) {
+                int current     = ((MainActivity) mContext).getCurrentPosition();
+                int duration    = ((MainActivity) mContext).getDuration();
+
+                String Time     = String.format("%02d:%02d:%02d / %02d:%02d:%02d",
+                        TimeUnit.MILLISECONDS.toHours(current),
+                        TimeUnit.MILLISECONDS.toMinutes(current) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(current)),
+                        TimeUnit.MILLISECONDS.toSeconds(current) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(current)),
+                        TimeUnit.MILLISECONDS.toHours(duration),
+                        TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
+                        TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+
+                mPlayTextTimeController.setText(Time);
+
+                mPlayerProgress.setMax(duration);
+                mPlayerProgress.setProgress(current);
+            }
+        }
     }
 
-    public void updateTitle(String title) {
+    private void updateTitle(String title) {
         mPlayTextTitleController.setText(title);
     }
 
@@ -549,6 +568,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
         updateBtnColorA();
         update3DToast();
+        updateTimeAndProgress(false);
 
         //returns canvas attached to gl texture to draw on
         Canvas glAttachedCanvas = mNAViewsToGLRenderer.onDrawViewBegin(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI);

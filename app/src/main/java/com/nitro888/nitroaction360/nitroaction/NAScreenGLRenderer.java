@@ -211,25 +211,21 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             offset              = ScreenTypeHelper.getScreenOffset(ScreenTypeHelper.SCREEN_RENDER_2D, eyeType);
             renderMesh(mModelBuffer3,perspectiveView,offset,mNAViewsToGLRenderer.getGLSurfaceTexture(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI));
 
-            int btn = checkLookingAtObject(perspectiveView,rationAndRotation);
+            mBtnIndex = checkLookingAtObject(perspectiveView,rationAndRotation);
 
-            if(mBtnIndex!=btn) {
-                mBtnIndex   = btn;
+            ((NAGUIRelativeLayout)((Activity) mContext).findViewById(R.id.GUI)).updateLookAtBtn(mBtnIndex);
 
-                ((NAGUIRelativeLayout)((Activity) mContext).findViewById(R.id.GUI)).updateLookAtBtn(mBtnIndex);
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((Activity) mContext).runOnUiThread(new Runnable(){
-                            @Override
-                            public void run() {
-                                ((Activity) mContext).findViewById(R.id.GUI).invalidate();
-                            }
-                        });
-                    }
-                }).start();
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ((Activity) mContext).runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            ((Activity) mContext).findViewById(R.id.GUI).invalidate();
+                        }
+                    });
+                }
+            }).start();
         }
 
         private void renderMesh(MeshBufferHelper renderMesh, float[] perspectiveView, float[] offset, int texture) {

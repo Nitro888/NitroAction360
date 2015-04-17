@@ -2,6 +2,7 @@ package com.nitro888.nitroaction360;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SeekBar;
 
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.nitro888.nitroaction360.cardboard.NACardboardOverlayView;
@@ -78,6 +79,16 @@ public class MainActivity extends CardboardActivity {
     public void skipNext() {
         mNAMediaPlayer.skipNext();
     }
+    public void setSeekBarProgress(SeekBar seekBarProgress) {
+        mNAMediaPlayer.setSeekBarProgress(seekBarProgress);
+    }
+    public int getDuration() {
+        return mNAMediaPlayer.getDuration();
+    }
+    public int getCurrentPosition() {
+        return mNAMediaPlayer.getCurrentPosition();
+    }
+
 
     // for setting controller
     public void setScreenShapeType(int screenID) {
