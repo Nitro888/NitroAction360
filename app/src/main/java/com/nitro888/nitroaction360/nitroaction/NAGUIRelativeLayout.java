@@ -52,22 +52,22 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     private static final int    GUI_SETTING_CTRL            = R.id.GUI_Setting;
     public static  final int    ITEMS_PER_PAGE              = 6;
 
-    private RelativeLayout      mAdController                   = null;
-    private TableLayout         mPlayController                 = null;
-    private GridLayout          mPlayBtnController              = null;
-    private TextView            mPlayTextTitleController        = null;
-    private TextView            mPlayTextTimeController         = null;
-    private SeekBar             mPlayerProgress                 = null;
-    private GridLayout          mBrowserController              = null;
-    private GridLayout          mSettingController              = null;
-    private boolean             mFinishInit                     = false;
+    private RelativeLayout      mAdController               = null;
+    private TableLayout         mPlayController             = null;
+    private GridLayout          mPlayBtnController          = null;
+    private TextView            mPlayTextTitleController    = null;
+    private TextView            mPlayTextTimeController     = null;
+    private SeekBar             mPlayerProgress             = null;
+    private GridLayout          mBrowserController          = null;
+    private GridLayout          mSettingController          = null;
+    private boolean             mFinishInit                 = false;
 
     private Vibrator            mVibrator;
 
     private int                 mLookAtBtnIndex             = -1;
     private int                 mLookAtBtnResourceID        = -1;
     private boolean             isActivateGUI               = false;
-    private int                 mActivateGUILayerID         = GUI_PLAYER_CTRL;
+    private int                 mActivateGUILayerID         = GUI_AD_CTRL;
 
     // for adView
     private AdView              mAdView                     = null;
@@ -75,7 +75,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
     public NAGUIRelativeLayout(Context context) {
         super(context);
-        setWillNotDraw(false);
+        //setWillNotDraw(false);
         mContext            = context;
         // init Vibrator
         mVibrator           = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -83,7 +83,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
     public NAGUIRelativeLayout (Context context, AttributeSet attrs) {
         super(context, attrs);
-        setWillNotDraw(false);
+        //setWillNotDraw(false);
         mContext            = context;
         // init Vibrator
         mVibrator           = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -110,8 +110,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         updateTimeAndProgress(true);
         updateTitle("");
 
-        menuOpen(-1);
-        mActivateGUILayerID = GUI_PLAYER_CTRL;
+        menuOpen(mActivateGUILayerID);
         mFinishInit         = true;
 
         ((MainActivity) mContext).setSeekBarProgress(mPlayerProgress);
@@ -123,7 +122,10 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         if(!isActivateGUI) {
             menuOpen(mActivateGUILayerID);
         } else {
-            if(mLookAtBtnIndex!=-1) {
+            if(mActivateGUILayerID==GUI_AD_CTRL){
+                menuOpen(GUI_PLAYER_CTRL);
+            }
+            else if(mLookAtBtnIndex!=-1) {
                 onGUIButtonClick(mLookAtBtnResourceID);
             } else {
                 menuOpen(-1);
@@ -132,24 +134,22 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     private void menuOpen(int showGUI) {
+        mActivateGUILayerID = showGUI;
 
-        switch (showGUI) {
+        switch (mActivateGUILayerID) {
             case GUI_AD_CTRL:       // Ads controller
-                mActivateGUILayerID = showGUI;
                 mAdController.setVisibility(View.VISIBLE);
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
                 break;
             case GUI_PLAYER_CTRL:   // play controller
-                mActivateGUILayerID = showGUI;
                 mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.VISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
                 break;
             case GUI_BROWSER_CTRL:  // browser controller
-                mActivateGUILayerID = showGUI;
                 browserSelectDir(mFolder);
                 mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.INVISIBLE);
@@ -157,7 +157,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 mSettingController.setVisibility(View.INVISIBLE);
                 break;
             case GUI_SETTING_CTRL:  // setting controller
-                mActivateGUILayerID = showGUI;
                 mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
@@ -345,17 +344,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     break;
                 case R.id.btn_stop_pause_play:
                     ((MainActivity) mContext).playOrPause();
-                    switch(((MainActivity) mContext).getPlayState()) {
-                        case NAMediaPlayer.PLAYER_STOP:
-                            ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_stop_white_48dp);
-                            return;
-                        case NAMediaPlayer.PLAYER_PAUSE:
-                            ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_play_arrow_white_48dp);
-                            return;
-                        case NAMediaPlayer.PLAYER_PLAY:
-                            ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_pause_white_48dp);
-                            return;
-                    }
                     break;
                 case R.id.btn_fast_forward:
                     ((MainActivity) mContext).fastForward();
@@ -441,10 +429,13 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_stop_pause_play:
                     if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_STOP) {
                         msg = "stop";
+                        ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_stop_white_48dp);
                     } else if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PAUSE) {
-                        msg = "stop";
+                        msg = "play";
+                        ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_play_arrow_white_48dp);
                     } else if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PLAY) {
                         msg = "pause";
+                        ((ImageButton)((Activity) mContext).findViewById(R.id.btn_stop_pause_play)).setImageResource(R.drawable.ic_pause_white_48dp);
                     }
                     break;
                 case R.id.btn_fast_forward:

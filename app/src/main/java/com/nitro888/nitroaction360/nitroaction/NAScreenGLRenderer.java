@@ -68,6 +68,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         if(mScreenTiltPosition<-90.0f)  mScreenTiltPosition =-90.0f;
     }
     public void setScreenScale(float step) {
+        if(ScreenTypeHelper.SCREEN_SHAPE_CURVE==mScreenShapeType) return;
         if(step==0.0f)  mScreenScale = 1.0f;
         else            mScreenScale +=STEP_SCALE*step;
     }
@@ -182,7 +183,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             mNormalHandle               = GLES20.glGetAttribLocation(mProgramHandle, "a_Normal");
             mTextureCoordinateHandle    = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");
 
-
+            // SCREEN
             float[] rationAndRotation   = ScreenTypeHelper.getScreenScaleRatioRotation(
                                             mScreenTiltPosition,mScreenScale,
                                             mNAViewsToGLRenderer.getTextureWidth(mPlayGLSurfaceTextureID),
@@ -191,13 +192,17 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             Matrix.setIdentityM(mModelMatrix, 0);
             Matrix.translateM(mModelMatrix, 0, 0, 0, 0);
             Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
-            Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
 
-            if(ScreenTypeHelper.SCREEN_SHAPE_CURVE==mScreenShapeType)
+            if(ScreenTypeHelper.SCREEN_SHAPE_CURVE==mScreenShapeType) {
+                Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
                 renderMesh(mModelBuffer1,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
-            else
+            }
+            else {
+                Matrix.scaleM(mModelMatrix,0, 1.0f,1.0f, 1.0f);
                 renderMesh(mModelBuffer2,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
+            }
 
+            // GUI
             rationAndRotation   = ScreenTypeHelper.getScreenScaleRatioRotation(
                                             mScreenTiltPosition,1.0f,
                                             mNAViewsToGLRenderer.getTextureWidth(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_GUI),
