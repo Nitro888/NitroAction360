@@ -79,8 +79,8 @@ public class MainActivity extends CardboardActivity {
     public void skipNext() {
         mNAMediaPlayer.skipNext();
     }
-    public void setSeekBarProgress(SeekBar seekBarProgress) {
-        mNAMediaPlayer.setSeekBarProgress(seekBarProgress);
+    public int getBufferingPercent() {
+        return mNAMediaPlayer.getBufferingPercent();
     }
     public int getDuration() {
         return mNAMediaPlayer.getDuration();

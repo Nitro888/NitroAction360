@@ -15,7 +15,7 @@ import java.io.FileInputStream;
 /**
  * Created by nitro888 on 15. 4. 14..
  */
-public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnPreparedListener{
+public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnVideoSizeChangedListener {
     private static final String         TAG                     = NAMediaPlayer.class.getSimpleName();
     private Context                     mContext;
 
@@ -26,12 +26,13 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     private NAViewsToGLRenderer         mNAViewsToGLRenderer    = null;
 
     private MediaPlayer                 mMediaPlayer            = null;
-    private SeekBar                     mSeekBarProgress        = null;
 
     private final static int            STEP_SKIP               = 60000;
     private final static int            STEP_FAST               = 30000;
     private int                         mCurrentPosition        = 0;
+    private int                         mBufferingPercent       = 0;
     private boolean                     mIsSetDataSource        = false;
+    private boolean                     mIsBufferingStart       = false;
     private int                         mPlayState              = PLAYER_STOP;
 
     public NAMediaPlayer(Context context) {
@@ -41,6 +42,7 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnBufferingUpdateListener(this);
         mMediaPlayer.setOnCompletionListener(this);
+        mMediaPlayer.setOnVideoSizeChangedListener(this);
     }
 
     public void setViewToGLRenderer(NAViewsToGLRenderer viewTOGLRenderer){
@@ -60,6 +62,8 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
 
     public void openMovieFile(String fileName) {
         if(mMediaPlayer==null)  return;
+        mBufferingPercent   = 0;
+        mIsBufferingStart   = false;
 
        Log.d(TAG,"openMovieFile");
 
@@ -77,8 +81,24 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
 
     public void openMovieStream(String url) {
         if(mMediaPlayer==null)  return;
+        mBufferingPercent   = 0;
+        mIsBufferingStart   = true;
 
         Log.d(TAG,"openMovieStream");
+        /*
+            public static void main(String[] args) {
+                try {
+                    // ex: http://www.youtube.com/watch?v=Nj6PFaDmp6c
+                    String url = args[0];
+                    // ex: "/Users/axet/Downloads"
+                    String path = args[1];
+                    VGet v = new VGet(new URL(url), new File(path));
+                    v.download();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        */
 
         mMediaPlayer.reset();
 
@@ -158,42 +178,35 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
         mCurrentPosition= mMediaPlayer.getCurrentPosition();
     }
 
-    public void setSeekBarProgress(SeekBar seekBarProgress) {
-        mSeekBarProgress   = seekBarProgress;
-    }
-
     public int getDuration() {
         return mMediaPlayer.getDuration();
     }
 
+    public int getBufferingPercent() {
+        return mBufferingPercent;
+    }
     public int getCurrentPosition() {
         return mMediaPlayer.getCurrentPosition();
     }
 
-    private void setTextureSize() {
-        mNAViewsToGLRenderer.setTextureWidth(
-                NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,
-                mMediaPlayer.getVideoWidth());
-        mNAViewsToGLRenderer.setTextureHeight(
-                NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,
-                mMediaPlayer.getVideoHeight());
+    private void setTextureSize(int width,int height) {
+        Log.d(TAG,"setTextureSize ("+width+","+height+")");
+        mNAViewsToGLRenderer.setTextureWidth(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,width);
+        mNAViewsToGLRenderer.setTextureHeight(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,height);
         mNAViewsToGLRenderer.createSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER);
         mMediaPlayer.setSurface(mNAViewsToGLRenderer.getSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER));
         mMediaPlayer.setScreenOnWhilePlaying(true);
     }
 
     @Override
-    public void onPrepared(MediaPlayer player) {
+    public void onPrepared(MediaPlayer mp) {
         mIsSetDataSource    = true;
         mPlayState          = PLAYER_PLAY;
-        player.start();
-        setTextureSize();
+        mp.start();
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        // MediaPlayer onCompletion event handler. Method which calls then song playing is complete
-        //buttonPlayPause.setImageResource(R.drawable.button_play);
         Log.d(TAG,"onCompletion");
         mPlayState          = PLAYER_STOP;
         mIsSetDataSource    = false;
@@ -202,10 +215,17 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
         // Method which updates the SeekBar secondary progress by current song loading from URL position
-        if(mSeekBarProgress!=null)
-            mSeekBarProgress.setSecondaryProgress(percent);
+        mBufferingPercent   = percent;
 
-        Log.d(TAG,"buffer percent : " + percent);
-        Log.d(TAG,"play : " + mp.getCurrentPosition() + " / " + mp.getDuration());
+        if(!mIsBufferingStart) {
+            mIsBufferingStart   = true;
+            mIsSetDataSource    = true;
+            mPlayState          = PLAYER_PLAY;
+        }
+    }
+
+    @Override
+    public void onVideoSizeChanged(MediaPlayer mp,int width,int height) {
+        setTextureSize(width,height);
     }
 }

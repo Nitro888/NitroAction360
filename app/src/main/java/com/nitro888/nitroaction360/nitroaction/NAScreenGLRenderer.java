@@ -68,7 +68,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         if(mScreenTiltPosition<-90.0f)  mScreenTiltPosition =-90.0f;
     }
     public void setScreenScale(float step) {
-        if(ScreenTypeHelper.SCREEN_SHAPE_CURVE==mScreenShapeType) return;
+        if(ScreenTypeHelper.SCREEN_SHAPE_DOME==mScreenShapeType) return;
         if(step==0.0f)  mScreenScale = 1.0f;
         else            mScreenScale +=STEP_SCALE*step;
     }

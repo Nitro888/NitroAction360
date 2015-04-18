@@ -113,7 +113,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         menuOpen(mActivateGUILayerID);
         mFinishInit         = true;
 
-        ((MainActivity) mContext).setSeekBarProgress(mPlayerProgress);
         findViewById(R.id.text_pages).setBackground(findViewById(R.id.btn_left).getBackground());
     }
 
@@ -515,6 +514,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
                 mPlayerProgress.setMax(duration);
                 mPlayerProgress.setProgress(current);
+                mPlayerProgress.setSecondaryProgress(((MainActivity) mContext).getBufferingPercent()*duration/100);
             }
         }
     }
