@@ -1,6 +1,7 @@
 package com.nitro888.nitroaction360;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 
@@ -16,6 +17,7 @@ import com.nitro888.nitroaction360.nitroaction.NAViewsToGLRenderer;
  * Created by nitro888 on 15. 4. 5..
  */
 public class MainActivity extends CardboardActivity {
+    private static final String         TAG                     = MainActivity.class.getSimpleName();
 
     private NACardboardOverlayView      mNACardboardOverlayView;
     private CardboardView               mCardboardView;
@@ -108,9 +110,27 @@ public class MainActivity extends CardboardActivity {
     public void onCardboardTrigger() {
         mNAGUIRelativeLayout.onCardboardTrigger();
     }
-
     public void onGUIButtonClick(View view)
     {
         mNAGUIRelativeLayout.onGUIButtonClick(view.getId());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mNAMediaPlayer.resume();
+    }
+    public void onSurfaceChanged() {
+        mNAMediaPlayer.onSurfaceChanged();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        mNAMediaPlayer.pause();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mNAMediaPlayer.stop();
     }
 }

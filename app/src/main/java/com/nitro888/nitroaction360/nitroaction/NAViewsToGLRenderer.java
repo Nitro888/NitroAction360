@@ -68,48 +68,8 @@ public class NAViewsToGLRenderer {
 
         for(int i = 0 ; i < mSurfaces.length ; i ++ )   createSurface(i);
 
-        //testPlay();
+        Log.d(TAG,"onSurfaceChanged()");
     }
-    /*
-    // Play test
-    private MediaPlayer mMediaPlayer            = null;
-
-    private void testPlay() {
-        if(mMediaPlayer==null) {
-            mMediaPlayer    = new MediaPlayer();
-
-            try {
-                //mMediaPlayer.setDataSource("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-                //mMediaPlayer.setDataSource("http://r3---sn-i3b7rn7y.googlevideo.com/videoplayback?mm=31&pl=22&id=o-AB19EI2gRyr35MVVuK-omLCq2BmwaYh6MIXVfIyUe0tl&dur=291.596&ip=219.76.4.12&mt=1429044631&mv=m&ms=au&fexp=900720%2C907263%2C932627%2C932631%2C934954%2C9407115%2C9407432%2C9408023%2C9408041%2C9408195%2C9408347%2C9408469%2C9408707%2C946008%2C947233%2C947243%2C948124%2C948607%2C948703%2C951703%2C952612%2C952626%2C952637%2C957201%2C961404%2C961406&sver=3&initcwndbps=1166250&sparams=dur%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Cmime%2Cmm%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Csource%2Cupn%2Cexpire&ipbits=0&expire=1429066342&mime=video%2Fmp4&ratebypass=yes&key=yt5&signature=A37F57940178EBC327CFBFF5AF06658970B180E6.48F6A6C5E750957E8244A73D440CAF69D0C9731E&nh=IgpwcjAzLmhrZzAxKgkxMjcuMC4wLjE&source=youtube&itag=22&upn=ReNITzQVZrc&title=AutoErotique+-+Asphyxiation+%28Official+Video%29");
-
-                AssetFileDescriptor afd = mContext.getResources().openRawResourceFd(R.raw.big_buck_bunny);
-                mMediaPlayer.setDataSource(
-                        afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                afd.close();
-
-
-                ((MainActivity) mContext).setScreenRenderType(ScreenTypeHelper.SCREEN_RENDER_2D);
-                mMediaPlayer.prepare();
-                setTextureSize();
-                mMediaPlayer.start();
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
-        }
-    }
-    private void setTextureSize() {
-        setTextureWidth(
-                NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,
-                mMediaPlayer.getVideoWidth());
-        setTextureHeight(
-                NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER,
-                mMediaPlayer.getVideoHeight());
-        createSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER);
-        mMediaPlayer.setSurface(getSurface(NAViewsToGLRenderer.SURFACE_TEXTURE_FOR_MEDIAPLAYER));
-        //mMediaPlayer.setScreenOnWhilePlaying(true);
-    }
-    // Play test
-    */
 
     public void createSurface (int typeID) {
         mSurfaces[typeID].createSurface();

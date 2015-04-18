@@ -90,8 +90,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     private void initLayout() {
-        Log.d(TAG,"test");
-
         mAdController           = (RelativeLayout)  findViewById(GUI_AD_CTRL);
         mPlayController         = (TableLayout)     findViewById(GUI_PLAYER_CTRL);
 

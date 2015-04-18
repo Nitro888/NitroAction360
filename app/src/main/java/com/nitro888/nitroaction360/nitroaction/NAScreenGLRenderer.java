@@ -11,6 +11,7 @@ import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
+import com.nitro888.nitroaction360.MainActivity;
 import com.nitro888.nitroaction360.R;
 import com.nitro888.nitroaction360.utils.MeshBufferHelper;
 import com.nitro888.nitroaction360.utils.RawResourceReader;
@@ -87,6 +88,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         if(mNAViewsToGLRenderer!=null)
             mNAViewsToGLRenderer.onSurfaceChanged();
         mCore.onSurfaceChanged(width,height);
+        ((MainActivity) mContext).onSurfaceChanged();
     }
     @Override
     public void onNewFrame(HeadTransform headTransform) {
