@@ -12,6 +12,7 @@ import com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout;
 import com.nitro888.nitroaction360.nitroaction.NAMediaPlayer;
 import com.nitro888.nitroaction360.nitroaction.NAScreenGLRenderer;
 import com.nitro888.nitroaction360.nitroaction.NAViewsToGLRenderer;
+import com.nitro888.nitroaction360.youtube.PlayListHelper;
 
 /**
  * Created by nitro888 on 15. 4. 5..
@@ -47,12 +48,15 @@ public class MainActivity extends CardboardActivity {
         mNAScreenGLRenderer     = new NAScreenGLRenderer(this);
         mNAScreenGLRenderer.setViewToGLRenderer(mNAViewsToGLRenderer);
 
+        // Load Youtube
+        PlayListHelper  playListHelper  = new PlayListHelper(this);
+
         // Cardboard
         mCardboardView          = (CardboardView) findViewById(R.id.cardboard_view);
         mCardboardView.setRenderer((CardboardView.StereoRenderer) mNAScreenGLRenderer);
 
         mNACardboardOverlayView = (NACardboardOverlayView) findViewById(R.id.overlay);
-        mNACardboardOverlayView.show3DToast("NitroAction 360 Start");
+        //mNACardboardOverlayView.show3DToast("NitroAction 360 Start");
 
         setCardboardView(mCardboardView);
     }

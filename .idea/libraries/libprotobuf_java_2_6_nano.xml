@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="libprotobuf-java-2.6-nano">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/libprotobuf-java-2.6-nano.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

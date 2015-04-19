@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="google-api-client-android-1.20.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/google-api-client-android-1.20.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
