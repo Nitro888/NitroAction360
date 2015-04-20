@@ -3,10 +3,10 @@ package com.nitro888.nitroaction360.nitroaction;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
@@ -19,6 +19,7 @@ import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.akoscz.youtube.PlaylistItem;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.nitro888.nitroaction360.MainActivity;
@@ -26,7 +27,9 @@ import com.nitro888.nitroaction360.R;
 import com.nitro888.nitroaction360.cardboard.NACardboardOverlayView;
 import com.nitro888.nitroaction360.utils.FileExplorer;
 import com.nitro888.nitroaction360.utils.ScreenTypeHelper;
+import com.nitro888.nitroaction360.utils.YouTubePlayListHelper;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -50,6 +53,8 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
     private static final int    GUI_BROWSER_CTRL            = R.id.GUI_Browser;
     private static final int    GUI_SETTING_CTRL            = R.id.GUI_Setting;
+    private static final int    GUI_YOUTUBE_CATEGORY_CTRL   = R.id.GUI_YouTube_Category;
+    private static final int    GUI_YOUTUBE_PLAYLIST_CTRL   = R.id.GUI_YouTube_Playlist;
     public static  final int    ITEMS_PER_PAGE              = 6;
 
     private RelativeLayout      mAdController               = null;
@@ -60,6 +65,8 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     private SeekBar             mPlayerProgress             = null;
     private GridLayout          mBrowserController          = null;
     private GridLayout          mSettingController          = null;
+    private GridLayout          mYoutubeCategoryController  = null;
+    private GridLayout          mYoutubePlaylistController  = null;
     private boolean             mFinishInit                 = false;
 
     private Vibrator            mVibrator;
@@ -90,19 +97,22 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     private void initLayout() {
-        mAdController           = (RelativeLayout)  findViewById(GUI_AD_CTRL);
-        mPlayController         = (TableLayout)     findViewById(GUI_PLAYER_CTRL);
+        mAdController               = (RelativeLayout)  findViewById(GUI_AD_CTRL);
+        mPlayController             = (TableLayout)     findViewById(GUI_PLAYER_CTRL);
 
-        mPlayBtnController      = (GridLayout)      findViewById(GUI_PLAYER_BTN_CTRL);
-        mPlayTextTitleController= (TextView)        findViewById(GUI_PLAYER_TITLE_CTRL);
-        mPlayTextTimeController = (TextView)        findViewById(GUI_PLAYER_TIME_CTRL);
-        mPlayerProgress         = (SeekBar)         findViewById(GUI_PLAYER_PROGRESS_CTRL);
+        mPlayBtnController          = (GridLayout)      findViewById(GUI_PLAYER_BTN_CTRL);
+        mPlayTextTitleController    = (TextView)        findViewById(GUI_PLAYER_TITLE_CTRL);
+        mPlayTextTimeController     = (TextView)        findViewById(GUI_PLAYER_TIME_CTRL);
+        mPlayerProgress             = (SeekBar)         findViewById(GUI_PLAYER_PROGRESS_CTRL);
 
-        mBrowserController      = (GridLayout)      findViewById(GUI_BROWSER_CTRL);
-        mSettingController      = (GridLayout)      findViewById(GUI_SETTING_CTRL);
+        mBrowserController          = (GridLayout)      findViewById(GUI_BROWSER_CTRL);
+        mSettingController          = (GridLayout)      findViewById(GUI_SETTING_CTRL);
 
-        mAdView                 = (AdView)          findViewById(R.id.adView);
-        mADRequest              = new AdRequest.Builder().build();
+        mYoutubeCategoryController  = (GridLayout)      findViewById(GUI_YOUTUBE_CATEGORY_CTRL);
+        mYoutubePlaylistController  = (GridLayout)      findViewById(GUI_YOUTUBE_PLAYLIST_CTRL);
+
+        mAdView                     = (AdView)          findViewById(R.id.adView);
+        mADRequest                  = new AdRequest.Builder().build();
         mAdView.loadAd(mADRequest);
 
         updateGUI(true);
@@ -112,6 +122,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         mFinishInit         = true;
 
         findViewById(R.id.text_pages).setBackground(findViewById(R.id.btn_left).getBackground());
+        findViewById(R.id.btn_youtube_not_use).setVisibility(View.INVISIBLE);
     }
 
     public void onCardboardTrigger() {
@@ -140,12 +151,16 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
+                mYoutubeCategoryController.setVisibility(View.INVISIBLE);
+                mYoutubePlaylistController.setVisibility(View.INVISIBLE);
                 break;
             case GUI_PLAYER_CTRL:   // play controller
                 mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.VISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
+                mYoutubeCategoryController.setVisibility(View.INVISIBLE);
+                mYoutubePlaylistController.setVisibility(View.INVISIBLE);
                 break;
             case GUI_BROWSER_CTRL:  // browser controller
                 browserSelectDir(mFolder);
@@ -153,12 +168,33 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.VISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
+                mYoutubeCategoryController.setVisibility(View.INVISIBLE);
+                mYoutubePlaylistController.setVisibility(View.INVISIBLE);
                 break;
             case GUI_SETTING_CTRL:  // setting controller
                 mAdController.setVisibility(View.INVISIBLE);
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.VISIBLE);
+                mYoutubeCategoryController.setVisibility(View.INVISIBLE);
+                mYoutubePlaylistController.setVisibility(View.INVISIBLE);
+                break;
+            case GUI_YOUTUBE_CATEGORY_CTRL:
+                mAdController.setVisibility(View.INVISIBLE);
+                mPlayController.setVisibility(View.INVISIBLE);
+                mBrowserController.setVisibility(View.INVISIBLE);
+                mSettingController.setVisibility(View.INVISIBLE);
+                mYoutubeCategoryController.setVisibility(View.VISIBLE);
+                mYoutubePlaylistController.setVisibility(View.INVISIBLE);
+                break;
+            case GUI_YOUTUBE_PLAYLIST_CTRL:
+                selectYoutubePlaylist();
+                mAdController.setVisibility(View.INVISIBLE);
+                mPlayController.setVisibility(View.INVISIBLE);
+                mBrowserController.setVisibility(View.INVISIBLE);
+                mSettingController.setVisibility(View.INVISIBLE);
+                mYoutubeCategoryController.setVisibility(View.INVISIBLE);
+                mYoutubePlaylistController.setVisibility(View.VISIBLE);
                 break;
             default:
                 mActivateGUILayerID = GUI_PLAYER_CTRL;
@@ -166,6 +202,8 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 mPlayController.setVisibility(View.INVISIBLE);
                 mBrowserController.setVisibility(View.INVISIBLE);
                 mSettingController.setVisibility(View.INVISIBLE);
+                mYoutubeCategoryController.setVisibility(View.INVISIBLE);
+                mYoutubePlaylistController.setVisibility(View.INVISIBLE);
                 break;
         }
 
@@ -253,6 +291,21 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         updateBrowserController(thumbnails);
     }
 
+    private void updateBrowserController(BitmapDrawable[] thumbnails) {
+        for(int i = 3 ; i < mBrowserController.getChildCount() ; i++)
+            mBrowserController.getChildAt(i).setVisibility(View.INVISIBLE);
+
+        Drawable    backImg = mBrowserController.getChildAt(0).getBackground();
+
+        for(int i = 0 ; i < thumbnails.length ; i++) {
+            mBrowserController.getChildAt(i+3).setVisibility(View.VISIBLE);
+            ((ImageButton)mBrowserController.getChildAt(i+3)).setImageResource(
+                    thumbnails[i] == null ? R.drawable.ic_folder_white_48dp : R.drawable.ic_play_circle_outline_white_48dp
+            );
+            mBrowserController.getChildAt(i+3).setBackground(thumbnails[i]==null?backImg:thumbnails[i]);
+        }
+    }
+
     private void browserSelectItem(int btnIndex){
         int type = FileExplorer.selectItem(mFolderFiles[0].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
 
@@ -263,37 +316,67 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             case 1:
                 menuOpen(-1);
                 updateTitle(mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+btnIndex));
-                ((MainActivity) mContext).openMovie(mFolderFiles[0].get(mFolderPage * ITEMS_PER_PAGE + btnIndex));
+                ((MainActivity) mContext).openMovieFile(mFolderFiles[0].get(mFolderPage * ITEMS_PER_PAGE + btnIndex));
                 break;
-        }
-    }
-
-    private void updateBrowserController(BitmapDrawable[] thumbnails) {
-        for(int i = 3 ; i < mBrowserController.getChildCount() ; i++)
-            mBrowserController.getChildAt(i).setVisibility(View.INVISIBLE);
-
-        Drawable    backImg = mBrowserController.getChildAt(0).getBackground();
-
-        int width   = 0;
-        int height  = 0;
-
-        for(int i = 0 ; i < thumbnails.length ; i++) {
-            width   = mBrowserController.getChildAt(i+3).getWidth();
-            height   = mBrowserController.getChildAt(i+3).getHeight();
-
-            mBrowserController.getChildAt(i+3).setVisibility(View.VISIBLE);
-            ((ImageButton)mBrowserController.getChildAt(i+3)).setImageResource(
-                    thumbnails[i] == null ? R.drawable.ic_folder_white_48dp : R.drawable.ic_play_circle_outline_white_48dp
-            );
-
-            mBrowserController.getChildAt(i+3).setBackground(thumbnails[i]==null?backImg:thumbnails[i]);
-
-            ((ImageButton)mBrowserController.getChildAt(i+3)).setMaxWidth(width);
-            ((ImageButton)mBrowserController.getChildAt(i+3)).setMaxHeight(height);
         }
     }
     /*
         UI Control  - browser
+    */
+
+
+    /*
+        UI Control  - youtube
+    */
+    private int     mYoutubeCategory             = YouTubePlayListHelper.YOUTUBE_CH_3D_EARTH_PLAYLIST_ID;
+
+    private void selectYoutubePlaylist() {
+        mFolderThumbnails.clear();
+
+        int itemCnt = ((MainActivity) mContext).getYoutubeCount(mYoutubeCategory);
+
+        for(int i=0 ; i < itemCnt ; i++) {
+            PlaylistItem p = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, i);
+            mFolderThumbnails.add(p.thumbnailUrl);
+        }
+
+        updateYoutubePlaylist();
+    }
+
+    private void updateYoutubePlaylist() {
+        int itemCnt = ((MainActivity) mContext).getYoutubeCount(mYoutubeCategory);
+
+        for(int i = 3 ; i < mYoutubePlaylistController.getChildCount() ; i++)
+            mYoutubePlaylistController.getChildAt(i).setVisibility(View.INVISIBLE);
+
+        for(int i = 0 ; i < itemCnt ; i++)
+            new DownloadImageTask(mYoutubePlaylistController.getChildAt(i+3)).execute(mFolderThumbnails.get(i));
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, BitmapDrawable> {
+        private View mView;
+        public DownloadImageTask(View view) {
+            mView   = view;
+        }
+        protected BitmapDrawable doInBackground(String... urls) {
+            return loadDrawableImageFromURL(urls[0]);
+        }
+
+        protected void onPostExecute(BitmapDrawable result) {
+            mView.setVisibility(View.VISIBLE);
+            mView.setBackground(result);
+        }
+        private BitmapDrawable loadDrawableImageFromURL(String url) {
+            try {
+                return new BitmapDrawable(getResources(), new URL(url).openStream());
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                return null;
+            }
+        }
+    }
+    /*
+        UI Control  - youtube
     */
 
     private void processBtn() {
@@ -331,7 +414,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     menuOpen(GUI_BROWSER_CTRL);
                     break;
                 case R.id.btn_youtube:
-                    // next version
+                    //menuOpen(GUI_YOUTUBE_CATEGORY_CTRL);
                     break;
                 case R.id.btn_setting:
                     menuOpen(GUI_SETTING_CTRL);
@@ -375,6 +458,67 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_dome:
                     ((MainActivity) mContext).setScreenShapeType(ScreenTypeHelper.SCREEN_SHAPE_DOME);
                     break;
+
+                // youtube category
+                case R.id.btn_youtube_earth:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_3D_EARTH_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
+                case R.id.btn_youtube_space:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_3D_SPACE_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
+                case R.id.btn_youtube_game:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_3D_GAME_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
+                case R.id.btn_youtube_mv:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_3D_MV_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
+                case R.id.btn_youtube_movie:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_3D_MOVIE_TRAILER_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
+                case R.id.btn_youtube_animation:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_3D_ANIMATION_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
+                case R.id.btn_youtube_demo:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_3D_DEMO_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
+                case R.id.btn_youtube_sp360:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_SP360_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
+
+                // youtube playlist
+                case R.id.btn_youtube_left:
+
+                    break;
+                case R.id.btn_youtube_right:
+
+                    break;
+                case R.id.btn_youtube01:
+                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 0).videoId);
+                    break;
+                case R.id.btn_youtube02:
+                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 1).videoId);
+                    break;
+                case R.id.btn_youtube03:
+                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 2).videoId);
+                    break;
+                case R.id.btn_youtube04:
+                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 3).videoId);
+                    break;
+                case R.id.btn_youtube05:
+                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 4).videoId);
+                    break;
+                case R.id.btn_youtube06:
+                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 5).videoId);
+
+                    break;
             }
         }
     }
@@ -415,7 +559,10 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     msg = "Storage";
                     break;
                 case R.id.btn_youtube:
-                    msg = "YouTube (Next Version)";
+                    msg = "YouTube";
+                    break;
+                case R.id.btn_setting:
+                    msg = "Setting";
                     break;
                 case R.id.btn_fast_rewind:
                     msg = "Fast Rewind";
@@ -464,6 +611,61 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_dome:
                     msg = "Dome Screen";
                     break;
+
+                // youtube category
+                case R.id.btn_youtube_earth:
+                    msg = "Earth";
+                    break;
+                case R.id.btn_youtube_space:
+                    msg = "Space";
+                    break;
+                case R.id.btn_youtube_game:
+                    msg = "Game";
+                    break;
+                case R.id.btn_youtube_mv:
+                    msg = "Music Video";
+                    break;
+                case R.id.btn_youtube_movie:
+                    msg = "Movie Trailer";
+                    break;
+                case R.id.btn_youtube_animation:
+                    msg = "Animation Movie Trailer";
+                    break;
+                case R.id.btn_youtube_demo:
+                    msg = "Demo";
+                    break;
+                case R.id.btn_youtube_sp360:
+                    msg = "SP360";
+                    break;
+                case R.id.btn_youtube_not_use:
+                    msg = "not use";
+                    break;
+
+                // youtube playlist
+                case R.id.btn_youtube_left:
+                    msg = "Previous Page";
+                    break;
+                case R.id.btn_youtube_right:
+                    msg = "Next Page";
+                    break;
+                case R.id.btn_youtube01:
+                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 0).title;
+                    break;
+                case R.id.btn_youtube02:
+                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 1).title;
+                    break;
+                case R.id.btn_youtube03:
+                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 2).title;
+                    break;
+                case R.id.btn_youtube04:
+                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 3).title;
+                    break;
+                case R.id.btn_youtube05:
+                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 4).title;
+                    break;
+                case R.id.btn_youtube06:
+                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 5).title;
+                    break;
             }
         }
 
@@ -472,11 +674,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
     public void updateLookAtBtn(int indexBtn) {
         mLookAtBtnIndex     = indexBtn;
-        GridLayout views    = null;
-
-        if(mPlayController.getVisibility()==View.VISIBLE)           views   = mPlayBtnController;
-        else if(mBrowserController.getVisibility()==View.VISIBLE)   views   = mBrowserController;
-        else if(mSettingController.getVisibility()==View.VISIBLE)   views   = mSettingController;
+        GridLayout views    = getActivateViews();
 
         if(views!=null) {
             if((mLookAtBtnIndex==-1)||(indexBtn>=views.getChildCount())) {
@@ -522,11 +720,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     private void updateBtnColorA() {
-        GridLayout views    = null;
-
-        if(mPlayController.getVisibility()==View.VISIBLE)           views   = mPlayBtnController;
-        else if(mBrowserController.getVisibility()==View.VISIBLE)   views   = mBrowserController;
-        else if(mSettingController.getVisibility()==View.VISIBLE)   views   = mSettingController;
+        GridLayout views    = getActivateViews();
 
         if(views!=null) {
             for(int i = 0 ; i < views.getChildCount() ; i++) {
@@ -541,6 +735,18 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 }
             }
         }
+    }
+
+    private GridLayout getActivateViews() {
+        GridLayout views    = null;
+
+        if(mPlayController.getVisibility()==View.VISIBLE)                   views   = mPlayBtnController;
+        else if(mBrowserController.getVisibility()==View.VISIBLE)           views   = mBrowserController;
+        else if(mSettingController.getVisibility()==View.VISIBLE)           views   = mSettingController;
+        else if(mYoutubeCategoryController.getVisibility()==View.VISIBLE)   views   = mYoutubeCategoryController;
+        else if(mYoutubePlaylistController.getVisibility()==View.VISIBLE)   views   = mYoutubePlaylistController;
+
+        return views;
     }
 
     //-------------------------------------------------------------------

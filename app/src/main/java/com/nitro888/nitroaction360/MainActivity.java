@@ -1,10 +1,9 @@
 package com.nitro888.nitroaction360;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.SeekBar;
 
+import com.akoscz.youtube.PlaylistItem;
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.nitro888.nitroaction360.cardboard.NACardboardOverlayView;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -12,7 +11,8 @@ import com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout;
 import com.nitro888.nitroaction360.nitroaction.NAMediaPlayer;
 import com.nitro888.nitroaction360.nitroaction.NAScreenGLRenderer;
 import com.nitro888.nitroaction360.nitroaction.NAViewsToGLRenderer;
-import com.nitro888.nitroaction360.youtube.PlayListHelper;
+import com.nitro888.nitroaction360.utils.YouTubeDownloadHelper;
+import com.nitro888.nitroaction360.utils.YouTubePlayListHelper;
 
 /**
  * Created by nitro888 on 15. 4. 5..
@@ -27,6 +27,7 @@ public class MainActivity extends CardboardActivity {
     private NAScreenGLRenderer          mNAScreenGLRenderer;
     private NAGUIRelativeLayout         mNAGUIRelativeLayout;
     private NAMediaPlayer               mNAMediaPlayer;
+    private YouTubePlayListHelper       mYoutubePlayListHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,15 @@ public class MainActivity extends CardboardActivity {
         mNAScreenGLRenderer.setViewToGLRenderer(mNAViewsToGLRenderer);
 
         // Load Youtube
-        PlayListHelper  playListHelper  = new PlayListHelper(this);
+        /*
+        ConnectivityManager cm =
+        (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork.isConnectedOrConnecting();
+        boolean isWiFi      = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+         */
+        //mYoutubePlayListHelper  = new YouTubePlayListHelper(this);
 
         // Cardboard
         mCardboardView          = (CardboardView) findViewById(R.id.cardboard_view);
@@ -59,11 +68,26 @@ public class MainActivity extends CardboardActivity {
         //mNACardboardOverlayView.show3DToast("NitroAction 360 Start");
 
         setCardboardView(mCardboardView);
+
+        //YouTubeDownloadHelper.main();
     }
 
     // for browser controller
-    public void openMovie(String fileName) {
+    public void openMovieFile(String fileName) {
         mNAMediaPlayer.openMovieFile(fileName);
+    }
+
+    // for youtube
+    public int getYoutubeCount(int category) {
+        return mYoutubePlayListHelper.getCount(category);
+    }
+
+    public PlaylistItem getYoutubeItem(int category, int position) {
+        return mYoutubePlayListHelper.getItem(category,position);
+    }
+
+    public void openMovieStream(String url) {
+        mNAMediaPlayer.openMovieStream(url);
     }
 
     // for play controller

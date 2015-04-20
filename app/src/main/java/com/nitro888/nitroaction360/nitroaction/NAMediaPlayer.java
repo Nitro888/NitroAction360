@@ -5,9 +5,16 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+import com.github.axet.vget.VGet;
+import com.github.axet.vget.info.VGetParser;
+import com.github.axet.vget.info.VideoInfo;
+import com.github.axet.wget.info.DownloadInfo;
+
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.net.URL;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by nitro888 on 15. 4. 14..
@@ -112,29 +119,31 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
         mCurrentPosition    = 0;
         mIsBufferingStart   = true;
 
-        /*
-            public static void main(String[] args) {
-                try {
-                    // ex: http://www.youtube.com/watch?v=Nj6PFaDmp6c
-                    String url = args[0];
-                    // ex: "/Users/axet/Downloads"
-                    String path = args[1];
-                    VGet v = new VGet(new URL(url), new File(path));
-                    v.download();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        */
-
         mMediaPlayer.reset();
+/*
+        try {
+            final URL   source  = new URL("https://www.youtube.com/watch?v="+url);
+            final VGet  vg      = new VGet(source);
 
+            if (vg.empty()) {
+                vg.extract(null, new AtomicBoolean(false), new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                });
+            }
+        }catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+*/
+        url = "http://r3---sn-25g7sm7e.googlevideo.com/videoplayback?dur=2639.899&sver=3&expire=1429498850&pl=24&nh=EAI&ratebypass=yes&itag=22&ipbits=0&signature=F6958D6909E6C433C1E91C2204E8F7105A18E108.71742A0E0C99DF6746CF83549151C31219461510&ms=au&mt=1429477116&mv=m&source=youtube&key=yt5&mm=31&id=o-AFXatyhNqLU_N06oBK38pzMas1NNdxGjeWl6o7LSfbvb&upn=AG6W7QsGOKw&initcwndbps=395000&ip=88.248.3.207&mime=video%2Fmp4&sparams=dur%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Cmime%2Cmm%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Csource%2Cupn%2Cexpire&fexp=900720%2C906335%2C907263%2C916636%2C931383%2C932627%2C934954%2C938028%2C938688%2C9405989%2C9407115%2C9407440%2C9408206%2C9408226%2C9408347%2C9408707%2C9408787%2C9409071%2C947233%2C948124%2C948703%2C951703%2C952612%2C952637%2C957201%2C961404%2C961406&title=IMAX-+Hubble+3D+%28CZ+DOKUMENT+3D+HD+1080p%29";
         try {
             mMediaPlayer.setDataSource(url);
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
+
     }
 
     public void playOrPause() {

@@ -32,7 +32,7 @@ import java.io.InputStreamReader;
 public abstract class GetYouTubePlaylistAsyncTask extends AsyncTask<String, Void, JSONObject> {
     private static final String     TAG                                     = GetYouTubePlaylistAsyncTask.class.getSimpleName();
 
-    //private static final int YOUTUBE_PLAYLIST_MAX_RESULTS = 50;
+    private static final int YOUTUBE_PLAYLIST_MAX_RESULTS = 6;
     private static final String YOUTUBE_PLAYLISTITEMS_URL = "https://www.googleapis.com/youtube/v3/playlistItems";
     private static final String YOUTUBE_PLAYLIST_PART = "snippet";
     private static final String YOUTUBE_PLAYLIST_FIELDS = "etag,pageInfo,nextPageToken,items(id,snippet(title,description,position,thumbnails(medium,high),resourceId/videoId))";
@@ -57,7 +57,7 @@ public abstract class GetYouTubePlaylistAsyncTask extends AsyncTask<String, Void
 
         mUriBuilder.appendQueryParameter("playlistId", playlistId)
                 .appendQueryParameter("part", YOUTUBE_PLAYLIST_PART)
-                //.appendQueryParameter("maxResults", Integer.toString(YOUTUBE_PLAYLIST_MAX_RESULTS))
+                .appendQueryParameter("maxResults", Integer.toString(YOUTUBE_PLAYLIST_MAX_RESULTS))
                 .appendQueryParameter("fields", YOUTUBE_PLAYLIST_FIELDS)
                 .appendQueryParameter("key", GoogleAPIKeys.API_BROWSER_YOUTUBE_KEY);
 
