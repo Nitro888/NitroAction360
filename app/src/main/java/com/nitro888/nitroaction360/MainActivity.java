@@ -1,5 +1,7 @@
 package com.nitro888.nitroaction360;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 
@@ -27,7 +29,7 @@ public class MainActivity extends CardboardActivity {
     private NAScreenGLRenderer          mNAScreenGLRenderer;
     private NAGUIRelativeLayout         mNAGUIRelativeLayout;
     private NAMediaPlayer               mNAMediaPlayer;
-    private YouTubePlayListHelper       mYoutubePlayListHelper;
+    private YouTubePlayListHelper       mYoutubePlayListHelper  = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,14 +53,16 @@ public class MainActivity extends CardboardActivity {
 
         // Load Youtube
         /*
-        ConnectivityManager cm =
-        (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm              = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo         activeNetwork   = cm.getActiveNetworkInfo();
+        boolean             isConnected     = activeNetwork.isConnectedOrConnecting();
+        boolean             isWiFi          = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork.isConnectedOrConnecting();
-        boolean isWiFi      = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
-         */
-        //mYoutubePlayListHelper  = new YouTubePlayListHelper(this);
+        if(isConnected)
+            mYoutubePlayListHelper  = new YouTubePlayListHelper(this);
+        else
+            mYoutubePlayListHelper  = null;
+        */
 
         // Cardboard
         mCardboardView          = (CardboardView) findViewById(R.id.cardboard_view);
@@ -78,11 +82,21 @@ public class MainActivity extends CardboardActivity {
     }
 
     // for youtube
+    public boolean isConnected() {
+        ConnectivityManager cm              = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo         activeNetwork   = cm.getActiveNetworkInfo();
+        boolean             isConnected = activeNetwork.isConnectedOrConnecting();
+        isConnected = isConnected&&(mYoutubePlayListHelper!=null?true:false);
+        return isConnected;
+    }
+
     public int getYoutubeCount(int category) {
+        if(mYoutubePlayListHelper==null)    return -1;
         return mYoutubePlayListHelper.getCount(category);
     }
 
     public PlaylistItem getYoutubeItem(int category, int position) {
+        if(mYoutubePlayListHelper==null)    return null;
         return mYoutubePlayListHelper.getItem(category,position);
     }
 

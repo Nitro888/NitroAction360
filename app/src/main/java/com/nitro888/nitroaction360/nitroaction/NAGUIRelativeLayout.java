@@ -333,6 +333,8 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     private void selectYoutubePlaylist() {
         mFolderThumbnails.clear();
 
+        if(!((MainActivity) mContext).isConnected())    return;
+
         int itemCnt = ((MainActivity) mContext).getYoutubeCount(mYoutubeCategory);
 
         for(int i=0 ; i < itemCnt ; i++) {
@@ -344,6 +346,8 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     private void updateYoutubePlaylist() {
+        if(!((MainActivity) mContext).isConnected())    return;
+
         int itemCnt = ((MainActivity) mContext).getYoutubeCount(mYoutubeCategory);
 
         for(int i = 3 ; i < mYoutubePlaylistController.getChildCount() ; i++)
@@ -501,23 +505,28 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
                     break;
                 case R.id.btn_youtube01:
-                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 0).videoId);
+                    if(((MainActivity) mContext).isConnected())
+                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 0).videoId);
                     break;
                 case R.id.btn_youtube02:
-                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 1).videoId);
+                    if(((MainActivity) mContext).isConnected())
+                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 1).videoId);
                     break;
                 case R.id.btn_youtube03:
-                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 2).videoId);
+                    if(((MainActivity) mContext).isConnected())
+                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 2).videoId);
                     break;
                 case R.id.btn_youtube04:
-                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 3).videoId);
+                    if(((MainActivity) mContext).isConnected())
+                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 3).videoId);
                     break;
                 case R.id.btn_youtube05:
-                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 4).videoId);
+                    if(((MainActivity) mContext).isConnected())
+                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 4).videoId);
                     break;
                 case R.id.btn_youtube06:
-                    ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 5).videoId);
-
+                    if(((MainActivity) mContext).isConnected())
+                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 5).videoId);
                     break;
             }
         }
