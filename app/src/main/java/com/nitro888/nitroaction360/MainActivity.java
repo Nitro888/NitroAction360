@@ -3,9 +3,14 @@ package com.nitro888.nitroaction360;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 
 import com.akoscz.youtube.PlaylistItem;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.nitro888.nitroaction360.cardboard.NACardboardOverlayView;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -15,6 +20,7 @@ import com.nitro888.nitroaction360.nitroaction.NAScreenGLRenderer;
 import com.nitro888.nitroaction360.nitroaction.NAViewsToGLRenderer;
 import com.nitro888.nitroaction360.utils.YouTubeDownloadHelper;
 import com.nitro888.nitroaction360.utils.YouTubePlayListHelper;
+import com.nitro888.nitroaction360.GoogleAnalyticsApp.TrackerName;
 
 /**
  * Created by nitro888 on 15. 4. 5..
@@ -36,6 +42,16 @@ public class MainActivity extends CardboardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_ui);
 
+        // Google Analytics
+        try {
+            Tracker t = ((GoogleAnalyticsApp) getApplication()).getTracker(TrackerName.GLOBAL_TRACKER);
+            t.send(new HitBuilders.AppViewBuilder().build());
+            t.enableAdvertisingIdCollection(true);
+        }
+        catch(Exception  e) {
+            Log.e(TAG,"Error"+e.getMessage());
+        }
+
         // ViewsToGLRenderer
         mNAViewsToGLRenderer    = new NAViewsToGLRenderer(this);
 
@@ -51,7 +67,7 @@ public class MainActivity extends CardboardActivity {
         mNAScreenGLRenderer     = new NAScreenGLRenderer(this);
         mNAScreenGLRenderer.setViewToGLRenderer(mNAViewsToGLRenderer);
 
-        // Load Youtube
+        // Load Youtube Playlist
         /*
         ConnectivityManager cm              = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo         activeNetwork   = cm.getActiveNetworkInfo();
@@ -73,7 +89,15 @@ public class MainActivity extends CardboardActivity {
 
         setCardboardView(mCardboardView);
 
+
+        // youtube test
         //YouTubeDownloadHelper.main();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     // for browser controller
@@ -174,5 +198,6 @@ public class MainActivity extends CardboardActivity {
     public void onStop() {
         super.onStop();
         mNAMediaPlayer.stop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 }
