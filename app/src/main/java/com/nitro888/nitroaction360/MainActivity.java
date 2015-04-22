@@ -107,21 +107,18 @@ public class MainActivity extends CardboardActivity {
         isConnected = isConnected&&(mYoutubePlayListHelper!=null?true:false);
         return isConnected;
     }
-
     public int getYoutubeCount(int category) {
         if(mYoutubePlayListHelper==null)    return -1;
         return mYoutubePlayListHelper.getCount(category);
     }
-
     public PlaylistItem getYoutubeItem(int category, int position) {
         if(mYoutubePlayListHelper==null)    return null;
         return mYoutubePlayListHelper.getItem(category,position);
     }
-
-    public void openMovieStream(String url) {
+    public void openMovieStream(String url, int renderType) {
+        setScreenRenderType(renderType);
         mNAMediaPlayer.openMovieStream(url);
     }
-
     public void getMoveStreamUrl(String youtubeID) {
         YouTubeDownloadHelper.GetYouTubeDownloadURLAsyncTask(this,youtubeID);
     }
@@ -154,7 +151,6 @@ public class MainActivity extends CardboardActivity {
     public int getCurrentPosition() {
         return mNAMediaPlayer.getCurrentPosition();
     }
-
 
     // for setting controller
     public void setScreenShapeType(int screenID) {

@@ -30,19 +30,12 @@ public abstract class YouTubeDownloadHelper extends AsyncTask<String, Void, List
 
     private class YouTubeVideoQuality {
         public String  mVideoTitle;
-        public String  mExtention;
+        public int     mDuration;
         public String  mDownloadUrl;
-        public String  mVideoUrl;
-        public int     mVideoSize;
-        public int     mVideoScreenWidth;
-        public int     mVideoScreenHeight;
-        public int     mVideoScreenHight;
-        public int     mVideoLength;
-
-        public String formatSize(int width, int height) {
-            String s = height >= 720 ? " HD" : "";
-            return width + " x " + height + s;
-        }
+        public String  mQuality;
+        public String  mCodecs;
+        public String  mType;
+        public String  mStereo3d;
     }
 
     public YouTubeDownloadHelper(Context context, String youtubeID) {
@@ -66,54 +59,52 @@ public abstract class YouTubeDownloadHelper extends AsyncTask<String, Void, List
             Log.e(TAG, "Failed to get url");
             return null;
         } else {
-            Map         map             = parseQueryString(result,false);
+            try {
+                Map         map             = parseQueryString(result);
+                String      title           = map.get("title").toString();
+                String      videoDuration   = map.get("length_seconds").toString();
+                String[]    videos          = URLDecoder.decode(map.get("url_encoded_fmt_stream_map").toString(), "utf-8").split(",");
 
-            String      title           = map.get("title").toString();
-            String      videoDuration   = map.get("length_seconds").toString();
-            String[]    videos          = map.get("url_encoded_fmt_stream_map").toString().split("%2C");    // %2C is ,
+                for(int i = 0 ; i < videos.length ; i ++ ) {
+                    Map     item    = parseQueryString(videos[i]);
 
-            for(int i = 0 ; i < videos.length ; i ++ ) {
-                try {
-                    Map item = parseQueryString(videos[i], true);
-                    String server   = item.get("fallback_host").toString();
-                    String url      = URLDecoder.decode(URLDecoder.decode(item.get("url").toString(),"utf-8"),"utf-8") + "&fallback_host=" + server;
+                    String server           = URLDecoder.decode(item.get("fallback_host").toString(),"utf-8");
+                    String[] type           = URLDecoder.decode(item.get("type").toString(),"utf-8").split(";");
+                    Object stereo3D         = item.get("stereo3d");
 
                     YouTubeVideoQuality videoItem   = new YouTubeVideoQuality();
-                    videoItem.mDownloadUrl          = url;
-                    videoItem.mVideoTitle           = title;
-                    //videoItem.mVideoLength          = Integer.getInteger(videoDuration);
-
-
-                    String tagInfo   = item.get("itag").toString();
-                    Log.d(TAG,tagInfo);
-                    Log.d(TAG,videos[i]);
+                    videoItem.mVideoTitle   = title;
+                    videoItem.mDuration     = Integer.parseInt(videoDuration);
+                    videoItem.mDownloadUrl  = URLDecoder.decode(item.get("url").toString(),"utf-8") + "&fallback_host=" + server;
+                    videoItem.mQuality      = URLDecoder.decode(item.get("quality").toString(),"utf-8");
+                    videoItem.mType         = type[0];
+                    videoItem.mCodecs       = type.length==2?type[1]:"";
+                    videoItem.mStereo3d     = stereo3D!=null?URLDecoder.decode(stereo3D.toString(),"utf-8"):"";
 
                     list.add(videoItem);
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage(), e);
                 }
+            }  catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
             }
         }
 
         return list;
     }
 
-    private static Map<String, String> parseQueryString(String queryString, boolean isUTF8) {
+    private static Map<String, String> parseQueryString(String queryString) {
         Map<String, String> map = new HashMap<String, String>();
 
         String[] parameters;
 
-        if(isUTF8)  parameters= queryString.split("%26");
-        else        parameters= queryString.split("&");
+        parameters= queryString.split("&");
 
         for(int i = 0; i < parameters.length; i++) {
             String[] keyAndValue;
 
-            if(isUTF8)  keyAndValue = parameters[i].split("%3D");
-            else        keyAndValue = parameters[i].split("=");
+            keyAndValue = parameters[i].split("=");
 
             if(keyAndValue.length != 2) {
-                Log.d(TAG, "invalid url parameter " + parameters[i]);
+                Log.e(TAG, "invalid url parameter " + parameters[i]);
                 continue;
             }
 
@@ -167,7 +158,23 @@ public abstract class YouTubeDownloadHelper extends AsyncTask<String, Void, List
     }
 
     public void handlePlaylistResult(List result) {
-        String url = ((YouTubeVideoQuality)result.get(0)).mDownloadUrl;
-        ((MainActivity) mContext).openMovieStream(url);
+        String  url         = "";
+        String  stereoType  = "";
+
+        for(int i = 0 ; i < result.size() ; i++ )
+            if((((YouTubeVideoQuality)result.get(i)).mStereo3d.equals("1")) &&
+                    (((YouTubeVideoQuality)result.get(i)).mType.equals("video/mp4"))) {
+                stereoType  = ((YouTubeVideoQuality)result.get(i)).mStereo3d;
+                url         = ((YouTubeVideoQuality)result.get(0)).mDownloadUrl;
+            }
+
+        if(url=="")
+            for(int i = 0 ; i < result.size() ; i++ ) {
+                if (((YouTubeVideoQuality)result.get(i)).mType.equals("video/mp4"))
+                    url = ((YouTubeVideoQuality) result.get(i)).mDownloadUrl;
+            }
+
+        if(url!="")
+            ((MainActivity) mContext).openMovieStream(url, stereoType.equals("1")? ScreenTypeHelper.SCREEN_RENDER_3D_SBS:ScreenTypeHelper.SCREEN_RENDER_2D);
     }
 }
