@@ -379,6 +379,13 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             }
         }
     }
+
+    private void youtubeSelectItem(int btnIndex){
+        if(((MainActivity) mContext).isConnected()) {
+            menuOpen(-1);
+            ((MainActivity) mContext).getMoveStreamUrl(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, btnIndex).videoId);
+        }
+    }
     /*
         UI Control  - youtube
     */
@@ -418,7 +425,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     menuOpen(GUI_BROWSER_CTRL);
                     break;
                 case R.id.btn_youtube:
-                    //menuOpen(GUI_YOUTUBE_CATEGORY_CTRL);
+                    menuOpen(GUI_YOUTUBE_CATEGORY_CTRL);
                     break;
                 case R.id.btn_setting:
                     menuOpen(GUI_SETTING_CTRL);
@@ -505,28 +512,22 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
                     break;
                 case R.id.btn_youtube01:
-                    if(((MainActivity) mContext).isConnected())
-                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 0).videoId);
+                    youtubeSelectItem(0);
                     break;
                 case R.id.btn_youtube02:
-                    if(((MainActivity) mContext).isConnected())
-                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 1).videoId);
+                    youtubeSelectItem(1);
                     break;
                 case R.id.btn_youtube03:
-                    if(((MainActivity) mContext).isConnected())
-                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 2).videoId);
+                    youtubeSelectItem(2);
                     break;
                 case R.id.btn_youtube04:
-                    if(((MainActivity) mContext).isConnected())
-                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 3).videoId);
+                    youtubeSelectItem(3);
                     break;
                 case R.id.btn_youtube05:
-                    if(((MainActivity) mContext).isConnected())
-                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 4).videoId);
+                    youtubeSelectItem(4);
                     break;
                 case R.id.btn_youtube06:
-                    if(((MainActivity) mContext).isConnected())
-                        ((MainActivity) mContext).openMovieStream(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 5).videoId);
+                    youtubeSelectItem(5);
                     break;
             }
         }

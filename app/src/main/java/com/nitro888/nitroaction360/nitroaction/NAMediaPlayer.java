@@ -107,6 +107,7 @@ public class NAMediaPlayer implements MediaPlayer.OnCompletionListener, MediaPla
 
     public void openMovieStream(String url) {
         if(mMediaPlayer==null)  return;
+
         mBufferingPercent   = 0;
         mCurrentPosition    = 0;
         mIsBufferingStart   = true;

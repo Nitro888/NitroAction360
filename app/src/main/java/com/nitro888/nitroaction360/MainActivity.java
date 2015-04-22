@@ -68,7 +68,6 @@ public class MainActivity extends CardboardActivity {
         mNAScreenGLRenderer.setViewToGLRenderer(mNAViewsToGLRenderer);
 
         // Load Youtube Playlist
-        /*
         ConnectivityManager cm              = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo         activeNetwork   = cm.getActiveNetworkInfo();
         boolean             isConnected     = activeNetwork.isConnectedOrConnecting();
@@ -78,7 +77,6 @@ public class MainActivity extends CardboardActivity {
             mYoutubePlayListHelper  = new YouTubePlayListHelper(this);
         else
             mYoutubePlayListHelper  = null;
-        */
 
         // Cardboard
         mCardboardView          = (CardboardView) findViewById(R.id.cardboard_view);
@@ -88,10 +86,6 @@ public class MainActivity extends CardboardActivity {
         //mNACardboardOverlayView.show3DToast("NitroAction 360 Start");
 
         setCardboardView(mCardboardView);
-
-
-        // youtube test
-        //YouTubeDownloadHelper.main();
     }
 
     @Override
@@ -126,6 +120,10 @@ public class MainActivity extends CardboardActivity {
 
     public void openMovieStream(String url) {
         mNAMediaPlayer.openMovieStream(url);
+    }
+
+    public void getMoveStreamUrl(String youtubeID) {
+        YouTubeDownloadHelper.GetYouTubeDownloadURLAsyncTask(this,youtubeID);
     }
 
     // for play controller
