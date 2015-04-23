@@ -58,11 +58,17 @@ public class YouTubePlayListHelper {
     }
 
     public int getCount(int category) {
-        return mYoutubePlayList[category].getPlaylist().getCount();
+        if(mYoutubePlayList[category].mIsLoadComplete)
+            return mYoutubePlayList[category].getPlaylist().getCount();
+
+        return 0;
     }
 
     public PlaylistItem getItem(int category, int position) {
-        return mYoutubePlayList[category].getPlaylist().getItem(position);
+        if(mYoutubePlayList[category].mIsLoadComplete)
+            return mYoutubePlayList[category].getPlaylist().getItem(position);
+
+        return null;
     }
 
     private class GetYouTubePlaylist {
