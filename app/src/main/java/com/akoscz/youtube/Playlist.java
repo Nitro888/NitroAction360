@@ -86,7 +86,10 @@ public class Playlist {
 
             for (int i = 0; i < jsonItems.length(); i++) {
                 JSONObject item = jsonItems.getJSONObject(i);
-                items.add(new PlaylistItem(item));
+
+                PlaylistItem youtubeItem = new PlaylistItem(item);
+                if(youtubeItem.thumbnailUrl!=null)
+                    items.add(new PlaylistItem(item));
             }
         }
     }

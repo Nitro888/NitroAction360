@@ -55,6 +55,8 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     private static final int    GUI_SETTING_CTRL            = R.id.GUI_Setting;
     private static final int    GUI_YOUTUBE_CATEGORY_CTRL   = R.id.GUI_YouTube_Category;
     private static final int    GUI_YOUTUBE_PLAYLIST_CTRL   = R.id.GUI_YouTube_Playlist;
+
+    public static  final int    MENU_PER_PAGE               = 3;
     public static  final int    ITEMS_PER_PAGE              = 6;
 
     private RelativeLayout      mAdController               = null;
@@ -229,6 +231,9 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             }, 100);
             */
             processBtn();
+        } else if (findViewById(mLookAtBtnResourceID) instanceof TextView) {
+            mLookAtBtnResourceID    = btnID;
+            processBtn();
         }
     }
 
@@ -263,15 +268,17 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     private void browserNextPage(){
+        int temp = mFolderPage;
         mFolderPage++;
         if(mFolderPage>=mFolderPageMax) mFolderPage=mFolderPageMax-1;
-        updateBrowserController();
+        if(temp!=mFolderPage)   updateBrowserController();
     }
 
     private void browserPreviousPage(){
+        int temp = mFolderPage;
         mFolderPage--;
         if(mFolderPage<0)       mFolderPage=mFolderPageMax-1;
-        updateBrowserController();
+        if(temp!=mFolderPage)   updateBrowserController();
     }
 
     private void updateBrowserController() {
@@ -292,17 +299,17 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     }
 
     private void updateBrowserController(BitmapDrawable[] thumbnails) {
-        for(int i = 3 ; i < mBrowserController.getChildCount() ; i++)
+        for(int i = MENU_PER_PAGE ; i < mBrowserController.getChildCount() ; i++)
             mBrowserController.getChildAt(i).setVisibility(View.INVISIBLE);
 
         Drawable    backImg = mBrowserController.getChildAt(0).getBackground();
 
         for(int i = 0 ; i < thumbnails.length ; i++) {
-            mBrowserController.getChildAt(i+3).setVisibility(View.VISIBLE);
-            ((ImageButton)mBrowserController.getChildAt(i+3)).setImageResource(
+            mBrowserController.getChildAt(i+MENU_PER_PAGE).setVisibility(View.VISIBLE);
+            ((ImageButton)mBrowserController.getChildAt(i+MENU_PER_PAGE)).setImageResource(
                     thumbnails[i] == null ? R.drawable.ic_folder_white_48dp : R.drawable.ic_play_circle_outline_white_48dp
             );
-            mBrowserController.getChildAt(i+3).setBackground(thumbnails[i]==null?backImg:thumbnails[i]);
+            mBrowserController.getChildAt(i+MENU_PER_PAGE).setBackground(thumbnails[i]==null?backImg:thumbnails[i]);
         }
     }
 
@@ -328,7 +335,9 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     /*
         UI Control  - youtube
     */
-    private int     mYoutubeCategory             = YouTubePlayListHelper.YOUTUBE_CH_3D_EARTH_PLAYLIST_ID;
+    private int     mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_3D_EARTH_PLAYLIST_ID;
+    private int     mYoutubePage        = 0;
+    private int     mYoutubePageMax     = 0;
 
     private void selectYoutubePlaylist() {
         mFolderThumbnails.clear();
@@ -339,22 +348,41 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
         for(int i=0 ; i < itemCnt ; i++) {
             PlaylistItem p = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, i);
-            mFolderThumbnails.add(p.thumbnailUrl);
+            if(p!=null)
+                mFolderThumbnails.add(p.thumbnailUrl);
         }
 
+        mYoutubePage     = 0;
+        mYoutubePageMax  = (mFolderThumbnails.size()%ITEMS_PER_PAGE)>0?(mFolderThumbnails.size()/ITEMS_PER_PAGE)+1:mFolderThumbnails.size()/ITEMS_PER_PAGE;
+
         updateYoutubePlaylist();
+    }
+
+    private void youtubeNextPage(){
+        int temp = mYoutubePage;
+        mYoutubePage++;
+        if(mYoutubePage>=mYoutubePageMax) mYoutubePage=mYoutubePageMax-1;
+        if(temp!=mYoutubePage)   updateYoutubePlaylist();
+    }
+
+    private void youtubePreviousPage(){
+        int temp = mYoutubePage;
+        mYoutubePage--;
+        if(mYoutubePage<0)       mYoutubePage=mYoutubePageMax-1;
+        if(temp!=mYoutubePage)   updateYoutubePlaylist();
     }
 
     private void updateYoutubePlaylist() {
         if(!((MainActivity) mContext).isConnected())    return;
 
-        int itemCnt = ((MainActivity) mContext).getYoutubeCount(mYoutubeCategory);
+        int listStart   = mYoutubePage*ITEMS_PER_PAGE;
+        int listEnd     = mFolderThumbnails.size()>(listStart+ITEMS_PER_PAGE)?listStart+ITEMS_PER_PAGE:mFolderThumbnails.size();
 
-        for(int i = 3 ; i < mYoutubePlaylistController.getChildCount() ; i++)
+        for(int i = MENU_PER_PAGE ; i < mYoutubePlaylistController.getChildCount() ; i++)
             mYoutubePlaylistController.getChildAt(i).setVisibility(View.INVISIBLE);
 
-        for(int i = 0 ; i < itemCnt ; i++)
-            new DownloadImageTask(mYoutubePlaylistController.getChildAt(i+3)).execute(mFolderThumbnails.get(i));
+        for(int i = 0 ; i < (listEnd-listStart) ; i++)
+            new DownloadImageTask(mYoutubePlaylistController.getChildAt(i+MENU_PER_PAGE)).execute(mFolderThumbnails.get(i+listStart));
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, BitmapDrawable> {
@@ -383,8 +411,16 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     private void youtubeSelectItem(int btnIndex){
         if(((MainActivity) mContext).isConnected()) {
             menuOpen(-1);
-            ((MainActivity) mContext).getMoveStreamUrl(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, btnIndex).videoId);
+            if(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory,mYoutubePage*ITEMS_PER_PAGE+btnIndex)!=null)
+                ((MainActivity) mContext).getMoveStreamUrl(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory,mYoutubePage*ITEMS_PER_PAGE+btnIndex).videoId);
         }
+    }
+
+    private String getYoutubeItemTitle(int btnIndex) {
+        if(((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, mYoutubePage*ITEMS_PER_PAGE+btnIndex)!=null)
+            return ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, mYoutubePage*ITEMS_PER_PAGE+btnIndex).title;
+
+        return "";
     }
     /*
         UI Control  - youtube
@@ -400,6 +436,9 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     break;
                 case R.id.btn_right:
                     browserNextPage();
+                    break;
+                case R.id.text_pages:
+                    menuOpen(GUI_PLAYER_CTRL);
                     break;
                 case R.id.btn_file01:
                     browserSelectItem(0);
@@ -506,10 +545,13 @@ public class NAGUIRelativeLayout extends RelativeLayout {
 
                 // youtube playlist
                 case R.id.btn_youtube_left:
-
+                    youtubePreviousPage();
                     break;
                 case R.id.btn_youtube_right:
-
+                    youtubeNextPage();
+                    break;
+                case R.id.youtube_pages:
+                    menuOpen(GUI_YOUTUBE_CATEGORY_CTRL);
                     break;
                 case R.id.btn_youtube01:
                     youtubeSelectItem(0);
@@ -544,6 +586,9 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     break;
                 case R.id.btn_right:
                     msg = "Next Page";
+                    break;
+                case R.id.text_pages:
+                    msg = "Home";
                     break;
                 case R.id.btn_file01:
                     msg = mFolderFiles[1].get(mFolderPage*ITEMS_PER_PAGE+0);
@@ -658,23 +703,26 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_youtube_right:
                     msg = "Next Page";
                     break;
+                case R.id.youtube_pages:
+                    msg = "Youtube Home";
+                    break;
                 case R.id.btn_youtube01:
-                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 0).title;
+                    msg = getYoutubeItemTitle(0);
                     break;
                 case R.id.btn_youtube02:
-                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 1).title;
+                    msg = getYoutubeItemTitle(1);
                     break;
                 case R.id.btn_youtube03:
-                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 2).title;
+                    msg = getYoutubeItemTitle(2);
                     break;
                 case R.id.btn_youtube04:
-                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 3).title;
+                    msg = getYoutubeItemTitle(3);
                     break;
                 case R.id.btn_youtube05:
-                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 4).title;
+                    msg = getYoutubeItemTitle(4);
                     break;
                 case R.id.btn_youtube06:
-                    msg = ((MainActivity) mContext).getYoutubeItem(mYoutubeCategory, 5).title;
+                    msg = getYoutubeItemTitle(5);
                     break;
             }
         }
@@ -704,6 +752,7 @@ public class NAGUIRelativeLayout extends RelativeLayout {
             mPlayerProgress.setProgress(0);
         } else {
             ((TextView)findViewById(R.id.text_pages)).setText((mFolderPage+1)+"/"+mFolderPageMax);
+            ((TextView)findViewById(R.id.youtube_pages)).setText((mYoutubePage+1)+"/"+mYoutubePageMax);
             if(((MainActivity) mContext).getPlayState()==NAMediaPlayer.PLAYER_PLAY) {
                 int current     = ((MainActivity) mContext).getCurrentPosition();
                 int duration    = ((MainActivity) mContext).getDuration();

@@ -3,7 +3,6 @@ package com.nitro888.nitroaction360;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 
@@ -111,9 +110,16 @@ public class MainActivity extends CardboardActivity {
         if(mYoutubePlayListHelper==null)    return -1;
         return mYoutubePlayListHelper.getCount(category);
     }
+
     public PlaylistItem getYoutubeItem(int category, int position) {
         if(mYoutubePlayListHelper==null)    return null;
-        return mYoutubePlayListHelper.getItem(category,position);
+
+        PlaylistItem    result = mYoutubePlayListHelper.getItem(category,position);
+
+        if(result==null)
+            mNACardboardOverlayView.show3DToast("Item Loading Fail");
+
+        return result;
     }
     public void openMovieStream(String url, int renderType) {
         setScreenRenderType(renderType);

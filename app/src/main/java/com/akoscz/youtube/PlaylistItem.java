@@ -30,7 +30,10 @@ public class PlaylistItem {
         position = snippet.getInt("position");
         title = snippet.getString("title");
         description = snippet.getString("description");
-        thumbnailUrl = snippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
+        if(snippet.getJSONObject("thumbnails")!=null)
+            thumbnailUrl = snippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
+        else
+            thumbnailUrl = null;
         videoId = snippet.getJSONObject("resourceId").getString("videoId");
     }
 }
