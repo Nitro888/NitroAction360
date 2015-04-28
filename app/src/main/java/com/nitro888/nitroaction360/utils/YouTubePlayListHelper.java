@@ -28,7 +28,8 @@ public class YouTubePlayListHelper {
     public static final int     YOUTUBE_CH_3D_ANIMATION_PLAYLIST_ID         = 5;
     public static final int     YOUTUBE_CH_3D_DEMO_PLAYLIST_ID              = 6;
     public static final int     YOUTUBE_CH_SP360_PLAYLIST_ID                = 7;
-    private static final int    YOUTUBE_CH_MAX_ID                           = 8;
+    public static final int     YOUTUBE_CH_YT360_PLAYLIST_ID                = 8;
+    private static final int    YOUTUBE_CH_MAX_ID                           = 9;
 
     private static final String YOUTUBE_CH_3D_EARTH_PLAYLIST                = "PLJki1W8ICQGQAW9C6O2u4rjl453QZ652u";
     private static final String YOUTUBE_CH_3D_SPACE_PLAYLIST                = "PLJki1W8ICQGRu_AR8xBrskxVKLbYKaoiP";
@@ -38,6 +39,7 @@ public class YouTubePlayListHelper {
     private static final String YOUTUBE_CH_3D_ANIMATION_PLAYLIST            = "PLJki1W8ICQGS-vEb3KunxbVdMBz-_3UA7";
     private static final String YOUTUBE_CH_3D_DEMO_PLAYLIST                 = "PLJki1W8ICQGQmOpJ0AJdWc9uQbmyD0bPb";
     private static final String YOUTUBE_CH_SP360_PLAYLIST                   = "PLJki1W8ICQGQVIXd-nQ2FTm_nxa9A2xRd";
+    private static final String YOUTUBE_CH_YT360_PLAYLIST                   = "PLJki1W8ICQGSUEOUp-5729SZ5XyibJtNg";
 
     private GetYouTubePlaylist[]    mYoutubePlayList                        = new GetYouTubePlaylist[YOUTUBE_CH_MAX_ID];
 
@@ -52,6 +54,7 @@ public class YouTubePlayListHelper {
         mYoutubePlayList[YOUTUBE_CH_3D_ANIMATION_PLAYLIST_ID]       = new GetYouTubePlaylist(YOUTUBE_CH_3D_ANIMATION_PLAYLIST);
         mYoutubePlayList[YOUTUBE_CH_3D_DEMO_PLAYLIST_ID]            = new GetYouTubePlaylist(YOUTUBE_CH_3D_DEMO_PLAYLIST);
         mYoutubePlayList[YOUTUBE_CH_SP360_PLAYLIST_ID]              = new GetYouTubePlaylist(YOUTUBE_CH_SP360_PLAYLIST);
+        mYoutubePlayList[YOUTUBE_CH_YT360_PLAYLIST_ID]              = new GetYouTubePlaylist(YOUTUBE_CH_YT360_PLAYLIST);
 
         for(int i = 0 ; i < mYoutubePlayList.length ; i ++ )
             mYoutubePlayList[i].GetYouTubePlaylistAsyncTask();

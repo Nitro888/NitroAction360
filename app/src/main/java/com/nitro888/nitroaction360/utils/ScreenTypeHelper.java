@@ -14,6 +14,7 @@ public class ScreenTypeHelper {
 
     public final static int     SCREEN_SHAPE_CURVE      = R.raw.plane_sq;
     public final static int     SCREEN_SHAPE_DOME       = R.raw.dome;
+    public final static int     SCREEN_SHAPE_SPHERE     = R.raw.sphere;
     public final static int     SCREEN_GUI              = R.raw.plane_sq_gui;   // GUI
 
 

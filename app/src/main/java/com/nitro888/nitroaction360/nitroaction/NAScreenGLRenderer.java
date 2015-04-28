@@ -32,7 +32,10 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
     private static final float          Z_FAR               = 500.0f;
     private static final float          CAMERA_Z            = 0.01f;
 
-    private float[]                     mCamera             = new float[16];
+    private float                       mStereoMultiplier   = 1.0f;
+    private float                       mEyeGap             = 0.06f;
+    private float[]                     mCameraR            = new float[16];
+    private float[]                     mCameraL            = new float[16];
     private float[]                     mView               = new float[16];
     private float[]                     mHeadView           = new float[16];
 
@@ -92,7 +95,9 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
     }
     @Override
     public void onNewFrame(HeadTransform headTransform) {
-        Matrix.setLookAtM(mCamera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        float fGap  = mStereoMultiplier * mEyeGap;
+        Matrix.setLookAtM(mCameraL, 0, -fGap, 0.0f, CAMERA_Z, -fGap, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(mCameraR, 0, fGap, 0.0f, CAMERA_Z, fGap, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
         headTransform.getHeadView(mHeadView, 0);
     }
     @Override
@@ -100,12 +105,16 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        Matrix.multiplyMM(mView, 0, eye.getEyeView(), 0, mCamera, 0);
-
         if(mNAViewsToGLRenderer!=null)
             mNAViewsToGLRenderer.onDrawFrame();
 
-        mCore.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR), mView, eye.getType());
+        if(eye.getType()==Eye.Type.LEFT) {
+            Matrix.multiplyMM(mView, 0, eye.getEyeView(), 0, mCameraL, 0);
+            mCore.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR), mView, eye.getType());
+        } else {
+            Matrix.multiplyMM(mView, 0, eye.getEyeView(), 0, mCameraR, 0);
+            mCore.onDrawEye(eye.getPerspective(Z_NEAR, Z_FAR), mView, eye.getType());
+        }
     }
     @Override
     public void onFinishFrame(Viewport viewport) {
@@ -132,6 +141,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         private int                     mTextureCoordinateHandle;
         private int                     mScreenOffsetHandle;
 
+        private final MeshBufferHelper  mModelBuffer0;          // vertex, texture, normal
         private final MeshBufferHelper  mModelBuffer1;          // vertex, texture, normal
         private final MeshBufferHelper  mModelBuffer2;          // vertex, texture, normal
         private final MeshBufferHelper  mModelBuffer3;          // vertex, texture, normal
@@ -139,6 +149,7 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
         public NAScreenGLRendererCore(Context context) {
             mContext                = context;
 
+            mModelBuffer0           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_SHAPE_SPHERE);
             mModelBuffer1           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_SHAPE_CURVE);
             mModelBuffer2           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_SHAPE_DOME);
             mModelBuffer3           = WaveFrontObjHelper.loadObj(mContext, ScreenTypeHelper.SCREEN_GUI);
@@ -195,13 +206,19 @@ public class NAScreenGLRenderer implements CardboardView.StereoRenderer {
             Matrix.translateM(mModelMatrix, 0, 0, 0, 0);
             Matrix.setRotateM(mModelMatrix,0,rationAndRotation[0],1.0f,0.0f,0.0f);
 
-            if(ScreenTypeHelper.SCREEN_SHAPE_CURVE==mScreenShapeType) {
-                Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
-                renderMesh(mModelBuffer1,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
-            }
-            else {
-                Matrix.scaleM(mModelMatrix,0, 1.0f,1.0f, 1.0f);
-                renderMesh(mModelBuffer2,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
+            switch (mScreenShapeType) {
+                case ScreenTypeHelper.SCREEN_SHAPE_SPHERE:
+                    Matrix.scaleM(mModelMatrix,0, 1.0f,1.0f, 1.0f);
+                    renderMesh(mModelBuffer0,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
+                    break;
+                case ScreenTypeHelper.SCREEN_SHAPE_DOME:
+                    Matrix.scaleM(mModelMatrix,0, 1.0f,1.0f, 1.0f);
+                    renderMesh(mModelBuffer2,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
+                    break;
+                default:
+                    Matrix.scaleM(mModelMatrix,0,rationAndRotation[1],rationAndRotation[2],rationAndRotation[3]);
+                    renderMesh(mModelBuffer1,perspectiveView,offset, mNAViewsToGLRenderer.getGLSurfaceTexture(mPlayGLSurfaceTextureID));
+                    break;
             }
 
             // GUI

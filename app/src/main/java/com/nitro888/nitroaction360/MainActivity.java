@@ -17,6 +17,7 @@ import com.nitro888.nitroaction360.nitroaction.NAGUIRelativeLayout;
 import com.nitro888.nitroaction360.nitroaction.NAMediaPlayer;
 import com.nitro888.nitroaction360.nitroaction.NAScreenGLRenderer;
 import com.nitro888.nitroaction360.nitroaction.NAViewsToGLRenderer;
+import com.nitro888.nitroaction360.utils.ScreenTypeHelper;
 import com.nitro888.nitroaction360.utils.YouTubeDownloadHelper;
 import com.nitro888.nitroaction360.utils.YouTubePlayListHelper;
 import com.nitro888.nitroaction360.GoogleAnalyticsApp.TrackerName;
@@ -122,6 +123,18 @@ public class MainActivity extends CardboardActivity {
         return result;
     }
     public void openMovieStream(String url, int renderType) {
+        switch(mNAGUIRelativeLayout.getPlayYoutubeCategory()) {
+            case YouTubePlayListHelper.YOUTUBE_CH_SP360_PLAYLIST_ID:
+                setScreenShapeType(ScreenTypeHelper.SCREEN_SHAPE_DOME);
+                break;
+            case YouTubePlayListHelper.YOUTUBE_CH_YT360_PLAYLIST_ID:
+                setScreenShapeType(ScreenTypeHelper.SCREEN_SHAPE_SPHERE);
+                break;
+            default:
+                setScreenShapeType(ScreenTypeHelper.SCREEN_SHAPE_CURVE);
+                break;
+        }
+
         setScreenRenderType(renderType);
         mNAMediaPlayer.openMovieStream(url);
     }

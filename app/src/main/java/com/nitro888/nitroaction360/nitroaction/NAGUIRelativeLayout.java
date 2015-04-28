@@ -124,7 +124,6 @@ public class NAGUIRelativeLayout extends RelativeLayout {
         mFinishInit         = true;
 
         findViewById(R.id.text_pages).setBackground(findViewById(R.id.btn_left).getBackground());
-        findViewById(R.id.btn_youtube_not_use).setVisibility(View.INVISIBLE);
     }
 
     public void onCardboardTrigger() {
@@ -339,6 +338,10 @@ public class NAGUIRelativeLayout extends RelativeLayout {
     private int     mYoutubePage        = 0;
     private int     mYoutubePageMax     = 0;
 
+    public int getPlayYoutubeCategory(){
+        return mYoutubeCategory;
+    }
+
     private void selectYoutubePlaylist() {
         mFolderThumbnails.clear();
 
@@ -542,6 +545,10 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                     mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_SP360_PLAYLIST_ID;
                     menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
                     break;
+                case R.id.btn_youtube_yt360:
+                    mYoutubeCategory    = YouTubePlayListHelper.YOUTUBE_CH_YT360_PLAYLIST_ID;
+                    menuOpen(GUI_YOUTUBE_PLAYLIST_CTRL);
+                    break;
 
                 // youtube playlist
                 case R.id.btn_youtube_left:
@@ -692,8 +699,8 @@ public class NAGUIRelativeLayout extends RelativeLayout {
                 case R.id.btn_youtube_sp360:
                     msg = "SP360";
                     break;
-                case R.id.btn_youtube_not_use:
-                    msg = "not use";
+                case R.id.btn_youtube_yt360:
+                    msg = "YouTube 360";
                     break;
 
                 // youtube playlist
